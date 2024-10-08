@@ -72,7 +72,7 @@ const FormWizard = () => {
             <Col xl={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Create An Account</h4>
+                  <h4 className="card-title mb-0">Create An Account hello</h4>
                 </CardHeader>
                 <CardBody>
                   <form className="vertical-navs-step form-steps">
