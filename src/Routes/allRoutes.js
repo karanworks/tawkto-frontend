@@ -13,7 +13,7 @@ import UserProfile from "../pages/Authentication/user-profile";
 
 //APi Key
 import Mapping from "../pages/Mapping";
-import Home from "../pages/Home";
+import Chat from "../pages/Chat";
 import Campaigns from "../pages/Campaigns";
 import Run from "../pages/Run";
 import Design from "../pages/Design";
@@ -22,7 +22,14 @@ import Gateways from "../pages/Gateways";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
-  { path: "/home", component: <Home /> },
+  // { path: "/home", component: <Chat /> },
+  { path: "/apps-chat", component: <Chat /> },
+  {
+    path: "/",
+    exact: true,
+    component: <Navigate to="/apps-chat" />,
+  },
+  { path: "*", component: <Navigate to="/apps-chat" /> },
   { path: "/roles", component: <Mapping /> },
   { path: "/campaigns", component: <Campaigns /> },
   { path: "/run", component: <Run /> },
@@ -36,12 +43,12 @@ const authProtectedRoutes = [
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
-  {
-    path: "/",
-    exact: true,
-    component: <Navigate to="/home" />,
-  },
-  { path: "*", component: <Navigate to="/home" /> },
+  // {
+  //   path: "/",
+  //   exact: true,
+  //   component: <Navigate to="/apps" />,
+  // },
+  // { path: "*", component: <Navigate to="/home" /> },
 ];
 
 const publicRoutes = [

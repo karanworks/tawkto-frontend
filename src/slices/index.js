@@ -4,7 +4,7 @@ import { combineReducers } from "redux";
 import LayoutReducer from "./layouts/reducer";
 
 // Authentication
-import HomeReducer from "./Home/reducer";
+import ChatReducer from "./Chat/reducer";
 import LoginReducer from "./auth/login/reducer";
 import UsersReducer from "./Users/reducer";
 import MappingReducer from "./Mapping/reducer";
@@ -30,7 +30,7 @@ const rootReducer = combineReducers({
   Design: DesignReducer,
   Profile: ProfileReducer,
   Report: ReportReducer,
-  Home: HomeReducer,
+  Chat: ChatReducer,
 });
 
 export default rootReducer;
