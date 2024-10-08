@@ -1,0 +1,50 @@
+/*
+Template Name: Velzon - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://themesbrand.com/
+Contact: support@themesbrand.com
+File: Custom Css File
+*/
+
+//************************* DIALPAD *************************
+
+.dialpad-container {
+  margin-top: 10px;
+}
+
+.dialpad-mobile-number-delete-btn {
+  &:hover {
+    background: none;
+  }
+}
+
+.dialpad-key-container {
+  width: 50px;
+  height: 50px;
+}
+
+.dialpad-dial-key-container {
+  margin-top: 10px;
+
+  .dialpad-dial-key {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.oncall-control-btn {
+  .oncall-btn-icon {
+    color: #3caae5;
+  }
+  &:hover {
+    .oncall-btn-icon {
+      color: white;
+    }
+  }
+}
+
+//************************* PLAY RECORDING MODAL *************************
+
+.recording-audio-element::-webkit-media-controls-panel {
+  background: white;
+}
