@@ -289,9 +289,11 @@ const fakeBackend = () => {
   mock.onGet(new RegExp(`${url.GET_MESSAGES}/*`)).reply(config => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (messages) {
+        if (messages) {          
           // Passing fake JSON data as response
           const { params } = config;
+        console.log("fake backend",config);
+        
           const filteredMessages = messages.filter(
             msg => msg.roomId === params.roomId
           );
