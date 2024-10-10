@@ -20,6 +20,8 @@ const Navdata = () => {
 
   const [isDashboard, setIsDashboard] = useState(false);
 
+  const [isAdministration, setIsAdministration] = useState(false);
+
   //
   const [isAuth, setIsAuth] = useState(false);
   const [isPages, setIsPages] = useState(false);
@@ -54,6 +56,9 @@ const Navdata = () => {
     if (iscurrentState !== "Dashboard") {
       setIsDashboard(false);
     }
+    if (iscurrentState !== "Administration") {
+      setIsAdministration(false);
+    }
 
     if (iscurrentState !== "Auth") {
       setIsAuth(false);
@@ -67,6 +72,7 @@ const Navdata = () => {
     isSettings,
     isManagement,
     isDashboard,
+    isAdministration,
     isAuth,
     isPages,
   ]);
@@ -75,6 +81,7 @@ const Navdata = () => {
     Settings: isSettings,
     Management: isManagement,
     Dashboard: isDashboard,
+    Administration: isAdministration,
   };
 
   const handleClick = (menuLabelId) => {
@@ -95,20 +102,57 @@ const Navdata = () => {
           setIsDashboard(!isDashboard);
           setIscurrentState(menuLabelId);
           updateIconSidebar(e);
+
+        case "Administration":
+          setIsAdministration(!isAdministration);
+          setIscurrentState(menuLabelId);
+          updateIconSidebar(e);
       }
     };
   };
 
-  const dynamicMenuData = menuDataOfUser?.map((menu) => {
-    // menuLableId me "label" ki spelling galat hai database me glt thi to testing ke liye galat likh kar hi check kr rha
-    const updatedMenu = {
-      ...menu,
-      icon: <FeatherIcon icon={menu.icon} className="icon-dual" />,
-      stateVariables: parentMenuStates[menu.menuLableId],
-      click: handleClick(menu.menuLableId),
-    };
-    return updatedMenu;
-  });
+  const hardcodedMenus = [
+    {
+      id: 12,
+      menuLableId: "Administration",
+      label: "Administration",
+      icon: "settings",
+      link: "/#",
+      status: 1,
+      sequence: 7,
+      createdAt: "2024-05-07T09:58:31.643Z",
+      updatedAt: "2024-05-07T09:58:31.643Z",
+      subItems: [
+        {
+          id: 2,
+          submenuLableId: "WorkspaceMembers",
+          label: "Workspace Members",
+          parentId: "Administration",
+          link: "/workspace-members",
+          status: 1,
+          menuId: 12,
+          createdAt: "2024-05-07T09:58:31.643Z",
+          updatedAt: "2024-05-07T09:58:31.643Z",
+        },
+      ],
+    },
+  ];
+
+  const dynamicMenuData = [...hardcodedMenus, ...menuDataOfUser]?.map(
+    (menu) => {
+      // menuLableId me "label" ki spelling galat hai database me glt thi to testing ke liye galat likh kar hi check kr rha
+
+      console.log("MENU COMING FROM SOMEWHERE ->", menu);
+
+      const updatedMenu = {
+        ...menu,
+        icon: <FeatherIcon icon={menu.icon} className="icon-dual" />,
+        stateVariables: parentMenuStates[menu.menuLableId],
+        click: handleClick(menu.menuLableId),
+      };
+      return updatedMenu;
+    }
+  );
 
   // menuLableId me "label" ki spelling galat hai database me glt thi to testing ke liye galat likh kar hi check kr rha
   return <React.Fragment>{dynamicMenuData}</React.Fragment>;

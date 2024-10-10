@@ -10,23 +10,23 @@ const jobProcess = [
   {
     id: 1,
     clss: "shadow-lg",
-    lable: "Register Account",
-    desc: "First, You need to make a account.",
+    lable: "Sign Up and Set Up in Minutes",
+    desc: "Easily create your account and customize your chat widget. No coding skills required—just copy and paste a snippet of code into your website, and you’re ready to go!",
   },
   {
     id: 2,
-    lable: "Create Resume",
-    desc: "Create a resume for your job.",
+    lable: "Engage Visitors in Real-Time",
+    desc: " Once the chat widget is live, you can instantly start interacting with website visitors. Get notified when a new visitor arrives, and proactively reach out to provide support or assistance.",
   },
   {
     id: 3,
-    lable: "Find Job",
-    desc: "Search for your dream jobs from velzon.",
+    lable: "Respond from Anywhere",
+    desc: "Whether on desktop or mobile, stay connected with your customers. Use our web or mobile app to chat with visitors on the go, ensuring you never miss an opportunity to connect.",
   },
   {
     id: 4,
-    lable: "Apply Job",
-    desc: "Apply to the compnay and wait for interview.",
+    lable: "Track, Analyze, and Improve",
+    desc: "Use built-in analytics to monitor chat performance, customer satisfaction, and response times. Gain insights into visitor behavior to improve engagement and optimize customer service.",
   },
 ];
 
