@@ -227,7 +227,7 @@ const Login = (props) => {
                   </CardBody>
                 </Card>
 
-                {/* <div className="mt-4 text-center">
+                <div className="mt-4 text-center">
                   <p className="mb-0">
                     Don't have an account ?{" "}
                     <Link
@@ -238,7 +238,7 @@ const Login = (props) => {
                       Signup{" "}
                     </Link>{" "}
                   </p>
-                </div> */}
+                </div>
               </Col>
             </Row>
           </Container>
