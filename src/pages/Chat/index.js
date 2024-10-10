@@ -32,6 +32,7 @@ import { chatContactData } from "../../common/data";
 
 import Picker from 'emoji-picker-react';
 
+
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -70,10 +71,13 @@ const Chat = () => {
   const [settings_Menu, setsettings_Menu] = useState(false);
   const [reply, setreply] = useState("");
   const [emojiPicker, setemojiPicker] = useState(false);
+  // const [fileUpload,setfileUpload] = useState(false)
+  // const [videoCall,setVideoCall] = useState(false)
   const [currentUser, setCurrentUser] = useState({
     name: "Anna Adame",
     isActive: true,
   });
+  
 
   const selectLayoutState = (state) => state.Chat;
   const chatProperties = createSelector(
@@ -209,6 +213,10 @@ const Chat = () => {
     setcurMessage(curMessage + event.emoji);
   };
 
+  // File upload
+  
+  // Video call
+
   document.title = "Chat | Velzon - React Admin & Dashboard Template";
   return (
     <React.Fragment>
@@ -221,7 +229,7 @@ const Chat = () => {
                   <div className="flex-grow-1">
                     <h5 className="mb-4">Chats</h5>
                   </div>
-                  <div className="flex-shrink-0">
+                  {/* <div className="flex-shrink-0">
                     <UncontrolledTooltip placement="bottom" target="addcontact">
                       Add Contact
                     </UncontrolledTooltip>
@@ -233,7 +241,7 @@ const Chat = () => {
                     >
                       <i className="ri-add-line align-bottom"></i>
                     </Button>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="search-box">
                   <input
@@ -246,7 +254,7 @@ const Chat = () => {
                   <i className="ri-search-2-line search-icon"></i>
                 </div>
               </div>
-              <Nav tabs className="nav nav-tabs nav-tabs-custom nav-primary nav-justified mb-3">
+              {/* <Nav tabs className="nav nav-tabs nav-tabs-custom nav-primary nav-justified mb-3">
                 <NavItem>
                   <NavLink
                     style={{ cursor: "pointer" }}
@@ -259,8 +267,8 @@ const Chat = () => {
                   >
                     Chats
                   </NavLink>
-                </NavItem>
-                <NavItem>
+                </NavItem> */}
+                {/* <NavItem>
                   <NavLink
                     style={{ cursor: "pointer" }}
                     className={classnames({
@@ -272,39 +280,39 @@ const Chat = () => {
                   >
                     Contacts
                   </NavLink>
-                </NavItem>
-              </Nav>
-              <TabContent
+                </NavItem> */}
+              {/* </Nav> */}
+              {/* <TabContent
                 activeTab={customActiveTab}
                 className="text-muted"
               >
-                <TabPane tabId="1" id="chats">
-                  <SimpleBar
+                <TabPane tabId="1" id="chats"> */}
+                  {/* <SimpleBar
                     className="chat-room-list pt-3"
-                    style={{ margin: "-16px 0px 0px" }}
-                  >
-                    <div className="d-flex align-items-center px-4 mb-2">
-                      <div className="flex-grow-1">
+                    style={{ margin: "-16px 0px 0px",borderTop:"1px solid #E9EBEC"}}
+                  > */}
+                    {/* <div className="d-flex align-items-center px-4 mb-2"> */}
+                      {/* <div className="flex-grow-1">
                         <h4 className="mb-0 fs-11 text-muted text-uppercase">
                           Direct Messages
                         </h4>
-                      </div>
-                      <div className="flex-shrink-0">
-                        <UncontrolledTooltip placement="bottom" target="addnewmsg">
+                      </div> */}
+                      {/* <div className="flex-shrink-0"> */}
+                        {/* <UncontrolledTooltip placement="bottom" target="addnewmsg">
                           New Message
-                        </UncontrolledTooltip>
+                        </UncontrolledTooltip> */}
 
-                        <button
+                        {/* <button
                           type="button"
                           id="addnewmsg"
                           className="btn btn-soft-primary btn-sm"
                         >
                           <i className="ri-add-line align-bottom"></i>
-                        </button>
-                      </div>
-                    </div>
+                        </button> */}
+                      {/* </div> */}
+                    {/* </div> */}
 
-                    <div className="chat-message-list">
+                    <div className="chat-message-list" style={{paddingTop:"3px",borderTop:"1px solid #E9EBEC"}}>
                       <ul
                         className="list-unstyled chat-list chat-user-list users-list"
                         id="userList"
@@ -354,9 +362,9 @@ const Chat = () => {
                                 <div className="flex-grow-1 overflow-hidden">
                                   <p className="text-truncate mb-0">{chat.name}</p>
                                 </div>
-                                {chat.badge && <div className="flex-shrink-0">
+                                {/* {chat.badge && <div className="flex-shrink-0">
                                   <span className="badge bg-dark-subtle text-dark rounded p-1">{chat.badge}</span>
-                                </div>}
+                                </div>} */}
                               </div>
                             </Link>
                           </li>
@@ -364,7 +372,7 @@ const Chat = () => {
                       </ul>
                     </div>
 
-                    <div className="d-flex align-items-center px-4 mt-4 pt-2 mb-2">
+                    {/* <div className="d-flex align-items-center px-4 mt-4 pt-2 mb-2">
                       <div className="flex-grow-1">
                         <h4 className="mb-0 fs-11 text-muted text-uppercase">
                           Channels
@@ -385,9 +393,9 @@ const Chat = () => {
                           <i className="ri-add-line align-bottom"></i>
                         </Button>
                       </div>
-                    </div>
+                    </div> */}
 
-                    <div className="chat-message-list">
+                    {/* <div className="chat-message-list">
                       <ul
                         className="list-unstyled chat-list chat-user-list mb-0 users-list"
                         id="channelList"
@@ -422,10 +430,10 @@ const Chat = () => {
                           </React.Fragment>
                         ))}
                       </ul>
-                    </div>
-                  </SimpleBar>
-                </TabPane>
-                <TabPane tabId="2" id="contacts">
+                    </div> */}
+                  {/* </SimpleBar> */}
+                {/* </TabPane> */}
+                {/* <TabPane tabId="2" id="contacts">
                   <SimpleBar className="chat-room-list pt-3" style={{ margin: "-16px 0px 0px" }}>
                     <div className="sort-contact">
                       {(chatContactData || []).map((item, key) => (<div className="mt-3" key={key}>
@@ -472,7 +480,7 @@ const Chat = () => {
                   </SimpleBar>
                 </TabPane>
 
-              </TabContent>
+              </TabContent> */}
             </div>
 
             <div className="user-chat w-100 overflow-hidden border">
@@ -531,7 +539,7 @@ const Chat = () => {
                         <Col sm={8} xs={4}>
                           <ul className="list-inline user-chat-nav text-end mb-0">
                             <li className="list-inline-item m-0">
-                              <Dropdown
+                              {/* <Dropdown
                                 isOpen={search_Menu}
                                 toggle={toggleSearch}
                               >
@@ -558,7 +566,7 @@ const Chat = () => {
                                     </div>
                                   </div>
                                 </DropdownMenu>
-                              </Dropdown>
+                              </Dropdown> */}
                             </li>
 
                             <li className="list-inline-item d-none d-lg-inline-block m-0">
@@ -714,6 +722,7 @@ const Chat = () => {
                       {emojiPicker && <div className="alert pickerEmoji">
                         <Picker disableSearchBar={true} onEmojiClick={onEmojiClick} />
                       </div>}
+                    
                     </div>
 
                     <div className="chat-input-section p-3 p-lg-4">
@@ -722,6 +731,7 @@ const Chat = () => {
                           <div className="col-auto">
                             <div className="chat-input-links me-2">
                               <div className="links-list-item">
+                                {/* Emoji btn */}
                                 <button
                                   type="button"
                                   className="btn btn-link text-decoration-none emoji-btn"
@@ -730,6 +740,26 @@ const Chat = () => {
                                 >
                                   <i className="bx bx-smile align-middle"></i>
                                 </button>
+                                {/* Upload btn */}
+                                <button
+                                  type="button"
+                                  className="btn btn-link text-decoration-none emoji-btn"
+                                  id="emoji-btn"
+                                  onClick={() => setemojiPicker(!emojiPicker)}
+                                >
+                                  <i className="bx bx-link align-middle"></i>
+                                </button>
+                                {/* Video Call btn */}
+                                <button
+                                  type="button"
+                                  className="btn btn-link text-decoration-none emoji-btn"
+                                  id="emoji-btn"
+                                  onClick={() => setemojiPicker(!emojiPicker)}
+                                >
+                                  <i className="bx bx-video align-middle"></i>
+                                </button>
+                                
+                        
                               </div>
                             </div>
                           </div>
