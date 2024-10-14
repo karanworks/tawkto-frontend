@@ -17,7 +17,8 @@ export const isUserAuthenticated = () => {
 };
 
 // Register Method
-export const postRegister = (data) => api.create(url.POST_FAKE_REGISTER, data);
+export const postRegister = (data) =>
+  api.create("http://192.168.1.5:3010/api/register", data);
 
 // Default Login Method
 // export const postFakeLogin = data => api.create(url.POST_FAKE_LOGIN, data);

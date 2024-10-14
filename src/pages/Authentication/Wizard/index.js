@@ -22,18 +22,16 @@ import {
 import classnames from "classnames";
 import { loadAnimation } from "lottie-web";
 import { defineElement } from "lord-icon-element";
-import FeatherIcon from "feather-icons-react";
-import avatar from "./avatar.png";
-import { color } from "echarts";
+
 import ChatWidgetPreview from "./ChatWidgetPreview";
 import ChatWidgetSettings from "./ChatWidgetSettings";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-// register lottie and define custom element
+// Wizard lottie and define custom element
 defineElement(loadAnimation);
 
-const FormWizard = () => {
+const Wizard = () => {
   const [activeVerticalTab, setactiveVerticalTab] = useState(7);
   const [passedverticalSteps, setPassedverticalSteps] = useState([1]);
   const [passwordShow, setPasswordShow] = useState(false);
@@ -69,7 +67,7 @@ const FormWizard = () => {
     }),
 
     onSubmit: (values) => {
-      // dispatch(registerUser(values));
+      // dispatch(WizardUser(values));
       console.log("form values=>", values);
     },
   });
@@ -600,4 +598,4 @@ const FormWizard = () => {
   );
 };
 
-export default FormWizard;
+export default Wizard;

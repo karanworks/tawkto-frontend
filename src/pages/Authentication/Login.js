@@ -235,7 +235,7 @@ const Login = (props) => {
                       className="fw-semibold text-primary text-decoration-underline"
                     >
                       {" "}
-                      Signup{" "}
+                      Register{" "}
                     </Link>{" "}
                   </p>
                 </div>

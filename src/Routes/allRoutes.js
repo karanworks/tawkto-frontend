@@ -6,10 +6,14 @@ import { Navigate } from "react-router-dom";
 //Administration
 import WorkspaceMembers from "../pages/WorkspaceMembers/index";
 import InviteMembers from "../pages/WorkspaceMembers/InviteMembers/index";
+import Departments from "../pages/Departments/index";
+import AddDepartment from "../pages/Departments/AddDepartments/index";
+import Overview from "../pages/Overview/index";
 
 //login
 import Login from "../pages/Authentication/Login";
 import Logout from "../pages/Authentication/Logout";
+import Wizard from "../pages/Authentication/Wizard";
 import Register from "../pages/Authentication/Register";
 
 // User Profile
@@ -45,6 +49,9 @@ const authProtectedRoutes = [
   { path: "/gateways", component: <Gateways /> },
   { path: "/invite-members", component: <InviteMembers /> },
   { path: "/workspace-members", component: <WorkspaceMembers /> },
+  { path: "/departments", component: <Departments /> },
+  { path: "/overview", component: <Overview /> },
+  { path: "/add-department", component: <AddDepartment /> },
   // { path: "/calendar", component: <Calendar /> },
 
   //User Profile
@@ -64,6 +71,7 @@ const publicRoutes = [
   // Authentication Page
   { path: "/logout", component: <Logout /> },
   { path: "/login", component: <Login /> },
+  { path: "/wizard", component: <Wizard /> },
   { path: "/register", component: <Register /> },
   { path: "/jobs-landing", component: <JobsLanding /> },
 ];
