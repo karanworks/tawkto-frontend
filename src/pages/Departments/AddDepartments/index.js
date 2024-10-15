@@ -37,7 +37,10 @@ const AddDepartment = () => {
                   <Input type="text"></Input>
 
                   <label style={{ marginTop: "10px" }}>Description</label>
-                  <Input type="text" style={{ minHeight: "200px" }}></Input>
+                  <Input
+                    type="textarea"
+                    style={{ minHeight: "200px", verticalAlign: "top" }}
+                  ></Input>
 
                   <label style={{ marginTop: "10px" }}>Members</label>
 

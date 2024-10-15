@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 export const initialState = {
   registrationError: null,
@@ -6,7 +7,7 @@ export const initialState = {
   loading: false,
   user: null,
   success: false,
-  error: false
+  error: false,
 };
 
 const registerSlice = createSlice({
@@ -18,6 +19,7 @@ const registerSlice = createSlice({
       state.loading = false;
       state.success = true;
       state.registrationError = null;
+      console.log("user register successfully");
     },
     registerUserFailed(state, action) {
       state.user = null;
@@ -29,19 +31,19 @@ const registerSlice = createSlice({
       state.success = false;
       state.error = false;
     },
-    apiErrorChange(state, action){
+    apiErrorChange(state, action) {
       state.error = action.payload;
       state.loading = false;
       state.isUserLogout = false;
-    }
-  }
+    },
+  },
 });
 
 export const {
   registerUserSuccessful,
   registerUserFailed,
   resetRegisterFlagChange,
-  apiErrorChange
+  apiErrorChange,
 } = registerSlice.actions;
 
 export default registerSlice.reducer;

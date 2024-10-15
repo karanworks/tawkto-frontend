@@ -17,15 +17,18 @@ export const isUserAuthenticated = () => {
 };
 
 // Register Method
-export const postRegister = (data) =>
-  api.create("http://192.168.1.5:3010/api/register", data);
+export const postRegister = (data) => {
+  console.log("REGISTER DATA ->", data);
 
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/api/register`, data);
+};
 // Default Login Method
-// export const postFakeLogin = data => api.create(url.POST_FAKE_LOGIN, data);
+// export const postFakeLogin = (data) => api.create(url.POST_FAKE_LOGIN, data);
 
 // Login Method
 export const postLogin = (data) => {
-  return api.create(url.POST_LOGIN, data);
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/api/login`, data);
+  // return api.create("http://localhost:3008/login", data);
 };
 // *****************************************************************
 // *************************** USERS *******************************

@@ -90,10 +90,11 @@ const Register = () => {
 
     e.preventDefault();
     validation.handleSubmit();
+
     return false;
   }
 
-  document.title = "Basic Register | Velzon - React Admin & Dashboard Template";
+  document.title = "Basic Register";
 
   return (
     <React.Fragment>
