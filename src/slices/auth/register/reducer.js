@@ -19,6 +19,7 @@ const registerSlice = createSlice({
       state.loading = false;
       state.success = true;
       state.registrationError = null;
+
       console.log("user register successfully");
     },
     registerUserFailed(state, action) {

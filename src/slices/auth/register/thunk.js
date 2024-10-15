@@ -21,7 +21,6 @@ export const registerUser = (user) => async (dispatch) => {
     if (process.env.REACT_APP_SERVER_URL) {
       response = postRegister(user);
       const data = await response;
-      console.log("data is here", data);
 
       if (data.status === "success") {
         dispatch(registerUserSuccessful(data));

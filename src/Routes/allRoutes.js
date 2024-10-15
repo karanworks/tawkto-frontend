@@ -9,12 +9,14 @@ import InviteMembers from "../pages/WorkspaceMembers/InviteMembers/index";
 import Departments from "../pages/Departments/index";
 import AddDepartment from "../pages/Departments/AddDepartments/index";
 import Overview from "../pages/Overview/index";
+import ConnectWebsite from "../pages/ConnectWebsite/index";
 
 //login
 import Login from "../pages/Authentication/Login";
 import Logout from "../pages/Authentication/Logout";
 import Wizard from "../pages/Authentication/Wizard";
 import Register from "../pages/Authentication/Register";
+import RegistrationModal from "../pages/Authentication/Register/RegistrationModal";
 
 // User Profile
 import UserProfile from "../pages/Authentication/user-profile";
@@ -52,6 +54,8 @@ const authProtectedRoutes = [
   { path: "/departments", component: <Departments /> },
   { path: "/overview", component: <Overview /> },
   { path: "/add-department", component: <AddDepartment /> },
+  { path: "/connect-website", component: <ConnectWebsite /> },
+  { path: "/registration-modal", component: <RegistrationModal /> },
   // { path: "/calendar", component: <Calendar /> },
 
   //User Profile

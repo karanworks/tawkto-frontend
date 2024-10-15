@@ -50,22 +50,22 @@ const Login = (props) => {
   const [userLogin, setUserLogin] = useState([]);
   const [passwordShow, setPasswordShow] = useState(false);
 
-  useEffect(() => {
-    if (user && user) {
-      const updatedUserData =
-        process.env.REACT_APP_DEFAULTAUTH === "firebase"
-          ? user.multiFactor.user.email
-          : user.user.email;
-      const updatedUserPassword =
-        process.env.REACT_APP_DEFAULTAUTH === "firebase"
-          ? ""
-          : user.user.confirm_password;
-      setUserLogin({
-        email: updatedUserData,
-        password: updatedUserPassword,
-      });
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user && user) {
+  //     const updatedUserData =
+  //       process.env.REACT_APP_DEFAULTAUTH === "firebase"
+  //         ? user.multiFactor.user.email
+  //         : user.user.email;
+  //     const updatedUserPassword =
+  //       process.env.REACT_APP_DEFAULTAUTH === "firebase"
+  //         ? ""
+  //         : user.user.confirm_password;
+  //     setUserLogin({
+  //       email: updatedUserData,
+  //       password: updatedUserPassword,
+  //     });
+  //   }
+  // }, [user]);
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
@@ -148,11 +148,6 @@ const Login = (props) => {
                         </div>
 
                         <div className="mb-3">
-                          {/* <div className="float-end">
-                            <Link to="/forgot-password" className="text-muted">
-                              Forgot password?
-                            </Link>
-                          </div> */}
                           <Label
                             className="form-label"
                             htmlFor="password-input"
