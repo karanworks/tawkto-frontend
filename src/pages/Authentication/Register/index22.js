@@ -19,81 +19,35 @@ import { useFormik } from "formik";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// action
-import {
-  registerUser,
-  apiError,
-  resetRegisterFlag,
-} from "../../../slices/thunks";
-
 //redux
-import { useSelector, useDispatch } from "react-redux";
 
 import { Link, useNavigate } from "react-router-dom";
 
-//import images
-// import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
-import { createSelector } from "reselect";
-
 const Register = () => {
-  const history = useNavigate();
-  const dispatch = useDispatch();
+  document.title = "Basic SignUp | Velzon - React Admin & Dashboard Template";
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
+    enableReinitialize: false,
 
     initialValues: {
-      email: "",
       name: "",
+      email: "",
       password: "",
       confirmPassword: "",
     },
     validationSchema: Yup.object({
+      name: Yup.string().required("Please Enter Your name"),
       email: Yup.string().required("Please Enter Your Email"),
-      name: Yup.string().required("Please Enter Your Name"),
       password: Yup.string().required("Please enter your password"),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password")], "Passwords do not match")
         .required("Please confirm your password"),
     }),
     onSubmit: (values) => {
-      console.log("Register values->", values);
-      dispatch(registerUser(values));
+      console.log("Button submitted=>", values);
     },
   });
-
-  // const selectLayoutState = (state) => state.Account;
-  // const registerdatatype = createSelector(selectLayoutState, (account) => ({
-  //   success: account.success,
-  //   error: account.error,
-  // }));
-  // // Inside your component
-  // const { error, success } = useSelector(registerdatatype);
-
-  // useEffect(() => {
-  //   dispatch(apiError(""));
-  // }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (success) {
-  //     setTimeout(() => history("/login"), 3000);
-  //   }
-
-  //   setTimeout(() => {
-  //     dispatch(resetRegisterFlag());
-  //   }, 3000);
-  // }, [dispatch, success, error, history]);
-
-  function formHandleSubmit(e) {
-    console.log("FORM GETTING SUBMITTED");
-
-    e.preventDefault();
-    validation.handleSubmit();
-    return false;
-  }
-
-  document.title = "Basic Register | Velzon - React Admin & Dashboard Template";
 
   return (
     <React.Fragment>
@@ -108,41 +62,19 @@ const Register = () => {
                   </div>
                   <div className="p-2 mt-4">
                     <Form
-                      onSubmit={formHandleSubmit}
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        validation.handleSubmit();
+                        return false;
+                      }}
                       className="needs-validation"
+                      action="#"
                     >
-                      {/* {success && success ? (
-                        <>
-                          {toast("Your Redirect To Login Page...", {
-                            position: "top-right",
-                            hideProgressBar: false,
-                            className: "bg-success text-white",
-                            progress: undefined,
-                            toastId: "",
-                          })}
-                          <ToastContainer autoClose={2000} limit={1} />
-                          <Alert color="success">
-                            Register User Successfully and Your Redirect To
-                            Login Page...
-                          </Alert>
-                        </>
-                      ) : null} */}
-
-                      {/* {error && error ? (
-                        <Alert color="danger">
-                          <div>
-                            Email has been Register Before, Please Use Another
-                            Email Address...{" "}
-                          </div>
-                        </Alert>
-                      ) : null} */}
-
                       <div className="mb-3">
                         <Label htmlFor="name" className="form-label">
                           Name <span className="text-danger">*</span>
                         </Label>
                         <Input
-                          id="name"
                           name="name"
                           type="text"
                           placeholder="Enter Name"
@@ -161,9 +93,8 @@ const Register = () => {
                           </FormFeedback>
                         ) : null}
                       </div>
-
                       <div className="mb-3">
-                        <Label htmlFor="email" className="form-label">
+                        <Label htmlFor="useremail" className="form-label">
                           Email <span className="text-danger">*</span>
                         </Label>
                         <Input
@@ -193,7 +124,6 @@ const Register = () => {
                           Password <span className="text-danger">*</span>
                         </Label>
                         <Input
-                          id="password"
                           name="password"
                           type="password"
                           placeholder="Enter Password"
@@ -221,7 +151,6 @@ const Register = () => {
                           <span className="text-danger">*</span>
                         </Label>
                         <Input
-                          id="confirmPassword"
                           name="confirmPassword"
                           type="password"
                           placeholder="Confirm Password"
@@ -245,25 +174,25 @@ const Register = () => {
 
                       <div className="mt-4">
                         <button className="btn btn-success w-100" type="submit">
-                          Register
+                          Sign Up
                         </button>
+                      </div>
+                      <div className="mt-4 text-center">
+                        <p className="mb-0">
+                          Already have an account ?{" "}
+                          <Link
+                            to="/login"
+                            className="fw-semibold text-primary text-decoration-underline"
+                          >
+                            {" "}
+                            Signin{" "}
+                          </Link>{" "}
+                        </p>
                       </div>
                     </Form>
                   </div>
                 </CardBody>
               </Card>
-              <div className="mt-4 text-center">
-                <p className="mb-0">
-                  Already have an account ?{" "}
-                  <Link
-                    to="/login"
-                    className="fw-semibold text-primary text-decoration-underline"
-                  >
-                    {" "}
-                    Login{" "}
-                  </Link>{" "}
-                </p>
-              </div>
             </Col>
           </Row>
         </Container>

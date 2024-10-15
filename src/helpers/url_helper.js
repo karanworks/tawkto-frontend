@@ -6,7 +6,6 @@ export const POST_FAKE_REGISTER = "/auth/signup";
 // export const POST_LOGIN = "http://localhost:3008/login";
 // export const POST_LOGIN = "http://192.168.1.200:3008/login";
 export const POST_LOGIN = `${process.env.REACT_APP_SERVER_URL}/login`;
-console.log("POST LOGIN URL ->", POST_LOGIN);
 
 export const POST_FAKE_JWT_LOGIN = "/post-jwt-login";
 export const POST_FAKE_PASSWORD_FORGET = "/auth/forgot-password";

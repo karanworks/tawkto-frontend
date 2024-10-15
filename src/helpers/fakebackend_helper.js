@@ -17,8 +17,8 @@ export const isUserAuthenticated = () => {
 };
 
 // Register Method
-export const postFakeRegister = (data) =>
-  api.create(url.POST_FAKE_REGISTER, data);
+export const postRegister = (data) =>
+  api.create("http://192.168.1.5:3010/api/register", data);
 
 // Default Login Method
 // export const postFakeLogin = data => api.create(url.POST_FAKE_LOGIN, data);
@@ -222,18 +222,19 @@ export const getReports = (filters) => {
   return api.create(`${process.env.REACT_APP_SERVER_URL}/reports`, filters);
 };
 
-
 //Chat
 export const getDirectContact = () => api.get(url.GET_DIRECT_CONTACT);
 
 // get Messages
-export const getMessages = roomId => api.get(`${url.GET_MESSAGES}/${roomId}`, { params: { roomId } });
+export const getMessages = (roomId) =>
+  api.get(`${url.GET_MESSAGES}/${roomId}`, { params: { roomId } });
 
 // add Message
-export const addMessage = message => api.create(url.ADD_MESSAGE, message);
+export const addMessage = (message) => api.create(url.ADD_MESSAGE, message);
 
 // add Message
-export const deleteMessage = message => api.delete(url.DELETE_MESSAGE, { headers: { message } });
+export const deleteMessage = (message) =>
+  api.delete(url.DELETE_MESSAGE, { headers: { message } });
 
 // get Channels
 export const getChannels = () => api.get(url.GET_CHANNELS);
