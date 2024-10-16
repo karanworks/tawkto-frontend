@@ -102,7 +102,13 @@ const Overview = () => {
                             borderRadius: "5px",
                           }}
                         >
-                          <div className="form-check form-switch form-switch-right form-switch-md">
+                          <div
+                            className="form-check form-switch form-switch-right form-switch-md"
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
                             <label
                               htmlFor="link-colors-showcode"
                               className="form-label text-muted"
@@ -115,7 +121,6 @@ const Overview = () => {
                               id="link-colors-showcode"
                               checked={isActive}
                               onChange={handleSwitchToggle}
-                              style={{ marginLeft: " 360px" }}
                             />
                           </div>
                         </div>
@@ -267,7 +272,13 @@ const Overview = () => {
                           borderRadius: "5px",
                         }}
                       >
-                        <div className="form-check form-switch form-switch-right form-switch-md">
+                        <div
+                          className="form-check form-switch form-switch-right form-switch-md"
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
                           <label
                             htmlFor="link-colors-showcode"
                             className="form-label text-muted"
@@ -280,7 +291,6 @@ const Overview = () => {
                             id="link-colors-showcode"
                             checked={isEnable}
                             onChange={handleSwitchEnable}
-                            style={{ marginLeft: " 360px" }}
                           />
                         </div>
                       </div>
@@ -420,7 +430,13 @@ const Overview = () => {
                             borderRadius: "5px",
                           }}
                         >
-                          <div className="form-check form-switch form-switch-right form-switch-md">
+                          <div
+                            className="form-check form-switch form-switch-right form-switch-md"
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
                             <label
                               htmlFor="link-colors-showcode"
                               className="form-label text-muted"
@@ -433,7 +449,6 @@ const Overview = () => {
                               id="link-colors-showcode"
                               checked={isSecure}
                               onChange={handleSwitchSecure}
-                              style={{ marginLeft: " 360px" }}
                             />
                           </div>
                         </div>
@@ -469,7 +484,13 @@ const Overview = () => {
                             borderRadius: "5px",
                           }}
                         >
-                          <div className="form-check form-switch form-switch-right form-switch-md">
+                          <div
+                            className="form-check form-switch form-switch-right form-switch-md"
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
                             <label
                               htmlFor="link-colors-showcode"
                               className="form-label text-muted"
@@ -482,7 +503,6 @@ const Overview = () => {
                               id="link-colors-showcode"
                               checked={isIPSecure}
                               onChange={handleSwitchIPSecure}
-                              style={{ marginLeft: " 360px" }}
                             />
                           </div>
                         </div>

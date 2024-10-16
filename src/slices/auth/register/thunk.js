@@ -22,7 +22,7 @@ export const registerUser = (user) => async (dispatch) => {
       response = postRegister(user);
       const data = await response;
 
-      if (data.message === "success") {
+      if (data.status === "success") {
         dispatch(registerUserSuccessful(data));
       } else {
         dispatch(registerUserFailed(data));

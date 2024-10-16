@@ -111,70 +111,68 @@ const Navdata = () => {
     };
   };
 
-  const hardcodedMenus = [
-    {
-      id: 12,
-      menuLableId: "Administration",
-      label: "Administration",
-      icon: "settings",
-      link: "/#",
-      status: 1,
-      sequence: 7,
-      createdAt: "2024-05-07T09:58:31.643Z",
-      updatedAt: "2024-05-07T09:58:31.643Z",
-      subItems: [
-        {
-          id: 12,
-          submenuLableId: "Overview",
-          label: "Overview",
-          parentId: "Administration",
-          link: "/overview",
-          status: 1,
-          menuId: 12,
-          createdAt: "2024-05-07T09:58:31.643Z",
-          updatedAt: "2024-05-07T09:58:31.643Z",
-        },
-        {
-          id: 12,
-          submenuLableId: "WorkspaceMembers",
-          label: "Workspace Members",
-          parentId: "Administration",
-          link: "/workspace-members",
-          status: 1,
-          menuId: 12,
-          createdAt: "2024-05-07T09:58:31.643Z",
-          updatedAt: "2024-05-07T09:58:31.643Z",
-        },
-        {
-          id: 12,
-          submenuLableId: "Departments",
-          label: "Departments",
-          parentId: "Administration",
-          link: "/departments",
-          status: 1,
-          menuId: 12,
-          createdAt: "2024-05-07T09:58:31.643Z",
-          updatedAt: "2024-05-07T09:58:31.643Z",
-        },
-      ],
-    },
-  ];
+  // const hardcodedMenus = [
+  //   {
+  //     id: 12,
+  //     menuLableId: "Administration",
+  //     label: "Administration",
+  //     icon: "settings",
+  //     link: "/#",
+  //     status: 1,
+  //     sequence: 7,
+  //     createdAt: "2024-05-07T09:58:31.643Z",
+  //     updatedAt: "2024-05-07T09:58:31.643Z",
+  //     subItems: [
+  //       {
+  //         id: 12,
+  //         submenuLableId: "Overview",
+  //         label: "Overview",
+  //         parentId: "Administration",
+  //         link: "/overview",
+  //         status: 1,
+  //         menuId: 12,
+  //         createdAt: "2024-05-07T09:58:31.643Z",
+  //         updatedAt: "2024-05-07T09:58:31.643Z",
+  //       },
+  //       {
+  //         id: 12,
+  //         submenuLableId: "WorkspaceMembers",
+  //         label: "Workspace Members",
+  //         parentId: "Administration",
+  //         link: "/workspace-members",
+  //         status: 1,
+  //         menuId: 12,
+  //         createdAt: "2024-05-07T09:58:31.643Z",
+  //         updatedAt: "2024-05-07T09:58:31.643Z",
+  //       },
+  //       {
+  //         id: 12,
+  //         submenuLableId: "Departments",
+  //         label: "Departments",
+  //         parentId: "Administration",
+  //         link: "/departments",
+  //         status: 1,
+  //         menuId: 12,
+  //         createdAt: "2024-05-07T09:58:31.643Z",
+  //         updatedAt: "2024-05-07T09:58:31.643Z",
+  //       },
+  //     ],
+  //   },
+  // ];
 
-  const dynamicMenuData = [...hardcodedMenus, ...menuDataOfUser]?.map(
-    (menu) => {
-      // menuLableId me "label" ki spelling galat hai database me glt thi to testing ke liye galat likh kar hi check kr rha
+  const dynamicMenuData = menuDataOfUser?.map((menu) => {
+    // menuLableId me "label" ki spelling galat hai database me glt thi to testing ke liye galat likh kar hi check kr rha
 
-      console.log("MENU COMING FROM SOMEWHERE ->", menu);
+    console.log("MENU COMING FROM SOMEWHERE ->", menu);
 
-      const updatedMenu = {
-        ...menu,
-        icon: <FeatherIcon icon={menu.icon} className="icon-dual" />,
-        stateVariables: parentMenuStates[menu.menuLableId],
-        click: handleClick(menu.menuLableId),
-      };
-      return updatedMenu;
-    }
-  );
+    const updatedMenu = {
+      ...menu,
+      icon: <FeatherIcon icon={menu.icon} className="icon-dual" />,
+      stateVariables: parentMenuStates[menu.menuLableId],
+      click: handleClick(menu.menuLableId),
+    };
+    return updatedMenu;
+  });
 
   // menuLableId me "label" ki spelling galat hai database me glt thi to testing ke liye galat likh kar hi check kr rha
   return <React.Fragment>{dynamicMenuData}</React.Fragment>;

@@ -9,12 +9,14 @@ import InviteMembers from "../pages/WorkspaceMembers/InviteMembers/index";
 import Departments from "../pages/Departments/index";
 import AddDepartment from "../pages/Departments/AddDepartments/index";
 import Overview from "../pages/Overview/index";
+import ConnectWebsite from "../pages/ConnectWebsite/index";
 
 //login
 import Login from "../pages/Authentication/Login";
 import Logout from "../pages/Authentication/Logout";
 import Wizard from "../pages/Authentication/Wizard";
 import Register from "../pages/Authentication/Register";
+import RegistrationModal from "../pages/Authentication/Register/RegistrationModal";
 
 // User Profile
 import UserProfile from "../pages/Authentication/user-profile";
@@ -29,7 +31,7 @@ import Report from "../pages/Report";
 import Gateways from "../pages/Gateways";
 
 //Landing Page
-import JobsLanding from "../pages/Job_Landing";
+import Landing from "../pages/Landing";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -38,9 +40,9 @@ const authProtectedRoutes = [
   {
     path: "/",
     exact: true,
-    component: <Navigate to="/apps-chat" />,
+    component: <Navigate to="/" />,
   },
-  { path: "*", component: <Navigate to="/apps-chat" /> },
+  { path: "*", component: <Navigate to="/" /> },
   { path: "/roles", component: <Mapping /> },
   { path: "/campaigns", component: <Campaigns /> },
   { path: "/run", component: <Run /> },
@@ -52,6 +54,8 @@ const authProtectedRoutes = [
   { path: "/departments", component: <Departments /> },
   { path: "/overview", component: <Overview /> },
   { path: "/add-department", component: <AddDepartment /> },
+  { path: "/connect-website", component: <ConnectWebsite /> },
+  { path: "/registration-modal", component: <RegistrationModal /> },
   // { path: "/calendar", component: <Calendar /> },
 
   //User Profile
@@ -73,7 +77,7 @@ const publicRoutes = [
   { path: "/login", component: <Login /> },
   { path: "/wizard", component: <Wizard /> },
   { path: "/register", component: <Register /> },
-  { path: "/jobs-landing", component: <JobsLanding /> },
+  { path: "/", component: <Landing /> },
 ];
 
 export { authProtectedRoutes, publicRoutes };

@@ -9,7 +9,7 @@ import Home from "./Home";
 import Navbar from "./Navbar";
 import Process from "./Process";
 
-const JobLanding = () => {
+const Landing = () => {
   document.title = "Job Landing | Velzon - React Admin & Dashboard Template";
 
   window.onscroll = function () {
@@ -59,4 +59,4 @@ const JobLanding = () => {
   );
 };
 
-export default JobLanding;
+export default Landing;

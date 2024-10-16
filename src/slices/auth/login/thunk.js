@@ -28,7 +28,7 @@ export const loginUser = (user, history) => async (dispatch) => {
       data = finallogin.data;
       if (finallogin.status === "success") {
         dispatch(loginSuccess(data));
-        history("/apps-chat");
+        history("/overview");
       } else {
         console.log("else condition while logging in ", finallogin);
         dispatch(apiError(finallogin));

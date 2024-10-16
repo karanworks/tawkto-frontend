@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -34,8 +34,13 @@ import { Link, useNavigate } from "react-router-dom";
 //import images
 // import ParticlesAuth from "../AuthenticationInner/ParticlesAuth";
 import { createSelector } from "reselect";
+import RegistrationModal from "./RegistrationModal";
 
 const Register = () => {
+  const [modal_backdrop, setmodal_backdrop] = useState(false);
+  function tog_backdrop() {
+    setmodal_backdrop(!modal_backdrop);
+  }
   const history = useNavigate();
   const dispatch = useDispatch();
 
@@ -59,41 +64,47 @@ const Register = () => {
     }),
     onSubmit: (values) => {
       console.log("Register values->", values);
-      dispatch(registerUser(values));
+      dispatch(registerUser(values)).then((res) => {
+        console.log("DISPATCH RESPONSE ->", res);
+      });
     },
   });
 
-  // const selectLayoutState = (state) => state.Account;
-  // const registerdatatype = createSelector(selectLayoutState, (account) => ({
-  //   success: account.success,
-  //   error: account.error,
-  // }));
-  // // Inside your component
-  // const { error, success } = useSelector(registerdatatype);
+  const selectLayoutState = (state) => state.Account;
+  const registerdatatype = createSelector(selectLayoutState, (account) => ({
+    success: account.success,
+    error: account.error,
+  }));
+  // Inside your component
+  const { error, success } = useSelector(registerdatatype);
 
-  // useEffect(() => {
-  //   dispatch(apiError(""));
-  // }, [dispatch]);
+  console.log("REGISTER SUCCESS ->", success);
 
-  // useEffect(() => {
-  //   if (success) {
-  //     setTimeout(() => history("/login"), 3000);
-  //   }
+  useEffect(() => {
+    dispatch(apiError(""));
+  }, [dispatch]);
 
-  //   setTimeout(() => {
-  //     dispatch(resetRegisterFlag());
-  //   }, 3000);
-  // }, [dispatch, success, error, history]);
+  useEffect(() => {
+    if (success) {
+      // setTimeout(() => history("/login"), 3000);
+      setmodal_backdrop(true);
+    }
+
+    setTimeout(() => {
+      dispatch(resetRegisterFlag());
+    }, 3000);
+  }, [dispatch, success, error, history]);
 
   function formHandleSubmit(e) {
     console.log("FORM GETTING SUBMITTED");
 
     e.preventDefault();
     validation.handleSubmit();
+
     return false;
   }
 
-  document.title = "Basic Register | Velzon - React Admin & Dashboard Template";
+  document.title = "Basic Register";
 
   return (
     <React.Fragment>
@@ -267,6 +278,11 @@ const Register = () => {
             </Col>
           </Row>
         </Container>
+        <RegistrationModal
+          modal_backdrop={modal_backdrop}
+          tog_backdrop={tog_backdrop}
+          setmodal_backdrop={setmodal_backdrop}
+        />
       </div>
     </React.Fragment>
   );
