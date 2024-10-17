@@ -48,8 +48,10 @@ import userDummayImage from "../../assets/images/users/user-dummy-img.jpg";
 //Import Scrollbar
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { createSelector } from "reselect";
+import { io } from "socket.io-client";
 
 const Chat = () => {
+  const socket = io("http://localhost:5010");
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const toggleCustom = (tab) => {
     if (customActiveTab !== tab) {
@@ -73,15 +75,17 @@ const Chat = () => {
     name: "Anna Adame",
     isActive: true,
   });
+  const [messages, setMessages] = useState([]);
 
   const selectLayoutState = (state) => state.Chat;
   const chatProperties = createSelector(selectLayoutState, (state) => ({
     chats: state.chats,
-    messages: state.messages,
+    // messages: state.messages,
     channels: state.channels,
   }));
   // Inside your component
-  const { chats, messages, channels } = useSelector(chatProperties);
+  // const { chats, messages, channels } = useSelector(chatProperties);
+  const { chats } = useSelector(chatProperties);
   //Toggle Chat Box Menus
   const toggleSearch = () => {
     setsearch_Menu(!search_Menu);
@@ -95,6 +99,27 @@ const Chat = () => {
   const toggleSettings = () => {
     setsettings_Menu(!settings_Menu);
   };
+
+  useEffect(() => {
+    socket.on("message", (message) => {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        message, // Ensure the correct structure of data
+      ]);
+    });
+
+    return () => {
+      socket.off("message");
+    };
+  }, []);
+
+  const sendMessage = () => {
+    if (curMessage.trim()) {
+      socket.emit("message", curMessage); // Send message to server via socket.io
+      setcurMessage(""); // Clear the input
+    }
+  };
+
   useEffect(() => {
     dispatch(onGetDirectContact());
     dispatch(onGetChannels());
@@ -137,6 +162,7 @@ const Chat = () => {
       e.preventDefault();
       setcurMessage(value);
       addMessage(currentRoomId, currentUser.name);
+      sendMessage();
     }
   };
 
@@ -451,15 +477,16 @@ const Chat = () => {
                           {messages &&
                             map(messages, (message, key) => (
                               <li
-                                className={
-                                  message.sender === Chat_Box_Username
-                                    ? " chat-list left"
-                                    : "chat-list right"
-                                }
+                                // className={
+                                //   message.sender === Chat_Box_Username
+                                //     ? " chat-list left"
+                                //     : "chat-list right"
+                                // }
+                                className="chat-list right"
                                 key={key}
                               >
                                 <div className="conversation-list">
-                                  {message.sender === Chat_Box_Username && (
+                                  {/* {message.sender === Chat_Box_Username && (
                                     <div className="chat-avatar">
                                       {Chat_Box_Image === undefined ? (
                                         <img src={userDummayImage} alt="" />
@@ -467,12 +494,13 @@ const Chat = () => {
                                         <img src={Chat_Box_Image} alt="" />
                                       )}
                                     </div>
-                                  )}
+                                  )} */}
+
                                   <div className="user-chat-content">
                                     <div className="ctext-wrap">
                                       <div className="ctext-wrap-content shadow-none">
                                         <p className="mb-0 ctext-content">
-                                          {message.message}
+                                          {message}
                                         </p>
                                       </div>
                                       <UncontrolledDropdown className="align-self-start message-box-drop">
@@ -597,6 +625,7 @@ const Chat = () => {
                                     addMessage(currentRoomId, currentUser.name);
                                     setemojiPicker(false);
                                     setemojiArray("");
+                                    sendMessage();
                                   }}
                                   className="chat-send waves-effect waves-light fs-13"
                                 >
