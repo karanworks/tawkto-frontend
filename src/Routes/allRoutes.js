@@ -32,11 +32,12 @@ import Gateways from "../pages/Gateways";
 
 //Landing Page
 import Landing from "../pages/Landing";
+import WidgetPage from "../pages/WidgetPage";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
   // { path: "/home", component: <Chat /> },
-  { path: "/apps-chat", component: <Chat /> },
+  { path: "/chat", component: <Chat /> },
   {
     path: "/",
     exact: true,
@@ -56,6 +57,7 @@ const authProtectedRoutes = [
   { path: "/add-department", component: <AddDepartment /> },
   { path: "/connect-website", component: <ConnectWebsite /> },
   { path: "/registration-modal", component: <RegistrationModal /> },
+  { path: "/widget-page", component: <WidgetPage /> },
   // { path: "/calendar", component: <Calendar /> },
 
   //User Profile
