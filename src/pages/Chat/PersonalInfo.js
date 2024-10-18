@@ -82,10 +82,10 @@ const PersonalInfo = ({ show, onCloseClick, currentuser, cuurentiseImg }) => {
       toggle={onCloseClick}
     >
       <OffcanvasBody className="offcanvas-body profile-offcanvas p-0">
-        <div className="team-cover">
+        {/* <div className="team-cover">
           <img src={Img9} alt="" className="img-fluid" />
-        </div>
-        <div className="p-1 pb-4 pt-0">
+        </div> */}
+        {/* <div className="p-1 pb-4 pt-0">
           <div className="team-settings">
             <div className="row g-0">
               <div className="col">
@@ -96,8 +96,8 @@ const PersonalInfo = ({ show, onCloseClick, currentuser, cuurentiseImg }) => {
                     className="btn-close btn-close-white"
                   ></Button>
                 </div>
-              </div>
-              <div className="col-auto">
+              </div> */}
+        {/* <div className="col-auto">
                 <div className="user-chat-nav d-flex">
                   <button
                     type="button"
@@ -125,26 +125,26 @@ const PersonalInfo = ({ show, onCloseClick, currentuser, cuurentiseImg }) => {
                       </DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
-                </div>
-              </div>
-            </div>
+                </div> */}
+        {/* </div> */}
+        {/* </div>
           </div>
-        </div>
-        <div className="p-3 text-center">
-          {cuurentiseImg ? (
-            <img
-              src={cuurentiseImg}
-              alt=""
-              className="avatar-lg img-thumbnail rounded-circle mx-auto profile-img"
-            />
-          ) : (
-            <img
-              src={dummyImage}
-              alt=""
-              className="avatar-lg img-thumbnail rounded-circle mx-auto profile-img"
-            />
-          )}
-          <div className="mt-3">
+        </div> */}
+        {/* <div className="p-3 text-center">
+        {cuurentiseImg ?
+        
+          <img
+            src={cuurentiseImg}
+            alt=""
+            className="avatar-lg img-thumbnail rounded-circle mx-auto profile-img"
+          />
+          :
+          <img 
+          src={dummyImage}
+          alt="" 
+          className="avatar-lg img-thumbnail rounded-circle mx-auto profile-img" />
+        } */}
+        {/* <div className="mt-3">
             <h5 className="fs-16 mb-1">
               <Link to="#" className="link-primary username">
                 {currentuser}
@@ -154,8 +154,8 @@ const PersonalInfo = ({ show, onCloseClick, currentuser, cuurentiseImg }) => {
               <i className="ri-checkbox-blank-circle-fill me-1 align-bottom text-success"></i>
               Online
             </p>
-          </div>
-          <div className="d-flex gap-3 justify-content-center">
+          </div> */}
+        {/* <div className="d-flex gap-3 justify-content-center">
             <button
               type="button"
               className="btn avatar-xs p-0"
@@ -166,9 +166,9 @@ const PersonalInfo = ({ show, onCloseClick, currentuser, cuurentiseImg }) => {
               <span className="avatar-title rounded bg-light text-dark">
                 <i className="ri-question-answer-line"></i>
               </span>
-            </button>
+            </button> */}
 
-            <button
+        {/* <button
               type="button"
               className="btn avatar-xs p-0"
               data-bs-toggle="tooltip"
@@ -178,9 +178,9 @@ const PersonalInfo = ({ show, onCloseClick, currentuser, cuurentiseImg }) => {
               <span className="avatar-title rounded bg-light text-dark">
                 <i className="ri-star-line"></i>
               </span>
-            </button>
+            </button> */}
 
-            <button
+        {/* <button
               type="button"
               className="btn avatar-xs p-0"
               data-bs-toggle="tooltip"
@@ -190,15 +190,15 @@ const PersonalInfo = ({ show, onCloseClick, currentuser, cuurentiseImg }) => {
               <span className="avatar-title rounded bg-light text-dark">
                 <i className="ri-phone-line"></i>
               </span>
-            </button>
+            </button> */}
 
-            <Dropdown isOpen={menu2} toggle={() => setMenu2(!menu2)}>
+        {/* <Dropdown isOpen={menu2} toggle={() => setMenu2(!menu2)}>
               <DropdownToggle className="btn avatar-xs p-0" tag="a">
                 <span className="avatar-title bg-light text-dark rounded">
                   <i className="ri-more-fill"></i>
                 </span>
-              </DropdownToggle>
-              <DropdownMenu className="dropdown-menu-end">
+              </DropdownToggle> */}
+        {/* <DropdownMenu className="dropdown-menu-end">
                 <DropdownItem href="#">
                   <i className="ri-inbox-archive-line align-bottom text-muted me-2"></i>
                   Archive
@@ -211,10 +211,10 @@ const PersonalInfo = ({ show, onCloseClick, currentuser, cuurentiseImg }) => {
                   <i className="ri-delete-bin-5-line align-bottom text-muted me-2"></i>
                   Delete
                 </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        </div>
+              </DropdownMenu> */}
+        {/* </Dropdown> */}
+        {/* </div> */}
+        {/* </div> */}
         <div className="border-top border-top-dashed p-3">
           <h5 className="fs-15 mb-3">Personal Details</h5>
           <div className="mb-3">
@@ -237,7 +237,7 @@ const PersonalInfo = ({ show, onCloseClick, currentuser, cuurentiseImg }) => {
           </div>
         </div>
 
-        <div className="border-top border-top-dashed p-3">
+        {/* <div className="border-top border-top-dashed p-3">
           <h5 className="fs-15 mb-3">Attached Files</h5>
 
           <div className="vstack gap-2">
@@ -252,7 +252,7 @@ const PersonalInfo = ({ show, onCloseClick, currentuser, cuurentiseImg }) => {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
       </OffcanvasBody>
     </Offcanvas>
   );

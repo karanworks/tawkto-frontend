@@ -13,20 +13,18 @@ const Navdata = () => {
   const userData = getLoggedinUser();
   const menuDataOfUser = userData.data.menus;
 
+  console.log("menuDataofUser ->", menuDataOfUser);
+
   //state data
-  const [isSettings, setIsSettings] = useState(false);
-
-  const [isManagement, setIsManagement] = useState(false);
-
-  const [isDashboard, setIsDashboard] = useState(false);
 
   const [isAdministration, setIsAdministration] = useState(false);
+  const [isLiveConversations, setIsLiveConversations] = useState(false);
 
   //
   const [isAuth, setIsAuth] = useState(false);
   const [isPages, setIsPages] = useState(false);
 
-  const [iscurrentState, setIscurrentState] = useState("Home");
+  const [iscurrentState, setIscurrentState] = useState("Administration");
 
   function updateIconSidebar(e) {
     if (e && e.target && e.target.getAttribute("subitems")) {
@@ -45,19 +43,11 @@ const Navdata = () => {
   useEffect(() => {
     document.body.classList.remove("twocolumn-panel");
 
-    if (iscurrentState !== "Settings") {
-      setIsSettings(false);
-    }
-
-    if (iscurrentState !== "Management") {
-      setIsManagement(false);
-    }
-
-    if (iscurrentState !== "Dashboard") {
-      setIsDashboard(false);
-    }
     if (iscurrentState !== "Administration") {
       setIsAdministration(false);
+    }
+    if (iscurrentState !== "LiveConversations") {
+      setIsLiveConversations(false);
     }
 
     if (iscurrentState !== "Auth") {
@@ -69,42 +59,27 @@ const Navdata = () => {
   }, [
     history,
     iscurrentState,
-    isSettings,
-    isManagement,
-    isDashboard,
     isAdministration,
+    isLiveConversations,
     isAuth,
     isPages,
   ]);
 
   const parentMenuStates = {
-    Settings: isSettings,
-    Management: isManagement,
-    Dashboard: isDashboard,
     Administration: isAdministration,
+    LiveConversations: isLiveConversations,
   };
 
   const handleClick = (menuLabelId) => {
     return function (e) {
       e.preventDefault();
       switch (menuLabelId) {
-        case "Settings":
-          setIsSettings(!isSettings);
-          setIscurrentState(menuLabelId);
-          updateIconSidebar(e);
-
-        case "Management":
-          setIsManagement(!isManagement);
-          setIscurrentState(menuLabelId);
-          updateIconSidebar(e);
-
-        case "Dashboard":
-          setIsDashboard(!isDashboard);
-          setIscurrentState(menuLabelId);
-          updateIconSidebar(e);
-
         case "Administration":
           setIsAdministration(!isAdministration);
+          setIscurrentState(menuLabelId);
+          updateIconSidebar(e);
+        case "LiveConversations":
+          setIsLiveConversations(!isLiveConversations);
           setIscurrentState(menuLabelId);
           updateIconSidebar(e);
       }

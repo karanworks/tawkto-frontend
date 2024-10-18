@@ -51,7 +51,6 @@ import { createSelector } from "reselect";
 import { io } from "socket.io-client";
 
 const Chat = () => {
-  const socket = io("http://localhost:5010");
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const toggleCustom = (tab) => {
     if (customActiveTab !== tab) {
@@ -76,6 +75,8 @@ const Chat = () => {
     isActive: true,
   });
   const [messages, setMessages] = useState([]);
+  const [visitorRequests, setVisitorRequests] = useState([]);
+  const [socket, setSocket] = useState(null);
 
   const selectLayoutState = (state) => state.Chat;
   const chatProperties = createSelector(selectLayoutState, (state) => ({
@@ -101,23 +102,18 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    socket.on("message", (message) => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        message, // Ensure the correct structure of data
-      ]);
+    const newSocket = io("http://localhost:5010");
+    newSocket.on("visitor-message-request", (userRequest) => {
+      setVisitorRequests((prevRequests) => [...prevRequests, userRequest]);
     });
-
-    return () => {
-      socket.off("message");
-    };
+    setSocket(newSocket);
   }, []);
 
   const sendMessage = () => {
-    if (curMessage.trim()) {
-      socket.emit("message", curMessage); // Send message to server via socket.io
-      setcurMessage(""); // Clear the input
-    }
+    // if (curMessage.trim()) {
+    //   socket.emit("message", curMessage); // Send message to server via socket.io
+    //   setcurMessage(""); // Clear the input
+    // }
   };
 
   useEffect(() => {
@@ -263,6 +259,12 @@ const Chat = () => {
                     className="list-unstyled chat-list chat-user-list users-list"
                     id="userList"
                   >
+                    {(visitorRequests || []).map((request) => (
+                      <li>
+                        id-{request.userId}, name-{request.name}
+                      </li>
+                    ))}
+
                     {(chats || []).map((chat) => (
                       <li
                         key={chat.id + chat.status}
