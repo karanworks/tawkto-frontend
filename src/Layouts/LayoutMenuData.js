@@ -13,8 +13,6 @@ const Navdata = () => {
   const userData = getLoggedinUser();
   const menuDataOfUser = userData.data.menus;
 
-  console.log("menuDataofUser ->", menuDataOfUser);
-
   //state data
 
   const [isAdministration, setIsAdministration] = useState(false);
