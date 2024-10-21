@@ -89,7 +89,6 @@ const InviteMembers = () => {
                       </thead>
                     </table>
                   </div>
-                  ;
                   {entries.map((entry, index) => (
                     <div key={index} className="mb-4">
                       <div className="display-flex align-middle ">

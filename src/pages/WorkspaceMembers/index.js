@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -8,15 +8,58 @@ import {
   Card,
   CardHeader,
   CardBody,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
   Input,
+  Button,
 } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import AddMemberModal from "./AddMemberModal";
+import { inviteWorkspaceMember } from "../../slices/WorkspaceMembers/thunk";
+import { useDispatch } from "react-redux";
 
 const WorkspaceMembers = () => {
+  const [modal_list, setmodal_list] = useState(false);
+
+  const dispatch = useDispatch();
+
+  function tog_list() {
+    setmodal_list(!modal_list);
+  }
+
+  const validation = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required("Please enter name"),
+      email: Yup.string().required("Please enter your email"),
+      password: Yup.string().required("Please enter password"),
+    }),
+    onSubmit: (values, { resetForm }) => {
+      console.log("MEMBER INPUT VALUES ->", values);
+      dispatch(inviteWorkspaceMember(values));
+
+      resetForm();
+
+      setmodal_list(false);
+    },
+  });
+
+  console.log("MEMBER INVITATION VALIDATION ->", validation);
+
+  function formHandleSubmit(e) {
+    e.preventDefault();
+    validation.handleSubmit();
+
+    if (!validation.errors) {
+      setmodal_list(false);
+    }
+    return false;
+  }
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -36,13 +79,13 @@ const WorkspaceMembers = () => {
                         />
                       </div>
                       <div>
-                        <Link
-                          to="/invite-members"
+                        <Button
                           className="btn btn-primary"
                           style={{ marginInlineEnd: "5px" }}
+                          onClick={tog_list}
                         >
                           <i className=" align-bottom me-1"></i> Invite Members
-                        </Link>
+                        </Button>
                       </div>
                     </div>
                     <div className="d-flex align-items-center flex-wrap gap-4">
@@ -192,6 +235,13 @@ const WorkspaceMembers = () => {
           </Row>
         </Container>
       </div>
+
+      <AddMemberModal
+        validation={validation}
+        modal_list={modal_list}
+        tog_list={tog_list}
+        formHandleSubmit={formHandleSubmit}
+      />
     </React.Fragment>
   );
 };
