@@ -20,16 +20,27 @@ export const isUserAuthenticated = () => {
 export const postRegister = (data) => {
   console.log("REGISTER DATA ->", data);
 
-  return api.create(`${process.env.REACT_APP_SERVER_URL}/api/register`, data);
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/register`, data);
 };
 // Default Login Method
 // export const postFakeLogin = (data) => api.create(url.POST_FAKE_LOGIN, data);
 
 // Login Method
 export const postLogin = (data) => {
-  return api.create(`${process.env.REACT_APP_SERVER_URL}/api/login`, data);
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/login`, data);
   // return api.create("http://localhost:3008/login", data);
 };
+
+// *****************************************************************
+// ************************* WORKSPACE *****************************
+// *****************************************************************
+export const getWorkspaces = () => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/workspace`);
+};
+export const createWorkspace = (data) => {
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/workspace`, data);
+};
+
 // *****************************************************************
 // *************************** USERS *******************************
 // *****************************************************************

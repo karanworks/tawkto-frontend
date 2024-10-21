@@ -142,15 +142,15 @@ const Chat = () => {
     dispatch(onAddMessage(message));
   };
 
-  const scrollToBottom = useCallback(() => {
-    if (messageBox) {
-      messageBox.scrollTop = messageBox.scrollHeight + 1000;
-    }
-  }, [messageBox]);
+  // const scrollToBottom = useCallback(() => {
+  //   if (messageBox) {
+  //     messageBox.scrollTop = messageBox.scrollHeight + 1000;
+  //   }
+  // }, [messageBox]);
 
-  useEffect(() => {
-    if (!isEmpty(messages)) scrollToBottom();
-  }, [messages, scrollToBottom]);
+  // useEffect(() => {
+  //   if (!isEmpty(messages)) scrollToBottom();
+  // }, [messages, scrollToBottom]);
 
   const onKeyPress = (e) => {
     const { key, value } = e;
@@ -469,7 +469,7 @@ const Chat = () => {
                       <SimpleBar
                         className="chat-conversation p-3 p-lg-4"
                         id="chat-conversation"
-                        containerRef={(ref) => setMessageBox(ref)}
+                        // containerRef={(ref) => setMessageBox(ref)}
                       >
                         <div id="elmLoader"></div>
                         <ul

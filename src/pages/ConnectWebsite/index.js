@@ -17,6 +17,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { createWorkspace } from "../../slices/ConnectWebsite/thunk";
 
 const ConnectWebsite = () => {
   const dispatch = useDispatch();
@@ -33,11 +34,19 @@ const ConnectWebsite = () => {
       websiteAddress: Yup.string().required("Please Enter Your websiteAddress"),
       workspaceName: Yup.string().required("Please Enter Your Workspace Name "),
     }),
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       // this code works for default login feature
-      console.log("VALUES ->", values);
+      console.log("WORKSPACE FORM VALUES ->", values);
+      dispatch(createWorkspace(values));
+      resetForm();
     },
   });
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    validation.handleSubmit();
+    return false;
+  }
 
   document.title = "ConnectWebsite | Velzon - React Admin & Dashboard Template";
   return (
@@ -45,17 +54,10 @@ const ConnectWebsite = () => {
       <div className="page-content">
         <Container fluid>
           <BreadCrumb title="ConnectWebsite" pageTitle="Pages" />
-          <Row>
-            <Col xs={12}>
+          <Row style={{ display: "flex", justifyContent: "center" }}>
+            <Col xs={4}>
               <div className="p-2 mt-4">
-                <Form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    validation.handleSubmit();
-                    return false;
-                  }}
-                  action="#"
-                >
+                <Form onSubmit={handleFormSubmit} action="#">
                   <div className="mb-3">
                     <Label htmlFor="websiteAddress" className="form-label">
                       Website Address
@@ -85,12 +87,12 @@ const ConnectWebsite = () => {
 
                   <div className="mb-3">
                     <Label htmlFor="workspaceName" className="form-label">
-                      Website Address
+                      Workspace Name
                     </Label>
                     <Input
                       name="workspaceName"
                       className="form-control"
-                      placeholder="Enter workspace Name"
+                      placeholder="Enter Workspace Name"
                       type="text"
                       onChange={validation.handleChange}
                       onBlur={validation.handleBlur}

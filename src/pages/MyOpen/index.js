@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
   Container,
+  Button,
+  UncontrolledTooltip,
+  Input,
   DropdownToggle,
   DropdownMenu,
   Dropdown,
@@ -10,14 +13,16 @@ import {
   Card,
   CardBody,
   UncontrolledDropdown,
-  ButtonGroup,
-  Label,
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { isEmpty, map } from "lodash";
 import classnames from "classnames";
 import SimpleBar from "simplebar-react";
-import Select from "react-select";
 
 //Import Icons
 import FeatherIcon from "feather-icons-react";
@@ -45,14 +50,7 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import { createSelector } from "reselect";
 import { io } from "socket.io-client";
 
-const SingleOptions = [
-  { value: "Choices 1", label: "Choices 1" },
-  { value: "Choices 2", label: "Choices 2" },
-  { value: "Choices 3", label: "Choices 3" },
-  { value: "Choices 4", label: "Choices 4" },
-];
-
-const Unassigned = () => {
+const MyOpen = () => {
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const toggleCustom = (tab) => {
     if (customActiveTab !== tab) {
@@ -65,6 +63,7 @@ const Unassigned = () => {
   const [isInfoDetails, setIsInfoDetails] = useState(false);
   const [Chat_Box_Username, setChat_Box_Username] = useState("Lisa Parker");
   const [Chat_Box_Image, setChat_Box_Image] = useState(avatar2);
+  const [currentRoomId, setCurrentRoomId] = useState(1);
   const [messageBox, setMessageBox] = useState(null);
   const [curMessage, setcurMessage] = useState("");
   const [search_Menu, setsearch_Menu] = useState(false);
@@ -75,11 +74,9 @@ const Unassigned = () => {
     name: "Anna Adame",
     isActive: true,
   });
-  const [selectedSingle, setSelectedSingle] = useState(null);
   const [messages, setMessages] = useState([]);
   const [visitorRequests, setVisitorRequests] = useState([]);
   const [socket, setSocket] = useState(null);
-  const [currentRoomId, setCurrentRoomId] = useState(null);
 
   const selectLayoutState = (state) => state.Chat;
   const chatProperties = createSelector(selectLayoutState, (state) => ({
@@ -90,12 +87,6 @@ const Unassigned = () => {
   // Inside your component
   // const { chats, messages, channels } = useSelector(chatProperties);
   const { chats } = useSelector(chatProperties);
-
-  function handleSelectSingle(selectedSingle) {
-    console.log("selected single ->", selectedSingle);
-    setSelectedSingle(selectedSingle);
-  }
-
   //Toggle Chat Box Menus
   const toggleSearch = () => {
     setsearch_Menu(!search_Menu);
@@ -114,25 +105,16 @@ const Unassigned = () => {
     const newSocket = io("http://localhost:5010");
     newSocket.on("visitor-message-request", (userRequest) => {
       setVisitorRequests((prevRequests) => [...prevRequests, userRequest]);
-      setCurrentRoomId(userRequest.roomId);
     });
-
-    newSocket.on("message", (data) => {
-      console.log("GOT MESSAGE ->", data);
-
-      setMessages((prev) => [...prev, data]);
-    });
-
     setSocket(newSocket);
   }, []);
 
-  function joinConversation() {
-    socket.emit("join-conversation", currentRoomId);
-  }
-
-  function sendMessage() {
-    socket.emit("message", { message: curMessage, roomId: currentRoomId });
-  }
+  const sendMessage = () => {
+    // if (curMessage.trim()) {
+    //   socket.emit("message", curMessage); // Send message to server via socket.io
+    //   setcurMessage(""); // Clear the input
+    // }
+  };
 
   useEffect(() => {
     dispatch(onGetDirectContact());
@@ -253,7 +235,7 @@ const Unassigned = () => {
               <div className="px-4 pt-4 mb-4">
                 <div className="d-flex align-items-start">
                   <div className="flex-grow-1">
-                    <h5 className="mb-4">👋 Unassigned</h5>
+                    <h5 className="mb-4">📬 My Open</h5>
                   </div>
                 </div>
                 <div className="search-box">
@@ -277,39 +259,12 @@ const Unassigned = () => {
                     className="list-unstyled chat-list chat-user-list users-list"
                     id="userList"
                   >
-                    {/* className="active" removed this class because it was changin the text color as well will modify it in the future */}
                     {(visitorRequests || []).map((request) => (
-                      <li style={{ background: "#F3F6F9" }}>
-                        <Link to="#" onClick={(e) => {}}>
-                          <div className="d-flex align-items-center">
-                            <div className="flex-shrink-0 chat-user-img online align-self-start me-2 ms-0">
-                              <div className="avatar-xxs">
-                                <div
-                                  className={
-                                    "avatar-title rounded-circle bg-primary userprofile"
-                                  }
-                                >
-                                  {request.name.charAt(0)}
-                                </div>
-                              </div>
-
-                              <span className="user-status"></span>
-                            </div>
-                            <div className="flex-grow-1 overflow-hidden">
-                              <div className="d-flex justify-content-between">
-                                <p className="text-truncate mb-0 text-muted">
-                                  {request.name}
-                                </p>
-                                <p className="mb-0 text-muted">8min</p>
-                              </div>
-                              <p className="text-truncate mb-0">
-                                {request.message}
-                              </p>
-                            </div>
-                          </div>
-                        </Link>
+                      <li>
+                        id-{request.userId}, name-{request.name}
                       </li>
                     ))}
+                    {/* className="active" removed this class because it was changin the text color as well will modify it in the future */}
                     <li style={{ background: "#F3F6F9" }}>
                       <Link to="#" onClick={(e) => {}}>
                         <div className="d-flex align-items-center">
@@ -361,18 +316,38 @@ const Unassigned = () => {
                                 <i className="ri-arrow-left-s-line align-bottom"></i>
                               </Link>
                             </div>
-                            <div className="flex-grow-1 ">
+                            <div className="flex-grow-1 overflow-hidden">
                               <div className="d-flex align-items-center">
-                                <div className="mb-3">
-                                  <Select
-                                    value={selectedSingle}
-                                    onChange={() => {
-                                      handleSelectSingle();
-                                    }}
-                                    options={SingleOptions}
-                                    className="form-select-sm"
-                                    placeholder="Select Assignee"
-                                  />
+                                <div className="flex-shrink-0 chat-user-img online user-own-img align-self-center me-3 ms-0">
+                                  {Chat_Box_Image === undefined ? (
+                                    <img
+                                      src={userDummayImage}
+                                      className="rounded-circle avatar-xs"
+                                      alt=""
+                                    />
+                                  ) : (
+                                    <img
+                                      src={Chat_Box_Image}
+                                      className="rounded-circle avatar-xs"
+                                      alt=""
+                                    />
+                                  )}
+                                  <span className="user-status"></span>
+                                </div>
+                                <div className="flex-grow-1 overflow-hidden">
+                                  <h5 className="text-truncate mb-0 fs-16">
+                                    <a
+                                      className="text-reset username"
+                                      data-bs-toggle="offcanvas"
+                                      href="#userProfileCanvasExample"
+                                      aria-controls="userProfileCanvasExample"
+                                    >
+                                      {Chat_Box_Username}
+                                    </a>
+                                  </h5>
+                                  <p className="text-truncate text-muted fs-14 mb-0 userStatus">
+                                    <small>Online</small>
+                                  </p>
                                 </div>
                               </div>
                             </div>
@@ -397,7 +372,6 @@ const Unassigned = () => {
                                 <span>Solve</span>
                               </button>
                             </li>
-
                             <li className="list-inline-item d-none d-lg-inline-block m-0">
                               <button
                                 type="button"
@@ -464,8 +438,26 @@ const Unassigned = () => {
                         >
                           {messages &&
                             map(messages, (message, key) => (
-                              <li className="chat-list right" key={key}>
+                              <li
+                                // className={
+                                //   message.sender === Chat_Box_Username
+                                //     ? " chat-list left"
+                                //     : "chat-list right"
+                                // }
+                                className="chat-list right"
+                                key={key}
+                              >
                                 <div className="conversation-list">
+                                  {/* {message.sender === Chat_Box_Username && (
+                                    <div className="chat-avatar">
+                                      {Chat_Box_Image === undefined ? (
+                                        <img src={userDummayImage} alt="" />
+                                      ) : (
+                                        <img src={Chat_Box_Image} alt="" />
+                                      )}
+                                    </div>
+                                  )} */}
+
                                   <div className="user-chat-content">
                                     <div className="ctext-wrap">
                                       <div className="ctext-wrap-content shadow-none">
@@ -553,13 +545,10 @@ const Unassigned = () => {
                       )}
                     </div>
 
-                    <div
-                      className="chat-input-section p-3 p-lg-4"
-                      style={{ borderTop: "1px solid #E9EBEC" }}
-                    >
-                      {/* <form id="chatinput-form"> */}
-                      <Row className="g-0 align-items-center">
-                        {/* <div className="col-auto">
+                    <div className="chat-input-section p-3 p-lg-4">
+                      <form id="chatinput-form">
+                        <Row className="g-0 align-items-center">
+                          <div className="col-auto">
                             <div className="chat-input-links me-2">
                               <div className="links-list-item">
                                 <button
@@ -572,32 +561,23 @@ const Unassigned = () => {
                                 </button>
                               </div>
                             </div>
-                          </div> */}
+                          </div>
 
-                        <div className="col d-flex flex-column align-items-center justify-center">
-                          {/* <div className="chat-input-feedback">
+                          <div className="col">
+                            <div className="chat-input-feedback">
                               Please Enter a Message
-                            </div> */}
-
-                          <button
-                            type="button"
-                            className="btn btn-primary btn-sm"
-                            onClick={joinConversation}
-                          >
-                            Join Conversation
-                          </button>
-                          <p className="text-muted">To start typing</p>
-                          <input
-                            type="text"
-                            value={curMessage}
-                            onKeyPress={onKeyPress}
-                            onChange={(e) => setcurMessage(e.target.value)}
-                            className="form-control chat-input bg-light border-light fs-13"
-                            id="chat-input"
-                            placeholder="Type your message..."
-                          />
-                        </div>
-                        {/* <div className="col-auto">
+                            </div>
+                            <input
+                              type="text"
+                              value={curMessage}
+                              onKeyPress={onKeyPress}
+                              onChange={(e) => setcurMessage(e.target.value)}
+                              className="form-control chat-input bg-light border-light fs-13"
+                              id="chat-input"
+                              placeholder="Type your message..."
+                            />
+                          </div>
+                          <div className="col-auto">
                             <div className="chat-input-links ms-2">
                               <div className="links-list-item">
                                 <Button
@@ -615,9 +595,9 @@ const Unassigned = () => {
                                 </Button>
                               </div>
                             </div>
-                          </div> */}
-                      </Row>
-                      {/* </form> */}
+                          </div>
+                        </Row>
+                      </form>
                     </div>
 
                     <div className={reply ? "replyCard show" : "replyCard"}>
@@ -662,4 +642,4 @@ const Unassigned = () => {
   );
 };
 
-export default Unassigned;
+export default MyOpen;

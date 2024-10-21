@@ -136,8 +136,6 @@ const Navdata = () => {
   const dynamicMenuData = menuDataOfUser?.map((menu) => {
     // menuLableId me "label" ki spelling galat hai database me glt thi to testing ke liye galat likh kar hi check kr rha
 
-    console.log("MENU COMING FROM SOMEWHERE ->", menu);
-
     const updatedMenu = {
       ...menu,
       icon: <FeatherIcon icon={menu.icon} className="icon-dual" />,
