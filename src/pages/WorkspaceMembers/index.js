@@ -79,7 +79,11 @@ const WorkspaceMembers = () => {
                       <div>
                         <Button
                           className="btn btn-primary"
-                          style={{ marginInlineEnd: "5px" }}
+                          style={{
+                            marginInlineEnd: "5px",
+                            backgroundColor: "#25A0E2",
+                            border: "none",
+                          }}
                           onClick={tog_list}
                         >
                           <i className=" align-bottom me-1"></i> Invite Members

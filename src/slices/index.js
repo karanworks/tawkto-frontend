@@ -6,6 +6,7 @@ import LayoutReducer from "./layouts/reducer";
 // Authentication
 import ChatReducer from "./Chat/reducer";
 import LoginReducer from "./auth/login/reducer";
+import WorkspaceReducer from "./Workspace/reducer";
 import UsersReducer from "./Users/reducer";
 import MappingReducer from "./Mapping/reducer";
 import CampaignsReducer from "./Campaigns/reducer";
@@ -21,6 +22,7 @@ import ProfileReducer from "./auth/profile/reducer";
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
   Login: LoginReducer,
+  Workspace: WorkspaceReducer,
   Account: AccountReducer,
   Users: UsersReducer,
   Mapping: MappingReducer,

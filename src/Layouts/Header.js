@@ -1,6 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Dropdown, DropdownMenu, DropdownToggle, Form } from "reactstrap";
+import {
+  ButtonGroup,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Form,
+  UncontrolledDropdown,
+} from "reactstrap";
 import webwersLogo from "../assets/images/webwersLogo.png";
 
 //import images
@@ -15,9 +23,57 @@ import LightDark from "../Components/Common/LightDark";
 import { changeSidebarVisibility } from "../slices/thunks";
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import AddWorkspaceModal from "./AddWorkspaceModal";
+import { getWorkspaces, createWorkspace } from "../slices/Workspace/thunk";
 
 const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
   const dispatch = useDispatch();
+
+  const { workspaces } = useSelector((state) => state.Workspace);
+
+  console.log("WORKSPACES ->", workspaces);
+
+  const [modal_list, setmodal_list] = useState(false);
+
+  useEffect(() => {
+    dispatch(getWorkspaces());
+  }, []);
+
+  function tog_list() {
+    setmodal_list(!modal_list);
+  }
+
+  const validation = useFormik({
+    initialValues: {
+      workspaceName: "",
+      websiteAddress: "",
+    },
+    validationSchema: Yup.object({
+      workspaceName: Yup.string().required("Please enter workspaceName"),
+      websiteAddress: Yup.string().required("Please enter your websiteAddress"),
+    }),
+    onSubmit: (values, { resetForm }) => {
+      console.log("MEMBER INPUT VALUES ->", values);
+
+      dispatch(createWorkspace(values));
+
+      resetForm();
+
+      setmodal_list(false);
+    },
+  });
+
+  function formHandleSubmit(e) {
+    e.preventDefault();
+    validation.handleSubmit();
+
+    if (!validation.errors) {
+      setmodal_list(false);
+    }
+    return false;
+  }
 
   const selectDashboardData = createSelector(
     (state) => state.Layout,
@@ -74,6 +130,15 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
         : document.body.classList.add("twocolumn-panel");
     }
   };
+  function formHandleSubmit(e) {
+    e.preventDefault();
+    validation.handleSubmit();
+
+    if (!validation.errors) {
+      setmodal_list(false);
+    }
+    return false;
+  }
 
   return (
     <React.Fragment>
@@ -149,17 +214,50 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                 </DropdownMenu>
               </Dropdown>
 
-              {/* LanguageDropdown */}
-              {/* <LanguageDropdown /> */}
+              <ButtonGroup>
+                <UncontrolledDropdown>
+                  <DropdownToggle
+                    tag="button"
+                    className="btn btn-primary btn-sm"
+                  >
+                    Select Workspace <i className="mdi mdi-chevron-down"></i>
+                  </DropdownToggle>
+                  <DropdownMenu style={{ paddingBottom: "0" }}>
+                    {workspaces.map((workspace) => (
+                      <DropdownItem key={workspace.id}>
+                        <span>{workspace.name}</span>
+                        <span>
+                          <i
+                            className="ri-check-line"
+                            style={{ fontSize: "20px", paddingLeft: "8px" }}
+                          ></i>
+                        </span>
+                      </DropdownItem>
+                    ))}
 
-              {/* WebAppsDropdown */}
-              {/* <WebAppsDropdown /> */}
+                    <DropdownItem divider />
 
-              {/* MyCartDropdwon */}
-              {/* <MyCartDropdown /> */}
-
-              {/* FullScreenDropdown */}
-              {/* <FullScreenDropdown /> */}
+                    <button
+                      style={{
+                        width: "100%",
+                        border: "none",
+                        backgroundColor: "#343A40",
+                        paddingBlock: "8px",
+                        color: "white",
+                      }}
+                      onClick={tog_list}
+                    >
+                      <i
+                        className="ri-add-circle-line"
+                        style={{
+                          marginRight: "8px",
+                        }}
+                      ></i>
+                      Add Workspace
+                    </button>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+              </ButtonGroup>
 
               {/* Dark/Light Mode set */}
               <LightDark
@@ -167,15 +265,18 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                 onChangeLayoutMode={onChangeLayoutMode}
               />
 
-              {/* NotificationDropdown */}
-              {/* <NotificationDropdown /> */}
-
               {/* ProfileDropdown */}
               <ProfileDropdown />
             </div>
           </div>
         </div>
       </header>
+      <AddWorkspaceModal
+        validation={validation}
+        modal_list={modal_list}
+        tog_list={tog_list}
+        formHandleSubmit={formHandleSubmit}
+      />
     </React.Fragment>
   );
 };
