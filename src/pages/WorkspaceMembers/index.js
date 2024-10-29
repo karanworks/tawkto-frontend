@@ -48,8 +48,6 @@ const WorkspaceMembers = () => {
     },
   });
 
-  console.log("MEMBER INVITATION VALIDATION ->", validation);
-
   function formHandleSubmit(e) {
     e.preventDefault();
     validation.handleSubmit();
