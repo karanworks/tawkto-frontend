@@ -44,8 +44,8 @@ export const createWorkspace = (data) => {
 // *****************************************************************
 // *********************** WORKSPACE MEMBERS ***********************
 // *****************************************************************
-export const inviteWorkspaceMember = () => {
-  return api.get(`${process.env.REACT_APP_SERVER_URL}/invite`);
+export const inviteWorkspaceMember = (data) => {
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/invite`, data);
 };
 
 // *****************************************************************

@@ -17,6 +17,7 @@ const Navdata = () => {
 
   const [isAdministration, setIsAdministration] = useState(false);
   const [isLiveConversations, setIsLiveConversations] = useState(false);
+  const [isCustomers, setIsCustomers] = useState(false);
 
   //
   const [isAuth, setIsAuth] = useState(false);
@@ -47,6 +48,9 @@ const Navdata = () => {
     if (iscurrentState !== "LiveConversations") {
       setIsLiveConversations(false);
     }
+    if (iscurrentState !== "Customers") {
+      setIsCustomers(false);
+    }
 
     if (iscurrentState !== "Auth") {
       setIsAuth(false);
@@ -66,6 +70,7 @@ const Navdata = () => {
   const parentMenuStates = {
     Administration: isAdministration,
     LiveConversations: isLiveConversations,
+    Customers: isCustomers,
   };
 
   const handleClick = (menuLabelId) => {
@@ -78,6 +83,10 @@ const Navdata = () => {
           updateIconSidebar(e);
         case "LiveConversations":
           setIsLiveConversations(!isLiveConversations);
+          setIscurrentState(menuLabelId);
+          updateIconSidebar(e);
+        case "Customers":
+          setIsCustomers(!isCustomers);
           setIscurrentState(menuLabelId);
           updateIconSidebar(e);
       }
