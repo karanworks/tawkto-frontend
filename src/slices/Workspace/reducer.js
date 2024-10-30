@@ -16,7 +16,7 @@ const workspaceSlice = createSlice({
       if (action.payload?.status === "failure") {
         state.error = action.payload.message;
       } else {
-        state.workspaces = action.payload?.data;
+        state.workspaces = action.payload?.data || [];
         state.error = "";
       }
     });
