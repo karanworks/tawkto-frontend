@@ -24,7 +24,10 @@ const workspaceSlice = createSlice({
       if (action.payload?.status === "failure") {
         state.error = action.payload.message;
       } else {
-        state.workspaces = [...state.workspaces, , action.payload?.data];
+        console.log("first workspace ->", action.payload?.data);
+        console.log("workspaces in reducer ->", state.workspaces);
+
+        state.workspaces = [...state.workspaces, action.payload?.data];
         state.error = "";
       }
     });
