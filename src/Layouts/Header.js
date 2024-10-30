@@ -223,17 +223,19 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                     Select Workspace <i className="mdi mdi-chevron-down"></i>
                   </DropdownToggle>
                   <DropdownMenu style={{ paddingBottom: "0" }}>
-                    {workspaces.map((workspace) => (
-                      <DropdownItem key={workspace.id}>
-                        <span>{workspace.name}</span>
-                        <span>
-                          <i
-                            className="ri-check-line"
-                            style={{ fontSize: "20px", paddingLeft: "8px" }}
-                          ></i>
-                        </span>
-                      </DropdownItem>
-                    ))}
+                    {(workspaces?.length > 0 ? workspaces : []).map(
+                      (workspace) => (
+                        <DropdownItem key={workspace.id}>
+                          <span>{workspace.name}</span>
+                          <span>
+                            <i
+                              className="ri-check-line"
+                              style={{ fontSize: "20px", paddingLeft: "8px" }}
+                            ></i>
+                          </span>
+                        </DropdownItem>
+                      )
+                    )}
 
                     <DropdownItem divider />
 
