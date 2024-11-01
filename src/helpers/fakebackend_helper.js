@@ -35,7 +35,9 @@ export const postLogin = (data) => {
 // ************************* WORKSPACE *****************************
 // *****************************************************************
 export const getWorkspaces = () => {
-  return api.get(`${process.env.REACT_APP_SERVER_URL}/workspace`);
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/workspace`, {
+    withCredentials: true,
+  });
 };
 export const createWorkspace = (data) => {
   return api.create(`${process.env.REACT_APP_SERVER_URL}/workspace`, data);

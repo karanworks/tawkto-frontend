@@ -33,8 +33,6 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
 
   const { workspaces } = useSelector((state) => state.Workspace);
 
-  console.log("WORKSPACES ->", workspaces);
-
   const [modal_list, setmodal_list] = useState(false);
 
   useEffect(() => {
