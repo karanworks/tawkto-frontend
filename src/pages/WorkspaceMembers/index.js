@@ -23,6 +23,21 @@ const WorkspaceMembers = () => {
 
   const dispatch = useDispatch();
 
+  const [roleStatus, setroleStatus] = useState(null);
+
+  function handleroleStatus(roleStatus) {
+    setroleStatus(roleStatus);
+  }
+
+  const rolestatus = [
+    {
+      options: [
+        { label: "Admin", value: "Admin" },
+        { label: "Agent", value: "Agent" },
+      ],
+    },
+  ];
+
   function tog_list() {
     setmodal_list(!modal_list);
   }
@@ -243,6 +258,9 @@ const WorkspaceMembers = () => {
         modal_list={modal_list}
         tog_list={tog_list}
         formHandleSubmit={formHandleSubmit}
+        handleroleStatus={handleroleStatus}
+        rolestatus={rolestatus}
+        roleStatus={roleStatus}
       />
     </React.Fragment>
   );

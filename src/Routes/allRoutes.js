@@ -36,6 +36,7 @@ import WidgetPage from "../pages/WidgetPage";
 import Unassigned from "../pages/Unassigned";
 import MyOpen from "../pages/MyOpen";
 import Solved from "../pages/Solved";
+import General from "../pages/Settings/General/index";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -65,6 +66,7 @@ const authProtectedRoutes = [
   { path: "/unassigned", component: <Unassigned /> },
   { path: "/my-open", component: <MyOpen /> },
   { path: "/solved", component: <Solved /> },
+  { path: "/general", component: <General /> },
   // { path: "/calendar", component: <Calendar /> },
 
   //User Profile
