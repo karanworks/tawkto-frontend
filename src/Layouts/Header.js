@@ -34,6 +34,7 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
   const { workspaces } = useSelector((state) => state.Workspace);
 
   const [modal_list, setmodal_list] = useState(false);
+  const [selectedWorkspace, setSelectedWorkspace] = useState(null); // State to track selected workspace
 
   useEffect(() => {
     dispatch(getWorkspaces());
@@ -53,12 +54,8 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
       websiteAddress: Yup.string().required("Please enter your websiteAddress"),
     }),
     onSubmit: (values, { resetForm }) => {
-      console.log("MEMBER INPUT VALUES ->", values);
-
       dispatch(createWorkspace(values));
-
       resetForm();
-
       setmodal_list(false);
     },
   });
@@ -66,7 +63,6 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
   function formHandleSubmit(e) {
     e.preventDefault();
     validation.handleSubmit();
-
     if (!validation.errors) {
       setmodal_list(false);
     }
@@ -77,7 +73,6 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
     (state) => state.Layout,
     (sidebarVisibilitytype) => sidebarVisibilitytype.sidebarVisibilitytype
   );
-  // Inside your component
   const sidebarVisibilitytype = useSelector(selectDashboardData);
 
   const [search, setSearch] = useState(false);
@@ -92,14 +87,10 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
     if (windowSize > 767)
       document.querySelector(".hamburger-icon").classList.toggle("open");
 
-    //For collapse horizontal menu
     if (document.documentElement.getAttribute("data-layout") === "horizontal") {
-      document.body.classList.contains("menu")
-        ? document.body.classList.remove("menu")
-        : document.body.classList.add("menu");
+      document.body.classList.toggle("menu");
     }
 
-    //For collapse vertical and semibox menu
     if (
       sidebarVisibilitytype === "show" &&
       (document.documentElement.getAttribute("data-layout") === "vertical" ||
@@ -121,22 +112,10 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
       }
     }
 
-    //Two column menu
     if (document.documentElement.getAttribute("data-layout") === "twocolumn") {
-      document.body.classList.contains("twocolumn-panel")
-        ? document.body.classList.remove("twocolumn-panel")
-        : document.body.classList.add("twocolumn-panel");
+      document.body.classList.toggle("twocolumn-panel");
     }
   };
-  function formHandleSubmit(e) {
-    e.preventDefault();
-    validation.handleSubmit();
-
-    if (!validation.errors) {
-      setmodal_list(false);
-    }
-    return false;
-  }
 
   return (
     <React.Fragment>
@@ -176,8 +155,6 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                   <span></span>
                 </span>
               </button>
-
-              {/* <SearchOption /> */}
             </div>
 
             <div className="d-flex align-items-center">
@@ -223,14 +200,22 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                   <DropdownMenu style={{ paddingBottom: "0" }}>
                     {(workspaces?.length > 0 ? workspaces : []).map(
                       (workspace) => (
-                        <DropdownItem key={workspace.id}>
+                        <DropdownItem
+                          key={workspace.id}
+                          onClick={() => setSelectedWorkspace(workspace.id)}
+                        >
                           <span>{workspace.name}</span>
-                          <span>
-                            <i
-                              className="ri-check-line"
-                              style={{ fontSize: "20px", paddingLeft: "8px" }}
-                            ></i>
-                          </span>
+                          {selectedWorkspace === workspace.id && (
+                            <span>
+                              <i
+                                className="ri-check-line"
+                                style={{
+                                  fontSize: "20px",
+                                  paddingLeft: "8px",
+                                }}
+                              ></i>
+                            </span>
+                          )}
                         </DropdownItem>
                       )
                     )}
@@ -259,13 +244,11 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                 </UncontrolledDropdown>
               </ButtonGroup>
 
-              {/* Dark/Light Mode set */}
               <LightDark
                 layoutMode={layoutModeType}
                 onChangeLayoutMode={onChangeLayoutMode}
               />
 
-              {/* ProfileDropdown */}
               <ProfileDropdown />
             </div>
           </div>

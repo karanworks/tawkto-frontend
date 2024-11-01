@@ -18,6 +18,9 @@ function AddMemberModal({
   tog_list,
   formHandleSubmit,
   validation,
+  handleroleStatus,
+  rolestatus,
+  roleStatus,
 }) {
   return (
     <Modal
@@ -116,6 +119,23 @@ function AddMemberModal({
                 {validation.errors.password}
               </FormFeedback>
             ) : null}
+          </div>
+
+          <div className="mb-2">
+            <Label htmlFor="password" className="form-label">
+              Select Role
+            </Label>
+            <div>
+              <Select
+                value={roleStatus}
+                onChange={() => {
+                  handleroleStatus();
+                }}
+                options={rolestatus}
+                name="choices-single-default"
+                id="idStatus"
+              ></Select>
+            </div>
           </div>
 
           <div className="text-end">
