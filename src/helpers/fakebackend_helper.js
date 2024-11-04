@@ -35,9 +35,7 @@ export const postLogin = (data) => {
 // ************************* WORKSPACE *****************************
 // *****************************************************************
 export const getWorkspaces = () => {
-  return api.get(`${process.env.REACT_APP_SERVER_URL}/workspace`, {
-    withCredentials: true,
-  });
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/workspace`);
 };
 export const createWorkspace = (data) => {
   return api.create(`${process.env.REACT_APP_SERVER_URL}/workspace`, data);
@@ -47,7 +45,7 @@ export const createWorkspace = (data) => {
 // *********************** WORKSPACE MEMBERS ***********************
 // *****************************************************************
 export const inviteWorkspaceMember = (data) => {
-  return api.create(`${process.env.REACT_APP_SERVER_URL}/invite`, data);
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/invite-member`, data);
 };
 
 // *****************************************************************

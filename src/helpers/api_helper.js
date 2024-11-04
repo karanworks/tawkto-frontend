@@ -2,6 +2,8 @@ import axios from "axios";
 import { api } from "../config";
 
 // default
+axios.defaults.withCredentials = true;
+
 axios.defaults.baseURL = api.API_URL;
 // content type
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -86,15 +88,16 @@ class APIClient {
     let paramKeys = [];
 
     if (params) {
-      Object.keys(params).map(key => {
-        paramKeys.push(key + '=' + params[key]);
+      Object.keys(params).map((key) => {
+        paramKeys.push(key + "=" + params[key]);
         return paramKeys;
       });
 
-      const queryString = paramKeys && paramKeys.length ? paramKeys.join('&') : "";
+      const queryString =
+        paramKeys && paramKeys.length ? paramKeys.join("&") : "";
       response = axios.get(`${url}?${queryString}`, params);
     } else {
-      response = axios.get(`${url}`, params);
+      response = axios.get(`${url}`, { withCredentials: true });
     }
 
     return response;

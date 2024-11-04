@@ -36,7 +36,7 @@ const ConnectWebsite = () => {
     }),
     onSubmit: (values, { resetForm }) => {
       // this code works for default login feature
-      console.log("WORKSPACE FORM VALUES ->", values);
+      console.log("WORKSPACE FORM VALUES IN CONNECT WEBSITE ->", values);
       dispatch(createWorkspace(values));
       resetForm();
     },
