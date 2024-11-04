@@ -23,7 +23,7 @@ import Flatpickr from "react-flatpickr";
 // import progileBg from "../../../../assets/images/profile-bg.jpg";
 // import avatar1 from "../../../../assets/images/users/avatar-1.jpg";
 
-const General = () => {
+const ChangePassword = () => {
   const [activeTab, setActiveTab] = useState("1");
   const [text, setText] = useState(
     "Hi I'm Anna Adame, It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is European languages are members of the same family."
@@ -93,7 +93,7 @@ const General = () => {
                 </CardBody>
               </Card> */}
 
-              <Card>
+              {/* <Card>
                 <CardBody>
                   <div className="d-flex align-items-center mb-5">
                     <div className="flex-grow-1">
@@ -122,7 +122,7 @@ const General = () => {
                     </div>
                   </div>
                 </CardBody>
-              </Card>
+              </Card> */}
               {/* <Card>
                 <CardBody>
                   <div className="d-flex align-items-center mb-4">
@@ -205,7 +205,7 @@ const General = () => {
                     className="nav-tabs-custom rounded card-header-tabs border-bottom-0"
                     role="tablist"
                   >
-                    <NavItem>
+                    {/* <NavItem>
                       <NavLink
                         className={classnames({ active: activeTab === "1" })}
                         onClick={() => {
@@ -215,8 +215,8 @@ const General = () => {
                         <i className="fas fa-home"></i>
                         Personal Details
                       </NavLink>
-                    </NavItem>
-                    {/* <NavItem>
+                    </NavItem> */}
+                    <NavItem>
                       <NavLink
                         to="#"
                         className={classnames({ active: activeTab === "2" })}
@@ -228,7 +228,7 @@ const General = () => {
                         <i className="far fa-user"></i>
                         Change Password
                       </NavLink>
-                    </NavItem> */}
+                    </NavItem>
                     {/* <NavItem>
                       <NavLink
                         to="#"
@@ -260,221 +260,6 @@ const General = () => {
                 <CardBody className="p-4">
                   <TabContent activeTab={activeTab}>
                     <TabPane tabId="1">
-                      <Form>
-                        <Row>
-                          <Col lg={6}>
-                            <div className="mb-3">
-                              <Label
-                                htmlFor="firstnameInput"
-                                className="form-label"
-                              >
-                                First Name
-                              </Label>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                id="firstnameInput"
-                                placeholder="Enter your firstname"
-                              />
-                            </div>
-                          </Col>
-                          <Col lg={6}>
-                            <div className="mb-3">
-                              <Label
-                                htmlFor="lastnameInput"
-                                className="form-label"
-                              >
-                                Last Name
-                              </Label>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                id="lastnameInput"
-                                placeholder="Enter your lastname"
-                              />
-                            </div>
-                          </Col>
-                          <Col lg={6}>
-                            <div className="mb-3">
-                              <Label
-                                htmlFor="phonenumberInput"
-                                className="form-label"
-                              >
-                                Phone Number
-                              </Label>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                id="phonenumberInput"
-                                placeholder="Enter your phone number"
-                              />
-                            </div>
-                          </Col>
-                          <Col lg={6}>
-                            <div className="mb-3">
-                              <Label
-                                htmlFor="emailInput"
-                                className="form-label"
-                              >
-                                Email Address
-                              </Label>
-                              <Input
-                                type="email"
-                                className="form-control"
-                                id="emailInput"
-                                placeholder="Enter your email"
-                              />
-                            </div>
-                          </Col>
-                          {/* <Col lg={12}>
-                            <div className="mb-3">
-                              <Label
-                                htmlFor="JoiningdatInput"
-                                className="form-label"
-                              >
-                                Joining Date
-                              </Label>
-                              <Flatpickr
-                                className="form-control"
-                                options={{
-                                  dateFormat: "d M, Y",
-                                }}
-                              />
-                            </div>
-                          </Col> */}
-                          {/* <Col lg={12}>
-                            <div className="mb-3">
-                              <Label
-                                htmlFor="skillsInput"
-                                className="form-label"
-                              >
-                                Skills
-                              </Label>
-                              <select className="form-select mb-3">
-                                <option>Select your Skill </option>
-                                <option value="Choices1">CSS</option>
-                                <option value="Choices2">HTML</option>
-                                <option value="Choices3">PYTHON</option>
-                                <option value="Choices4">JAVA</option>
-                                <option value="Choices5">ASP.NET</option>
-                              </select>
-                            </div>
-                          </Col> */}
-                          {/* <Col lg={6}>
-                            <div className="mb-3">
-                              <Label
-                                htmlFor="designationInput"
-                                className="form-label"
-                              >
-                                Designation
-                              </Label>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                id="designationInput"
-                                placeholder="Designation"
-                                defaultValue="Lead Designer / Developer"
-                              />
-                            </div>
-                          </Col> */}
-                          <Col lg={6}>
-                            <div className="mb-3">
-                              <Label
-                                htmlFor="websiteInput1"
-                                className="form-label"
-                              >
-                                Website
-                              </Label>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                id="websiteInput1"
-                                placeholder="www.example.com"
-                              />
-                            </div>
-                          </Col>
-                          <Col lg={6}>
-                            <div className="mb-3">
-                              <Label htmlFor="cityInput" className="form-label">
-                                City
-                              </Label>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                id="cityInput"
-                                placeholder="City"
-                              />
-                            </div>
-                          </Col>
-                          <Col lg={6}>
-                            <div className="mb-3">
-                              <Label
-                                htmlFor="countryInput"
-                                className="form-label"
-                              >
-                                Country
-                              </Label>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                id="countryInput"
-                                placeholder="Country"
-                              />
-                            </div>
-                          </Col>
-                          <Col lg={6}>
-                            <div className="mb-3">
-                              <Label
-                                htmlFor="zipcodeInput"
-                                className="form-label"
-                              >
-                                Zip Code
-                              </Label>
-                              <Input
-                                type="text"
-                                className="form-control"
-                                minLength="5"
-                                maxLength="6"
-                                id="zipcodeInput"
-                                placeholder="Enter zipcode"
-                              />
-                            </div>
-                          </Col>
-                          {/* <Col lg={12}>
-                            <div className="mb-3 pb-2">
-                              <Label
-                                htmlFor="exampleFormControlTextarea"
-                                className="form-label"
-                              >
-                                Description
-                              </Label>
-                              <textarea
-                                className="form-control"
-                                id="exampleFormControlTextarea"
-                                value={text}
-                                onChange={(e) => setText(e.target.value)}
-                                rows="3"
-                              />
-                            </div>
-                          </Col> */}
-                          <Col lg={12}>
-                            <div className="hstack gap-2 justify-content-end">
-                              <button type="button" className="btn btn-primary">
-                                Updates
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-soft-secondary"
-                              >
-                                Cancel
-                              </button>
-                            </div>
-                          </Col>
-                        </Row>
-                      </Form>
-                    </TabPane>
-
-                    <TabPane tabId="2">
                       <Form>
                         <Row className="g-2">
                           <Col lg={4}>
@@ -628,7 +413,7 @@ const General = () => {
                       </div>
                     </TabPane>
 
-                    <TabPane tabId="3">
+                    {/* <TabPane tabId="3">
                       <form>
                         <div id="newlink">
                           <div id="1">
@@ -800,8 +585,8 @@ const General = () => {
                           </div>
                         </Col>
                       </form>
-                    </TabPane>
-                    <TabPane tabId="4">
+                    </TabPane> */}
+                    {/* <TabPane tabId="4">
                       <div className="mb-4 pb-2">
                         <h5 className="card-title text-decoration-underline mb-3">
                           Security:
@@ -1020,7 +805,7 @@ const General = () => {
                           </Link>
                         </div>
                       </div>
-                    </TabPane>
+                    </TabPane> */}
                   </TabContent>
                 </CardBody>
               </Card>
@@ -1032,4 +817,4 @@ const General = () => {
   );
 };
 
-export default General;
+export default ChangePassword;
