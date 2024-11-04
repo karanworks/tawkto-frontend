@@ -23,7 +23,7 @@ import Flatpickr from "react-flatpickr";
 // import progileBg from "../../../../assets/images/profile-bg.jpg";
 // import avatar1 from "../../../../assets/images/users/avatar-1.jpg";
 
-const General = () => {
+const Security = () => {
   const [activeTab, setActiveTab] = useState("1");
   const [text, setText] = useState(
     "Hi I'm Anna Adame, It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is European languages are members of the same family."
@@ -92,7 +92,7 @@ const General = () => {
                   </div>
                 </CardBody>
               </Card> */}
-
+              {/* 
               <Card>
                 <CardBody>
                   <div className="d-flex align-items-center mb-5">
@@ -122,7 +122,7 @@ const General = () => {
                     </div>
                   </div>
                 </CardBody>
-              </Card>
+              </Card> */}
               {/* <Card>
                 <CardBody>
                   <div className="d-flex align-items-center mb-4">
@@ -205,7 +205,7 @@ const General = () => {
                     className="nav-tabs-custom rounded card-header-tabs border-bottom-0"
                     role="tablist"
                   >
-                    <NavItem>
+                    {/* <NavItem>
                       <NavLink
                         className={classnames({ active: activeTab === "1" })}
                         onClick={() => {
@@ -215,7 +215,7 @@ const General = () => {
                         <i className="fas fa-home"></i>
                         Personal Details
                       </NavLink>
-                    </NavItem>
+                    </NavItem> */}
                     {/* <NavItem>
                       <NavLink
                         to="#"
@@ -242,7 +242,7 @@ const General = () => {
                         Experience
                       </NavLink>
                     </NavItem> */}
-                    {/* <NavItem>
+                    <NavItem>
                       <NavLink
                         to="#"
                         className={classnames({ active: activeTab === "4" })}
@@ -254,12 +254,12 @@ const General = () => {
                         <i className="far fa-envelope"></i>
                         Privacy Policy
                       </NavLink>
-                    </NavItem> */}
+                    </NavItem>
                   </Nav>
                 </CardHeader>
                 <CardBody className="p-4">
                   <TabContent activeTab={activeTab}>
-                    <TabPane tabId="1">
+                    {/* <TabPane tabId="4">
                       <Form>
                         <Row>
                           <Col lg={6}>
@@ -326,7 +326,7 @@ const General = () => {
                               />
                             </div>
                           </Col>
-                          {/* <Col lg={12}>
+                          <Col lg={12}>
                             <div className="mb-3">
                               <Label
                                 htmlFor="JoiningdatInput"
@@ -341,8 +341,8 @@ const General = () => {
                                 }}
                               />
                             </div>
-                          </Col> */}
-                          {/* <Col lg={12}>
+                          </Col>
+                          <Col lg={12}>
                             <div className="mb-3">
                               <Label
                                 htmlFor="skillsInput"
@@ -359,8 +359,8 @@ const General = () => {
                                 <option value="Choices5">ASP.NET</option>
                               </select>
                             </div>
-                          </Col> */}
-                          {/* <Col lg={6}>
+                          </Col>
+                          <Col lg={6}>
                             <div className="mb-3">
                               <Label
                                 htmlFor="designationInput"
@@ -376,7 +376,7 @@ const General = () => {
                                 defaultValue="Lead Designer / Developer"
                               />
                             </div>
-                          </Col> */}
+                          </Col>
                           <Col lg={6}>
                             <div className="mb-3">
                               <Label
@@ -440,7 +440,7 @@ const General = () => {
                               />
                             </div>
                           </Col>
-                          {/* <Col lg={12}>
+                          <Col lg={12}>
                             <div className="mb-3 pb-2">
                               <Label
                                 htmlFor="exampleFormControlTextarea"
@@ -456,7 +456,7 @@ const General = () => {
                                 rows="3"
                               />
                             </div>
-                          </Col> */}
+                          </Col>
                           <Col lg={12}>
                             <div className="hstack gap-2 justify-content-end">
                               <button type="button" className="btn btn-primary">
@@ -472,9 +472,9 @@ const General = () => {
                           </Col>
                         </Row>
                       </Form>
-                    </TabPane>
+                    </TabPane> */}
 
-                    <TabPane tabId="2">
+                    {/* <TabPane tabId="2">
                       <Form>
                         <Row className="g-2">
                           <Col lg={4}>
@@ -626,9 +626,9 @@ const General = () => {
                           </Link>
                         </div>
                       </div>
-                    </TabPane>
+                    </TabPane> */}
 
-                    <TabPane tabId="3">
+                    {/* <TabPane tabId="3">
                       <form>
                         <div id="newlink">
                           <div id="1">
@@ -800,8 +800,8 @@ const General = () => {
                           </div>
                         </Col>
                       </form>
-                    </TabPane>
-                    <TabPane tabId="4">
+                    </TabPane> */}
+                    <TabPane tabId="1">
                       <div className="mb-4 pb-2">
                         <h5 className="card-title text-decoration-underline mb-3">
                           Security:
@@ -1032,4 +1032,4 @@ const General = () => {
   );
 };
 
-export default General;
+export default Security;

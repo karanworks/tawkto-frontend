@@ -41,7 +41,7 @@ function AddMemberModal({
       </ModalHeader>
       <Form className="tablelist-form" onSubmit={formHandleSubmit}>
         <ModalBody style={{ paddingTop: "0px" }}>
-          <div className="mb-2">
+          {/* <div className="mb-2">
             <Label htmlFor="name" className="form-label">
               Name
             </Label>
@@ -65,7 +65,7 @@ function AddMemberModal({
                 {validation.errors.name}
               </FormFeedback>
             ) : null}
-          </div>
+          </div> */}
           <div className="mb-2">
             <Label htmlFor="name" className="form-label">
               Email
@@ -93,7 +93,7 @@ function AddMemberModal({
               </FormFeedback>
             ) : null}
           </div>
-          <div className="mb-2">
+          {/* <div className="mb-2">
             <Label htmlFor="password" className="form-label">
               Password
             </Label>
@@ -119,7 +119,7 @@ function AddMemberModal({
                 {validation.errors.password}
               </FormFeedback>
             ) : null}
-          </div>
+          </div> */}
 
           <div className="mb-2">
             <Label htmlFor="password" className="form-label">
