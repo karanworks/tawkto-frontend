@@ -193,18 +193,18 @@ const Overview = () => {
                         </div>
 
                         <div
-                          class="avatar-xl"
+                          className="avatar-xl"
                           style={{ display: "flex", width: "330px" }}
                         >
                           <div
-                            class="avatar-title rounded bg-danger-subtle text-danger"
+                            className="avatar-title rounded bg-danger-subtle text-danger"
                             style={{ height: "152px" }}
                           >
                             Xl
                           </div>
                           <div>
                             <p
-                              class="fst-italic"
+                              className="fst-italic"
                               style={{ margin: "20px 20px 0px 20px" }}
                             >
                               {" "}
@@ -213,7 +213,7 @@ const Overview = () => {
                             </p>
                             <button
                               type="button"
-                              class="btn rounded-pill btn-secondary waves-effect waves-light"
+                              className="btn rounded-pill btn-secondary waves-effect waves-light"
                               style={{ margin: "10px 20px 0px 20px" }}
                             >
                               Save
@@ -519,7 +519,7 @@ const Overview = () => {
                       >
                         <button
                           type="button"
-                          class="btn btn-danger waves-effect waves-light"
+                          className="btn btn-danger waves-effect waves-light"
                         >
                           Delete Property
                         </button>
