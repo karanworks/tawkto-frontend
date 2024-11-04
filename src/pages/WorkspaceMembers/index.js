@@ -25,17 +25,9 @@ const WorkspaceMembers = () => {
 
   const [roleStatus, setroleStatus] = useState(null);
 
-  function handleroleStatus(roleStatus) {
-    setroleStatus(roleStatus);
-  }
-
   const rolestatus = [
-    {
-      options: [
-        { label: "Admin", value: "Admin" },
-        { label: "Agent", value: "Agent" },
-      ],
-    },
+    { label: "Admin", value: "Admin" },
+    { label: "Agent", value: "Agent" },
   ];
 
   function tog_list() {
@@ -46,12 +38,12 @@ const WorkspaceMembers = () => {
     initialValues: {
       name: "",
       email: "",
-      password: "",
+      role: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Please enter name"),
       email: Yup.string().required("Please enter your email"),
-      password: Yup.string().required("Please enter password"),
+      role: Yup.string().required("Please enter role"),
     }),
     onSubmit: (values, { resetForm }) => {
       console.log("MEMBER INPUT VALUES ->", values);
@@ -63,6 +55,8 @@ const WorkspaceMembers = () => {
     },
   });
 
+  console.log("Invite Member validation", validation);
+
   function formHandleSubmit(e) {
     e.preventDefault();
     validation.handleSubmit();
@@ -71,6 +65,11 @@ const WorkspaceMembers = () => {
       setmodal_list(false);
     }
     return false;
+  }
+
+  function handleroleStatus(roleStatus) {
+    setroleStatus(roleStatus);
+    validation.setFieldValue("role", roleStatus.value);
   }
 
   return (

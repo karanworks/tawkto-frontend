@@ -68,6 +68,31 @@ function AddMemberModal({
           </div> */}
           <div className="mb-2">
             <Label htmlFor="name" className="form-label">
+              Name
+            </Label>
+
+            <Input
+              id="name"
+              name="name"
+              className="form-control"
+              placeholder="Enter name"
+              type="text"
+              onChange={validation.handleChange}
+              onBlur={validation.handleBlur}
+              value={validation.values.name || ""}
+              invalid={
+                validation.touched.name && validation.errors.name ? true : false
+              }
+            />
+
+            {validation.touched.name && validation.errors.name ? (
+              <FormFeedback type="invalid">
+                {validation.errors.name}
+              </FormFeedback>
+            ) : null}
+          </div>
+          <div className="mb-2">
+            <Label htmlFor="name" className="form-label">
               Email
             </Label>
 
@@ -128,8 +153,8 @@ function AddMemberModal({
             <div>
               <Select
                 value={roleStatus}
-                onChange={() => {
-                  handleroleStatus();
+                onChange={(roleStatus) => {
+                  handleroleStatus(roleStatus);
                 }}
                 options={rolestatus}
                 name="choices-single-default"

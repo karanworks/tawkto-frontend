@@ -13,14 +13,7 @@ const campaignSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(inviteWorkspaceMember.fulfilled, (state, action) => {
-      if (action.payload.status == "failure") {
-        state.alreadyRegisteredError = action.payload.message;
-        state.error = "";
-      } else {
-        state.campaigns = [...state.campaigns, action.payload.data];
-        state.alreadyRegisteredError = null;
-        state.error = "";
-      }
+      console.log("workSpace member reducer", action.payload);
     });
   },
 });
