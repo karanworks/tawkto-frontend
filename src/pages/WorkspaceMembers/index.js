@@ -115,16 +115,6 @@ const WorkspaceMembers = () => {
                         </Button>
                       </div>
                     </div>
-                    <div className="d-flex align-items-center flex-wrap gap-4">
-                      <div className="flex-shrink-0 ">
-                        <div className="hstack text-nowrap gap-2">
-                          <button className="btn btn-soft-primary">
-                            <i className="ri-filter-2-line me-1 align-bottom"></i>{" "}
-                            Filters
-                          </button>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </CardHeader>
               </Card>

@@ -27,8 +27,6 @@ const SetPassword = () => {
 
   const dispatch = useDispatch();
 
-  const loggedInUserData = getLoggedinUser().data;
-
   const [passwordShow, setPasswordShow] = useState(false);
   const [confrimPasswordShow, setConfrimPasswordShow] = useState(false);
 
@@ -57,7 +55,6 @@ const SetPassword = () => {
         setPasswordWorkspaceMember({
           ...values,
           token,
-          workspaceId: loggedInUserData.workspace.id,
         })
       );
     },
