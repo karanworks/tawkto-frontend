@@ -18,6 +18,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { setPasswordWorkspaceMember } from "../../slices/WorkspaceMembers/thunk";
 import { useDispatch } from "react-redux";
+import { getLoggedinUser } from "../../helpers/api_helper";
 
 const SetPassword = () => {
   document.title = "Create New Password";
@@ -25,6 +26,8 @@ const SetPassword = () => {
   const { token } = useParams();
 
   const dispatch = useDispatch();
+
+  const loggedInUserData = getLoggedinUser().data;
 
   const [passwordShow, setPasswordShow] = useState(false);
   const [confrimPasswordShow, setConfrimPasswordShow] = useState(false);
@@ -50,7 +53,13 @@ const SetPassword = () => {
         .required("Confirm Password Required"),
     }),
     onSubmit: (values) => {
-      dispatch(setPasswordWorkspaceMember({ ...values, token }));
+      dispatch(
+        setPasswordWorkspaceMember({
+          ...values,
+          token,
+          workspaceId: loggedInUserData.workspace.id,
+        })
+      );
     },
   });
   return (

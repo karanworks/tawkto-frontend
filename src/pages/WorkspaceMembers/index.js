@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -18,6 +18,7 @@ import AddMemberModal from "./AddMemberModal";
 import { inviteWorkspaceMember } from "../../slices/WorkspaceMembers/thunk";
 import { useDispatch } from "react-redux";
 import { getLoggedinUser } from "../../helpers/api_helper";
+import userIcon from "./user-icon.png";
 
 const WorkspaceMembers = () => {
   const [modal_list, setmodal_list] = useState(false);
@@ -27,8 +28,6 @@ const WorkspaceMembers = () => {
   const [roleStatus, setroleStatus] = useState(null);
 
   const loggedInUserData = getLoggedinUser().data;
-
-  console.log("LOGGED IN USER DATA ->", loggedInUserData);
 
   const rolestatus = [
     { label: "Admin", value: "Admin" },
@@ -64,8 +63,6 @@ const WorkspaceMembers = () => {
     },
   });
 
-  console.log("Invite Member validation", validation);
-
   function formHandleSubmit(e) {
     e.preventDefault();
     validation.handleSubmit();
@@ -80,6 +77,11 @@ const WorkspaceMembers = () => {
     setroleStatus(roleStatus);
     validation.setFieldValue("role", roleStatus.value);
   }
+
+  console.log(
+    "MEMBERS IN WORKSPACE MEMBERS ->",
+    loggedInUserData.workspace.workspaceMembers
+  );
 
   return (
     <React.Fragment>
@@ -135,98 +137,103 @@ const WorkspaceMembers = () => {
                       <table className="table align-middle table-nowrap table-striped-columns mb-0">
                         <thead className="table-light">
                           <tr>
-                            <th scope="col" style={{ width: "46px" }}>
-                              <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  value=""
-                                  id="cardtableCheck"
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor="cardtableCheck"
-                                ></label>
-                              </div>
-                            </th>
-                            <th scope="col">ID</th>
-                            <th scope="col">Admin</th>
-
-                            <th scope="col" style={{ width: "200px" }}>
-                              Admin
-                            </th>
-                            <th scope="col">Agent Status</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Invitation Status</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Settings</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>
-                              <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  value=""
-                                  id="cardtableCheck01"
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor="cardtableCheck01"
-                                ></label>
-                              </div>
-                            </td>
-                            <td>
-                              <Link to="#" className="fw-medium">
-                                #VL2110
-                              </Link>
-                            </td>
-                            <td>William Elmore</td>
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-sm btn-light"
-                              >
-                                Details
-                              </button>
-                            </td>
+                          {loggedInUserData.workspace.workspaceMembers?.map(
+                            (member) => (
+                              <tr>
+                                <td>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "10px",
+                                    }}
+                                  >
+                                    <div>
+                                      <img
+                                        src={userIcon}
+                                        alt="member-icon"
+                                        style={{
+                                          width: "30px",
+                                          height: "30px",
+                                        }}
+                                      />
+                                    </div>
 
-                            <td>
-                              <span className="badge bg-success">Active</span>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  value=""
-                                  id="cardtableCheck01"
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor="cardtableCheck01"
-                                ></label>
-                              </div>
-                            </td>
-                            <td>
-                              <Link to="#" className="fw-medium">
-                                #VL2111
-                              </Link>
-                            </td>
-                            <td>Paul</td>
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-sm btn-light"
-                              >
-                                Details
-                              </button>
-                            </td>
+                                    <div>
+                                      <div
+                                        style={{ display: "flex", gap: "8px" }}
+                                      >
+                                        <p style={{ margin: "0" }}>
+                                          {member.name}
+                                        </p>
 
-                            <td>
-                              <span className="badge bg-success">Pending</span>
-                            </td>
-                          </tr>
+                                        {member.email ===
+                                        loggedInUserData.email ? (
+                                          <p
+                                            style={{
+                                              margin: "0",
+                                              color: "#737582",
+                                            }}
+                                          >
+                                            ( You )
+                                          </p>
+                                        ) : null}
+                                      </div>
+                                      <p
+                                        style={{
+                                          margin: "0",
+                                          fontSize: "13px",
+                                        }}
+                                      >
+                                        {member.email}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td>
+                                  {member.roleId === 1 ? "Admin" : "Agent"}
+                                </td>
+
+                                <td>
+                                  <span
+                                    className={`badge bg-${
+                                      member.invitationAccepted
+                                        ? "success"
+                                        : "danger"
+                                    }`}
+                                  >
+                                    {member.invitationAccepted
+                                      ? "Accepted"
+                                      : "Pending"}
+                                  </span>
+                                </td>
+                                <td>
+                                  <button
+                                    type="button"
+                                    class="btn btn-danger btn-sm"
+                                  >
+                                    Deactivate
+                                  </button>
+                                </td>
+                                <td>
+                                  <button
+                                    type="button"
+                                    class="btn btn-primary btn-sm"
+                                  >
+                                    Edit Profile
+                                  </button>
+                                </td>
+                              </tr>
+                            )
+                          )}
                         </tbody>
                       </table>
                     </div>
