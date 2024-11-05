@@ -28,7 +28,11 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 // actions
-import { loginUser, resetLoginFlag } from "../../slices/thunks";
+import {
+  alreadyLoggedInUser,
+  loginUser,
+  resetLoginFlag,
+} from "../../slices/thunks";
 
 import { createSelector } from "reselect";
 import { loginSuccess } from "../../slices/auth/login/reducer";
@@ -66,6 +70,10 @@ const Login = (props) => {
   //     });
   //   }
   // }, [user]);
+
+  useEffect(() => {
+    dispatch(alreadyLoggedInUser(props.router.navigate));
+  }, [props.router.navigate, dispatch]);
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed

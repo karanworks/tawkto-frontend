@@ -27,6 +27,8 @@ const AuthProtected = (props) => {
     Navigate is un-auth access protected routes via url
     */
 
+  console.log("USER PROFILE IN AUTH PROTECTED ->", userProfile);
+
   if (!userProfile && loading && !token) {
     return (
       <Navigate to={{ pathname: "/login", state: { from: props.location } }} />

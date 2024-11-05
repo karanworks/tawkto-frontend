@@ -10,6 +10,35 @@ import {
 } from "./reducer";
 import axios from "axios";
 
+// export const loginUser = (user, history) => async (dispatch) => {
+//   try {
+//     let response;
+
+//     response = postLogin({
+//       email: user.email,
+//       password: user.password,
+//     });
+
+//     var data = await response;
+
+//     if (data) {
+//       sessionStorage.setItem("authUser", JSON.stringify(data));
+//       var finallogin = JSON.stringify(data);
+//       finallogin = JSON.parse(finallogin);
+//       data = finallogin.data;
+//       if (finallogin.status === "success") {
+//         dispatch(loginSuccess(data));
+//         history("/overview");
+//       } else {
+//         console.log("else condition while logging in ", finallogin);
+//         dispatch(apiError(finallogin));
+//       }
+//     }
+//   } catch (error) {
+//     console.log("error while logging in ", error);
+//     dispatch(apiError(error));
+//   }
+// };
 export const loginUser = (user, history) => async (dispatch) => {
   try {
     let response;
@@ -23,6 +52,7 @@ export const loginUser = (user, history) => async (dispatch) => {
 
     if (data) {
       sessionStorage.setItem("authUser", JSON.stringify(data));
+      localStorage.setItem("authUser", JSON.stringify(data));
       var finallogin = JSON.stringify(data);
       finallogin = JSON.parse(finallogin);
       data = finallogin.data;
@@ -40,9 +70,22 @@ export const loginUser = (user, history) => async (dispatch) => {
   }
 };
 
+export const alreadyLoggedInUser = (history) => async (dispatch) => {
+  // check if already logged in
+  const loggedInUser = localStorage.getItem("authUser");
+  const loggedInUserData = JSON.parse(loggedInUser);
+  console.log("LOGGED IN USER DATA ->", loggedInUserData);
+
+  if (loggedInUserData) {
+    dispatch(loginSuccess(loggedInUserData));
+    history("/overview");
+  }
+};
+
 export const logoutUser = () => async (dispatch) => {
   try {
     sessionStorage.removeItem("authUser");
+    localStorage.removeItem("authUser");
 
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/logout`, {
