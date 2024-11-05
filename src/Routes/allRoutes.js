@@ -94,7 +94,7 @@ const publicRoutes = [
   { path: "/wizard", component: <Wizard /> },
   { path: "/register", component: <Register /> },
   { path: "/", component: <Landing /> },
-  { path: "/set-password/user/:userId", component: <SetPassword /> },
+  { path: "/set-password/token/:token", component: <SetPassword /> },
 ];
 
 export { authProtectedRoutes, publicRoutes };

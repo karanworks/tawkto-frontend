@@ -47,6 +47,9 @@ export const createWorkspace = (data) => {
 export const inviteWorkspaceMember = (data) => {
   return api.create(`${process.env.REACT_APP_SERVER_URL}/invite-member`, data);
 };
+export const setPasswordWorkspaceMember = (data) => {
+  return api.create(`${process.env.REACT_APP_SERVER_URL}/set-password`, data);
+};
 
 // *****************************************************************
 // *************************** USERS *******************************

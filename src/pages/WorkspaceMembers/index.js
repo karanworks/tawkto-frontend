@@ -17,6 +17,7 @@ import * as Yup from "yup";
 import AddMemberModal from "./AddMemberModal";
 import { inviteWorkspaceMember } from "../../slices/WorkspaceMembers/thunk";
 import { useDispatch } from "react-redux";
+import { getLoggedinUser } from "../../helpers/api_helper";
 
 const WorkspaceMembers = () => {
   const [modal_list, setmodal_list] = useState(false);
@@ -24,6 +25,10 @@ const WorkspaceMembers = () => {
   const dispatch = useDispatch();
 
   const [roleStatus, setroleStatus] = useState(null);
+
+  const loggedInUserData = getLoggedinUser().data;
+
+  console.log("LOGGED IN USER DATA ->", loggedInUserData);
 
   const rolestatus = [
     { label: "Admin", value: "Admin" },
@@ -46,8 +51,12 @@ const WorkspaceMembers = () => {
       role: Yup.string().required("Please enter role"),
     }),
     onSubmit: (values, { resetForm }) => {
-      console.log("MEMBER INPUT VALUES ->", values);
-      dispatch(inviteWorkspaceMember(values));
+      dispatch(
+        inviteWorkspaceMember({
+          ...values,
+          workspaceId: loggedInUserData.workspace.id,
+        })
+      );
 
       resetForm();
 

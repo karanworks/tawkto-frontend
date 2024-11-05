@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   Button,
   Card,
@@ -12,14 +12,19 @@ import {
   Label,
   FormFeedback,
 } from "reactstrap";
-import logoLight from "../../assets/images/logo-light.png";
 
 //formik
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { setPasswordWorkspaceMember } from "../../slices/WorkspaceMembers/thunk";
+import { useDispatch } from "react-redux";
 
 const SetPassword = () => {
   document.title = "Create New Password";
+
+  const { token } = useParams();
+
+  const dispatch = useDispatch();
 
   const [passwordShow, setPasswordShow] = useState(false);
   const [confrimPasswordShow, setConfrimPasswordShow] = useState(false);
@@ -45,7 +50,7 @@ const SetPassword = () => {
         .required("Confirm Password Required"),
     }),
     onSubmit: (values) => {
-      console.log(values);
+      dispatch(setPasswordWorkspaceMember({ ...values, token }));
     },
   });
   return (
