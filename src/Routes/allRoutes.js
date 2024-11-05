@@ -39,6 +39,7 @@ import Solved from "../pages/Solved";
 import General from "../pages/Settings/General/index";
 import ChangePassword from "../pages/Settings/ChangePassword/index";
 import Security from "../pages/Settings/Security/index";
+import SetPassword from "../pages/SetPassword";
 
 const authProtectedRoutes = [
   // { path: "/users", component: <Users /> },
@@ -93,6 +94,7 @@ const publicRoutes = [
   { path: "/wizard", component: <Wizard /> },
   { path: "/register", component: <Register /> },
   { path: "/", component: <Landing /> },
+  { path: "/set-password/user/:userId", component: <SetPassword /> },
 ];
 
 export { authProtectedRoutes, publicRoutes };
