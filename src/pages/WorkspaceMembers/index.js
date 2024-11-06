@@ -33,8 +33,6 @@ const WorkspaceMembers = () => {
 
   const { workspaceMembers } = useSelector((state) => state.WorkspaceMembers);
 
-  console.log("GOT WORKSPACE MEMBERS ->", workspaceMembers);
-
   const loggedInUserData = getLoggedinUser().data;
 
   const rolestatus = [
