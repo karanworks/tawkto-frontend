@@ -18,6 +18,7 @@ import {
 } from "reactstrap";
 import classnames from "classnames";
 import Flatpickr from "react-flatpickr";
+import BreadCrumb from "../../../Components/Common/BreadCrumb";
 
 //import images
 // import progileBg from "../../../../assets/images/profile-bg.jpg";
@@ -41,6 +42,8 @@ const General = () => {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
+          <BreadCrumb title="Settings" pageTitle="General" />
+
           {/* <div className="position-relative mx-n4 mt-n4"> */}
           {/* <div className="profile-wid-bg profile-setting-img">
               
