@@ -41,8 +41,6 @@ const Security = () => {
           <BreadCrumb title="Settings" pageTitle="Security" />
 
           <Row>
-            <Col xxl={3}></Col>
-
             <Col xxl={9}>
               <Card>
                 <CardHeader>
@@ -125,7 +123,7 @@ const Security = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="mb-3">
+                      {/* <div className="mb-3">
                         <h5 className="card-title text-decoration-underline mb-3">
                           Application Notifications:
                         </h5>
@@ -256,7 +254,7 @@ const Security = () => {
                             </div>
                           </li>
                         </ul>
-                      </div>
+                      </div> */}
                       <div>
                         <h5 className="card-title text-decoration-underline mb-3">
                           Delete This Account:
