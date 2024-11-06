@@ -78,11 +78,6 @@ const WorkspaceMembers = () => {
     validation.setFieldValue("role", roleStatus.value);
   }
 
-  console.log(
-    "MEMBERS IN WORKSPACE MEMBERS ->",
-    loggedInUserData.workspace.workspaceMembers
-  );
-
   return (
     <React.Fragment>
       <div className="page-content">
@@ -135,7 +130,7 @@ const WorkspaceMembers = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {loggedInUserData.workspace.workspaceMembers?.map(
+                          {loggedInUserData.workspace?.workspaceMembers?.map(
                             (member) => (
                               <tr>
                                 <td>
