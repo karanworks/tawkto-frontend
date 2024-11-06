@@ -44,7 +44,7 @@ const Security = () => {
             <Col xxl={3}></Col>
 
             <Col xxl={9}>
-              <Card className="mt-xxl-n5">
+              <Card>
                 <CardHeader>
                   <Nav
                     className="nav-tabs-custom rounded card-header-tabs border-bottom-0"
