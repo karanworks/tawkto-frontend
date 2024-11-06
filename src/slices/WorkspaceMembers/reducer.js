@@ -20,11 +20,6 @@ const campaignSlice = createSlice({
       state.workspaceMembers = action.payload.workspaceMembers;
     });
     builder.addCase(inviteWorkspaceMember.fulfilled, (state, action) => {
-      console.log(
-        "RESULT OF INVITATION WORKSPACE MEMBER ->",
-        action.payload.data
-      );
-
       state.workspaceMembers = [...state.workspaceMembers, action.payload.data];
 
       console.log("invite workspace member reducer", action.payload);

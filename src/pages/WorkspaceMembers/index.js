@@ -214,18 +214,26 @@ const WorkspaceMembers = () => {
                               <td>
                                 <button
                                   type="button"
-                                  className="btn btn-danger btn-sm"
+                                  className="btn btn-outline-danger btn-sm"
                                 >
                                   Deactivate
                                 </button>
                               </td>
                               <td>
-                                <button
-                                  type="button"
-                                  className="btn btn-primary btn-sm"
-                                >
-                                  Edit Profile
-                                </button>
+                                <div style={{ display: "flex", gap: "8px" }}>
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary btn-sm"
+                                  >
+                                    Edit Profile
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="btn btn-danger btn-sm"
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
