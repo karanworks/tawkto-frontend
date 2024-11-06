@@ -278,8 +278,8 @@ const Unassigned = () => {
                     id="userList"
                   >
                     {/* className="active" removed this class because it was changin the text color as well will modify it in the future */}
-                    {(visitorRequests || []).map((request) => (
-                      <li style={{ background: "#F3F6F9" }}>
+                    {(visitorRequests || []).map((request, i) => (
+                      <li style={{ background: "#F3F6F9" }} key={i}>
                         <Link to="#" onClick={(e) => {}}>
                           <div className="d-flex align-items-center">
                             <div className="flex-shrink-0 chat-user-img online align-self-start me-2 ms-0">

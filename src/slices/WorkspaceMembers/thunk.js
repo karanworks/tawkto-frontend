@@ -1,10 +1,23 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import {
+  getWorkspaceMembers as getWorkspaceMembersApi,
   inviteWorkspaceMember as inviteWorkspaceMemberApi,
   setPasswordWorkspaceMember as setPasswordWorkspaceMemberApi,
 } from "../../helpers/fakebackend_helper";
 
+export const getWorkspaceMembers = createAsyncThunk(
+  "workspaceMembers/getWorkspaceMembers",
+  async (workspaceId) => {
+    try {
+      const response = await getWorkspaceMembersApi(workspaceId);
+
+      return response;
+    } catch (error) {
+      console.log("error inside getting workspace members thunk", error);
+    }
+  }
+);
 export const inviteWorkspaceMember = createAsyncThunk(
   "workspaceMembers/inviteWorkspaceMember",
   async (values) => {
