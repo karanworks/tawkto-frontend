@@ -20,10 +20,6 @@ import classnames from "classnames";
 import Flatpickr from "react-flatpickr";
 import BreadCrumb from "../../../Components/Common/BreadCrumb";
 
-//import images
-// import progileBg from "../../../../assets/images/profile-bg.jpg";
-// import avatar1 from "../../../../assets/images/users/avatar-1.jpg";
-
 const General = () => {
   const [activeTab, setActiveTab] = useState("1");
   const [text, setText] = useState(
@@ -46,7 +42,7 @@ const General = () => {
 
           <Row>
             <Col xxl={9}>
-              <Card className="mt-xxl-n5">
+              <Card>
                 <CardHeader>
                   <Nav
                     className="nav-tabs-custom rounded card-header-tabs border-bottom-0"
