@@ -41,31 +41,6 @@ function AddMemberModal({
       </ModalHeader>
       <Form className="tablelist-form" onSubmit={formHandleSubmit}>
         <ModalBody style={{ paddingTop: "0px" }}>
-          {/* <div className="mb-2">
-            <Label htmlFor="name" className="form-label">
-              Name
-            </Label>
-
-            <Input
-              id="name"
-              name="name"
-              className="form-control"
-              placeholder="Enter Name"
-              type="text"
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.name || ""}
-              invalid={
-                validation.touched.name && validation.errors.name ? true : false
-              }
-            />
-
-            {validation.touched.name && validation.errors.name ? (
-              <FormFeedback type="invalid">
-                {validation.errors.name}
-              </FormFeedback>
-            ) : null}
-          </div> */}
           <div className="mb-2">
             <Label htmlFor="name" className="form-label">
               Name
