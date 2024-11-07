@@ -2,7 +2,8 @@ import { createSlice, current } from "@reduxjs/toolkit";
 import { getWorkspaces, createWorkspace } from "./thunk";
 
 export const initialState = {
-  workspaces: [],
+  workspace: null,
+  // workspaces: [], In future there are going to be multiple workspaces
   alreadyRegisteredError: null,
   error: "",
 };
@@ -16,7 +17,7 @@ const workspaceSlice = createSlice({
       if (action.payload?.status === "failure") {
         state.error = action.payload.message;
       } else {
-        state.workspaces = action.payload?.data || [];
+        state.workspace = action.payload?.data;
         state.error = "";
       }
     });
@@ -24,10 +25,8 @@ const workspaceSlice = createSlice({
       if (action.payload?.status === "failure") {
         state.error = action.payload.message;
       } else {
-        console.log("first workspace ->", action.payload?.data);
-        console.log("workspaces in reducer ->", state.workspaces);
-
-        state.workspaces = [...state.workspaces, action.payload?.data];
+        // state.workspaces = [...state.workspaces, action.payload?.data];
+        state.workspace = action.payload?.data;
         state.error = "";
       }
     });

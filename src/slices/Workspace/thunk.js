@@ -7,9 +7,9 @@ import {
 
 export const getWorkspaces = createAsyncThunk(
   "workspace/getWorkspaces",
-  async () => {
+  async (userId) => {
     try {
-      const response = await getWorkspacesApi();
+      const response = await getWorkspacesApi(userId);
 
       return response;
     } catch (error) {
