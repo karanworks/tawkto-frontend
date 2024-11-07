@@ -10,6 +10,7 @@ import Departments from "../pages/Departments/index";
 import AddDepartment from "../pages/Departments/AddDepartments/index";
 import Overview from "../pages/Overview/index";
 import ConnectWebsite from "../pages/ConnectWebsite/index";
+import LiveUsers from "../pages/Customers/LiveUSers";
 
 //login
 import Login from "../pages/Authentication/Login";
@@ -73,6 +74,7 @@ const authProtectedRoutes = [
   { path: "/general", component: <General /> },
   { path: "/change-password", component: <ChangePassword /> },
   { path: "/security", component: <Security /> },
+  { path: "/live-users", component: <LiveUsers /> },
 
   //User Profile
   { path: "/profile", component: <UserProfile /> },
