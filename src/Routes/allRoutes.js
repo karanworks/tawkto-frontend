@@ -43,9 +43,6 @@ import Security from "../pages/Settings/Security/index";
 import SetPassword from "../pages/SetPassword";
 
 const authProtectedRoutes = [
-  // { path: "/users", component: <Users /> },
-  // { path: "/home", component: <Chat /> },
-
   {
     path: "/",
     exact: true,
@@ -70,7 +67,6 @@ const authProtectedRoutes = [
   { path: "/unassigned", component: <Unassigned /> },
   { path: "/my-open", component: <MyOpen /> },
   { path: "/solved", component: <Solved /> },
-  // { path: "/calendar", component: <Calendar /> },
   { path: "/general", component: <General /> },
   { path: "/change-password", component: <ChangePassword /> },
   { path: "/security", component: <Security /> },
@@ -78,15 +74,6 @@ const authProtectedRoutes = [
 
   //User Profile
   { path: "/profile", component: <UserProfile /> },
-
-  // this route should be at the end of all other routes
-  // eslint-disable-next-line react/display-name
-  // {
-  //   path: "/",
-  //   exact: true,
-  //   component: <Navigate to="/apps" />,
-  // },
-  // { path: "*", component: <Navigate to="/home" /> },
 ];
 
 const publicRoutes = [
