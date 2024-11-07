@@ -86,6 +86,7 @@ export const logoutUser = () => async (dispatch) => {
   try {
     sessionStorage.removeItem("authUser");
     localStorage.removeItem("authUser");
+    localStorage.removeItem("workspace");
 
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/logout`, {
