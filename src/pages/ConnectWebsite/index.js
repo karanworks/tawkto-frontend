@@ -35,9 +35,9 @@ const ConnectWebsite = () => {
       workspaceName: Yup.string().required("Please Enter Your Workspace Name "),
     }),
     onSubmit: (values, { resetForm }) => {
-      // this code works for default login feature
-      console.log("WORKSPACE FORM VALUES IN CONNECT WEBSITE ->", values);
-      dispatch(createWorkspace(values));
+      dispatch(createWorkspace(values)).then((res) => {
+        localStorage.setItem("workspace", JSON.stringify(res.payload.data));
+      });
       resetForm();
     },
   });

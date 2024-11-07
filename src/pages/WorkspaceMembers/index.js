@@ -23,6 +23,7 @@ import { useDispatch } from "react-redux";
 import { getLoggedinUser } from "../../helpers/api_helper";
 import userIcon from "./user-icon.png";
 import { useSelector } from "react-redux";
+import { getWorkspaces } from "../../slices/Workspace/thunk";
 
 const WorkspaceMembers = () => {
   const [modal_list, setmodal_list] = useState(false);
@@ -34,6 +35,18 @@ const WorkspaceMembers = () => {
   const { workspaceMembers } = useSelector((state) => state.WorkspaceMembers);
 
   const loggedInUserData = getLoggedinUser().data;
+
+  const workspace = JSON.parse(localStorage.getItem("workspace"));
+
+  useEffect(() => {
+    if (!workspace) {
+      dispatch(getWorkspaces(loggedInUserData.id)).then((res) => {
+        if (res.payload?.data) {
+          localStorage.setItem("workspace", JSON.stringify(res.payload.data));
+        }
+      });
+    }
+  }, [workspace]);
 
   const rolestatus = [
     { label: "Admin", value: "Admin" },
@@ -59,7 +72,7 @@ const WorkspaceMembers = () => {
       dispatch(
         inviteWorkspaceMember({
           ...values,
-          workspaceId: loggedInUserData.workspace.id,
+          workspaceId: workspace.id,
         })
       );
 
@@ -70,8 +83,8 @@ const WorkspaceMembers = () => {
   });
 
   useEffect(() => {
-    if (loggedInUserData.workspace) {
-      dispatch(getWorkspaceMembers(loggedInUserData.workspace.id));
+    if (workspace) {
+      dispatch(getWorkspaceMembers(workspace.id));
     }
   }, [dispatch]);
 
@@ -129,116 +142,133 @@ const WorkspaceMembers = () => {
             <Col xl={12}>
               <Card>
                 <CardBody>
-                  <div className="live-preview">
-                    <div className="table-responsive table-card">
-                      <table className="table align-middle table-nowrap table-striped-columns mb-0">
-                        <thead className="table-light">
-                          <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Role</th>
-                            <th scope="col">Invitation Status</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Settings</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {workspaceMembers?.map((member, i) => (
-                            <tr key={i}>
-                              <td>
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "10px",
-                                  }}
-                                >
-                                  <div>
-                                    <img
-                                      src={userIcon}
-                                      alt="member-icon"
-                                      style={{
-                                        width: "30px",
-                                        height: "30px",
-                                      }}
-                                    />
-                                  </div>
-
-                                  <div>
-                                    <div
-                                      style={{ display: "flex", gap: "8px" }}
-                                    >
-                                      <p style={{ margin: "0" }}>
-                                        {member.name}
-                                      </p>
-
-                                      {member.email ===
-                                      loggedInUserData.email ? (
-                                        <p
-                                          style={{
-                                            margin: "0",
-                                            color: "#737582",
-                                          }}
-                                        >
-                                          ( You )
-                                        </p>
-                                      ) : null}
-                                    </div>
-                                    <p
-                                      style={{
-                                        margin: "0",
-                                        fontSize: "13px",
-                                      }}
-                                    >
-                                      {member.email}
-                                    </p>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>{member.roleId === 1 ? "Admin" : "Agent"}</td>
-
-                              <td>
-                                <span
-                                  className={`badge bg-${
-                                    member.invitationAccepted
-                                      ? "success"
-                                      : "danger"
-                                  }`}
-                                >
-                                  {member.invitationAccepted
-                                    ? "Accepted"
-                                    : "Pending"}
-                                </span>
-                              </td>
-                              <td>
-                                <button
-                                  type="button"
-                                  className="btn btn-outline-danger btn-sm"
-                                >
-                                  Deactivate
-                                </button>
-                              </td>
-                              <td>
-                                <div style={{ display: "flex", gap: "8px" }}>
-                                  <button
-                                    type="button"
-                                    className="btn btn-primary btn-sm"
-                                  >
-                                    Edit Profile
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="btn btn-danger btn-sm"
-                                  >
-                                    Delete
-                                  </button>
-                                </div>
-                              </td>
+                  {workspaceMembers && workspaceMembers.length > 0 ? (
+                    <div className="live-preview">
+                      <div className="table-responsive table-card">
+                        <table className="table align-middle table-nowrap table-striped-columns mb-0">
+                          <thead className="table-light">
+                            <tr>
+                              <th scope="col">Name</th>
+                              <th scope="col">Role</th>
+                              <th scope="col">Invitation Status</th>
+                              <th scope="col">Status</th>
+                              <th scope="col">Settings</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {workspaceMembers?.map((member, i) => (
+                              <tr key={i}>
+                                <td>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "10px",
+                                    }}
+                                  >
+                                    <div>
+                                      <img
+                                        src={userIcon}
+                                        alt="member-icon"
+                                        style={{
+                                          width: "30px",
+                                          height: "30px",
+                                        }}
+                                      />
+                                    </div>
+
+                                    <div>
+                                      <div
+                                        style={{ display: "flex", gap: "8px" }}
+                                      >
+                                        <p style={{ margin: "0" }}>
+                                          {member.name}
+                                        </p>
+
+                                        {member.email ===
+                                        loggedInUserData.email ? (
+                                          <p
+                                            style={{
+                                              margin: "0",
+                                              color: "#737582",
+                                            }}
+                                          >
+                                            ( You )
+                                          </p>
+                                        ) : null}
+                                      </div>
+                                      <p
+                                        style={{
+                                          margin: "0",
+                                          fontSize: "13px",
+                                        }}
+                                      >
+                                        {member.email}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td>
+                                  {member.roleId === 1 ? "Admin" : "Agent"}
+                                </td>
+
+                                <td>
+                                  <span
+                                    className={`badge bg-${
+                                      member.invitationAccepted
+                                        ? "success"
+                                        : "danger"
+                                    }`}
+                                  >
+                                    {member.invitationAccepted
+                                      ? "Accepted"
+                                      : "Pending"}
+                                  </span>
+                                </td>
+                                <td>
+                                  <button
+                                    type="button"
+                                    className="btn btn-outline-danger btn-sm"
+                                  >
+                                    Deactivate
+                                  </button>
+                                </td>
+                                <td>
+                                  <div style={{ display: "flex", gap: "8px" }}>
+                                    <button
+                                      type="button"
+                                      className="btn btn-primary btn-sm"
+                                    >
+                                      Edit Profile
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="btn btn-danger btn-sm"
+                                    >
+                                      Delete
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        fontSize: "25px",
+                        fontWeight: "bold",
+                        color: "#bfbfbf",
+                      }}
+                    >
+                      <p> No Members !</p>
+                    </div>
+                  )}
                 </CardBody>
               </Card>
             </Col>

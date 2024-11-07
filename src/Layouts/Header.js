@@ -26,19 +26,13 @@ import { createSelector } from "reselect";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import AddWorkspaceModal from "./AddWorkspaceModal";
-import { getWorkspaces, createWorkspace } from "../slices/Workspace/thunk";
+import { createWorkspace } from "../slices/Workspace/thunk";
 
 const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
   const dispatch = useDispatch();
 
-  const { workspaces } = useSelector((state) => state.Workspace);
-
   const [modal_list, setmodal_list] = useState(false);
   const [selectedWorkspace, setSelectedWorkspace] = useState(null); // State to track selected workspace
-
-  useEffect(() => {
-    dispatch(getWorkspaces());
-  }, []);
 
   function tog_list() {
     setmodal_list(!modal_list);
@@ -178,7 +172,6 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                           type="text"
                           className="form-control"
                           placeholder="Search ..."
-                          aria-label="Recipient's username"
                         />
                         <button className="btn btn-primary" type="submit">
                           <i className="mdi mdi-magnify"></i>
@@ -188,7 +181,7 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                   </Form>
                 </DropdownMenu>
               </Dropdown>
-
+              {/* 
               <ButtonGroup>
                 <UncontrolledDropdown>
                   <DropdownToggle
@@ -242,7 +235,7 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                     </button>
                   </DropdownMenu>
                 </UncontrolledDropdown>
-              </ButtonGroup>
+              </ButtonGroup> */}
 
               <LightDark
                 layoutMode={layoutModeType}
