@@ -14,8 +14,6 @@ import {
   Label,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import { isEmpty, map } from "lodash";
-import classnames from "classnames";
 import SimpleBar from "simplebar-react";
 import Select from "react-select";
 
@@ -40,10 +38,9 @@ import {
 import avatar2 from "../../assets/images/users/avatar-2.jpg";
 import userDummayImage from "../../assets/images/users/user-dummy-img.jpg";
 
-//Import Scrollbar
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { createSelector } from "reselect";
-import { io } from "socket.io-client";
+import socket from "../../socket/socket";
 
 const SingleOptions = [
   { value: "Choices 1", label: "Choices 1" },
@@ -76,9 +73,8 @@ const Unassigned = () => {
     isActive: true,
   });
   const [selectedSingle, setSelectedSingle] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(["sdfsdf"]);
   const [visitorRequests, setVisitorRequests] = useState([]);
-  const [socket, setSocket] = useState(null);
   const [currentRoomId, setCurrentRoomId] = useState(null);
 
   const selectLayoutState = (state) => state.Chat;
@@ -91,10 +87,21 @@ const Unassigned = () => {
   // const { chats, messages, channels } = useSelector(chatProperties);
   const { chats } = useSelector(chatProperties);
 
+  useEffect(() => {
+    dispatch(onGetDirectContact());
+    dispatch(onGetChannels());
+    dispatch(getMessages(currentRoomId));
+  }, [dispatch, currentRoomId]);
+
   function handleSelectSingle(selectedSingle) {
     console.log("selected single ->", selectedSingle);
     setSelectedSingle(selectedSingle);
   }
+
+  socket.on("visitor-message", (message) => {
+    console.log("VISITOR MESSAGE RECEIVED ->", message);
+    setMessages([...messages, message]);
+  });
 
   //Toggle Chat Box Menus
   const toggleSearch = () => {
@@ -110,35 +117,16 @@ const Unassigned = () => {
     setsettings_Menu(!settings_Menu);
   };
 
-  useEffect(() => {
-    const newSocket = io("http://localhost:5010");
-    newSocket.on("visitor-message-request", (userRequest) => {
-      setVisitorRequests((prevRequests) => [...prevRequests, userRequest]);
-      setCurrentRoomId(userRequest.roomId);
-    });
-
-    newSocket.on("message", (data) => {
-      console.log("GOT MESSAGE ->", data);
-
-      setMessages((prev) => [...prev, data]);
-    });
-
-    setSocket(newSocket);
-  }, []);
-
   function joinConversation() {
     socket.emit("join-conversation", currentRoomId);
   }
 
   function sendMessage() {
-    socket.emit("message", { message: curMessage, roomId: currentRoomId });
+    socket.emit("agent-message", {
+      message: curMessage,
+      roomId: currentRoomId,
+    });
   }
-
-  useEffect(() => {
-    dispatch(onGetDirectContact());
-    dispatch(onGetChannels());
-    dispatch(getMessages(currentRoomId));
-  }, [dispatch, currentRoomId]);
 
   //Use For Chat Box
   const userChatOpen = (id, name, status, roomId, image) => {
@@ -463,7 +451,7 @@ const Unassigned = () => {
                           id="users-conversation"
                         >
                           {messages &&
-                            map(messages, (message, key) => (
+                            messages.map((message, key) => (
                               <li className="chat-list right" key={key}>
                                 <div className="conversation-list">
                                   <div className="user-chat-content">

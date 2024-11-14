@@ -129,7 +129,7 @@ function AddMemberModal({
               <Select
                 value={roleStatus}
                 onChange={(roleStatus) => {
-                  handleroleStatus(roleStatus);
+                  handleRoleStatus(roleStatus);
                 }}
                 options={rolestatus}
                 name="choices-single-default"

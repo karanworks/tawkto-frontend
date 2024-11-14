@@ -76,7 +76,6 @@ const Solved = () => {
   });
   const [messages, setMessages] = useState([]);
   const [visitorRequests, setVisitorRequests] = useState([]);
-  const [socket, setSocket] = useState(null);
 
   const selectLayoutState = (state) => state.Chat;
   const chatProperties = createSelector(selectLayoutState, (state) => ({
@@ -99,21 +98,6 @@ const Solved = () => {
 
   const toggleSettings = () => {
     setsettings_Menu(!settings_Menu);
-  };
-
-  useEffect(() => {
-    const newSocket = io("http://localhost:5010");
-    newSocket.on("visitor-message-request", (userRequest) => {
-      setVisitorRequests((prevRequests) => [...prevRequests, userRequest]);
-    });
-    setSocket(newSocket);
-  }, []);
-
-  const sendMessage = () => {
-    // if (curMessage.trim()) {
-    //   socket.emit("message", curMessage); // Send message to server via socket.io
-    //   setcurMessage(""); // Clear the input
-    // }
   };
 
   useEffect(() => {

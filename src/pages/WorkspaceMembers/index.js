@@ -24,6 +24,7 @@ import { getLoggedinUser } from "../../helpers/api_helper";
 import userIcon from "./user-icon.png";
 import { useSelector } from "react-redux";
 import { getWorkspaces } from "../../slices/Workspace/thunk";
+import Loader from "../../Components/Common/Loader";
 
 const WorkspaceMembers = () => {
   const [modal_list, setmodal_list] = useState(false);
@@ -32,21 +33,35 @@ const WorkspaceMembers = () => {
 
   const [roleStatus, setroleStatus] = useState(null);
 
+  const [workspace, setWorkspace] = useState(
+    JSON.parse(localStorage.getItem("workspace"))
+  );
+
+  const [loading, setLoading] = useState(false);
+
   const { workspaceMembers } = useSelector((state) => state.WorkspaceMembers);
 
   const loggedInUserData = getLoggedinUser().data;
-
-  const workspace = JSON.parse(localStorage.getItem("workspace"));
 
   useEffect(() => {
     if (!workspace) {
       dispatch(getWorkspaces(loggedInUserData.id)).then((res) => {
         if (res.payload?.data) {
           localStorage.setItem("workspace", JSON.stringify(res.payload.data));
+          setWorkspace(res.payload.data);
         }
       });
     }
-  }, [workspace]);
+  }, [workspace, dispatch]);
+
+  useEffect(() => {
+    if (workspace) {
+      setLoading(true);
+      dispatch(getWorkspaceMembers(workspace.id)).then((res) =>
+        setLoading(false)
+      );
+    }
+  }, [dispatch, workspace]);
 
   const rolestatus = [
     { label: "Admin", value: "Admin" },
@@ -82,12 +97,6 @@ const WorkspaceMembers = () => {
     },
   });
 
-  useEffect(() => {
-    if (workspace) {
-      dispatch(getWorkspaceMembers(workspace.id));
-    }
-  }, [dispatch]);
-
   function formHandleSubmit(e) {
     e.preventDefault();
     validation.handleSubmit();
@@ -98,7 +107,7 @@ const WorkspaceMembers = () => {
     return false;
   }
 
-  function handleroleStatus(roleStatus) {
+  function handleRoleStatus(roleStatus) {
     setroleStatus(roleStatus);
     validation.setFieldValue("role", roleStatus.value);
   }
@@ -156,101 +165,121 @@ const WorkspaceMembers = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {workspaceMembers?.map((member, i) => (
-                              <tr key={i}>
-                                <td>
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: "10px",
-                                    }}
-                                  >
-                                    <div>
-                                      <img
-                                        src={userIcon}
-                                        alt="member-icon"
-                                        style={{
-                                          width: "30px",
-                                          height: "30px",
-                                        }}
-                                      />
-                                    </div>
-
-                                    <div>
-                                      <div
-                                        style={{ display: "flex", gap: "8px" }}
-                                      >
-                                        <p style={{ margin: "0" }}>
-                                          {member.name}
-                                        </p>
-
-                                        {member.email ===
-                                        loggedInUserData.email ? (
-                                          <p
-                                            style={{
-                                              margin: "0",
-                                              color: "#737582",
-                                            }}
-                                          >
-                                            ( You )
-                                          </p>
-                                        ) : null}
-                                      </div>
-                                      <p
-                                        style={{
-                                          margin: "0",
-                                          fontSize: "13px",
-                                        }}
-                                      >
-                                        {member.email}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td>
-                                  {member.roleId === 1 ? "Admin" : "Agent"}
-                                </td>
-
-                                <td>
-                                  <span
-                                    className={`badge bg-${
-                                      member.invitationAccepted
-                                        ? "success"
-                                        : "danger"
-                                    }`}
-                                  >
-                                    {member.invitationAccepted
-                                      ? "Accepted"
-                                      : "Pending"}
-                                  </span>
-                                </td>
-                                <td>
-                                  <button
-                                    type="button"
-                                    className="btn btn-outline-danger btn-sm"
-                                  >
-                                    Deactivate
-                                  </button>
-                                </td>
-                                <td>
-                                  <div style={{ display: "flex", gap: "8px" }}>
-                                    <button
-                                      type="button"
-                                      className="btn btn-primary btn-sm"
-                                    >
-                                      Edit Profile
-                                    </button>
-                                    <button
-                                      type="button"
-                                      className="btn btn-danger btn-sm"
-                                    >
-                                      Delete
-                                    </button>
-                                  </div>
+                            {loading ? (
+                              <tr>
+                                <td
+                                  colSpan={7}
+                                  style={{
+                                    border: "none",
+                                    textAlign: "center",
+                                    verticalAlign: "middle",
+                                  }}
+                                >
+                                  <Loader />
                                 </td>
                               </tr>
-                            ))}
+                            ) : (
+                              workspaceMembers?.map((member, i) => (
+                                <tr key={i}>
+                                  <td>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                      }}
+                                    >
+                                      <div>
+                                        <img
+                                          src={userIcon}
+                                          alt="member-icon"
+                                          style={{
+                                            width: "30px",
+                                            height: "30px",
+                                          }}
+                                        />
+                                      </div>
+
+                                      <div>
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            gap: "8px",
+                                          }}
+                                        >
+                                          <p style={{ margin: "0" }}>
+                                            {member.name}
+                                          </p>
+
+                                          {member.email ===
+                                          loggedInUserData.email ? (
+                                            <p
+                                              style={{
+                                                margin: "0",
+                                                color: "#737582",
+                                              }}
+                                            >
+                                              ( You )
+                                            </p>
+                                          ) : null}
+                                        </div>
+                                        <p
+                                          style={{
+                                            margin: "0",
+                                            fontSize: "13px",
+                                          }}
+                                        >
+                                          {member.email}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    {member.roleId === 1 ? "Admin" : "Agent"}
+                                  </td>
+
+                                  <td>
+                                    <span
+                                      className={`badge bg-${
+                                        member.invitationAccepted
+                                          ? "success"
+                                          : "danger"
+                                      }`}
+                                    >
+                                      {member.invitationAccepted
+                                        ? "Accepted"
+                                        : "Pending"}
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <button
+                                      type="button"
+                                      className="btn btn-outline-danger btn-sm"
+                                    >
+                                      Deactivate
+                                    </button>
+                                  </td>
+                                  <td>
+                                    <div
+                                      style={{ display: "flex", gap: "8px" }}
+                                    >
+                                      <button
+                                        type="button"
+                                        className="btn btn-primary btn-sm"
+                                      >
+                                        Edit Profile
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="btn btn-danger btn-sm"
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))
+                            )}
                           </tbody>
                         </table>
                       </div>
@@ -304,7 +333,7 @@ const WorkspaceMembers = () => {
         modal_list={modal_list}
         tog_list={tog_list}
         formHandleSubmit={formHandleSubmit}
-        handleroleStatus={handleroleStatus}
+        handleRoleStatus={handleRoleStatus}
         rolestatus={rolestatus}
         roleStatus={roleStatus}
       />
