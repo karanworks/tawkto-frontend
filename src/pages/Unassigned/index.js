@@ -73,6 +73,7 @@ const Unassigned = () => {
     name: "Anna Adame",
     isActive: true,
   });
+  const [activeChat, setActiveChat] = useState(null);
   const [selectedSingle, setSelectedSingle] = useState(null);
   const [messages, setMessages] = useState([]);
   const [visitorRequests, setVisitorRequests] = useState([]);
@@ -113,7 +114,7 @@ const Unassigned = () => {
           return {
             ...request,
             // messages: request.messages.push(visitorRequest.messages),
-            messages: [request.messages, visitorRequest.messages],
+            messages: [...request.messages, visitorRequest.messages],
           };
         } else {
           return request;
@@ -130,6 +131,16 @@ const Unassigned = () => {
 
     console.log("VISITOR REQUEST ->", visitorRequest);
   });
+
+  function handleActiveChat(chatId) {
+    const activeChat = visitorRequests.find(
+      (request) => request.visitorId === chatId
+    );
+
+    setActiveChat(activeChat);
+
+    console.log("ACTIVE CHAT ->", activeChat);
+  }
 
   //Toggle Chat Box Menus
   const toggleSearch = () => {
@@ -295,8 +306,12 @@ const Unassigned = () => {
                   >
                     {/* className="active" removed this class because it was changin the text color as well will modify it in the future */}
                     {(visitorRequests || []).map((request, i) => (
-                      <li style={{ background: "#F3F6F9" }} key={i}>
-                        <Link to="/unassigned/5234452344" onClick={(e) => {}}>
+                      <li
+                        style={{ background: "#F3F6F9" }}
+                        key={i}
+                        onClick={() => handleActiveChat(request.visitorId)}
+                      >
+                        <Link to="#" onClick={(e) => {}}>
                           <div className="d-flex align-items-center">
                             <div className="flex-shrink-0 chat-user-img online align-self-start me-2 ms-0">
                               <div className="avatar-xxs">
@@ -318,9 +333,33 @@ const Unassigned = () => {
                                 </p>
                                 <p className="mb-0 text-muted">8min</p>
                               </div>
-                              <p className="text-truncate mb-0">
-                                {request.messages[request.messages.length - 1]}
-                              </p>
+
+                              <div className="d-flex justify-content-between">
+                                <p className="text-truncate mb-0">
+                                  {
+                                    request.messages[
+                                      request.messages.length - 1
+                                    ]
+                                  }
+                                </p>
+                                <div
+                                  style={{
+                                    width: "18px",
+                                    height: "18px",
+                                    color: "white",
+                                    background: "red",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    borderRadius: "50%",
+                                    fontSize: "10px",
+                                  }}
+                                >
+                                  <p className="mb-0">
+                                    {request.messages.length}
+                                  </p>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </Link>
@@ -363,53 +402,7 @@ const Unassigned = () => {
               </SimpleBar>
             </div>
 
-            {true ? (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  width: "100%",
-                  marginTop: "100px",
-                }}
-              >
-                <div>
-                  <img
-                    src={NoChatIcon}
-                    alt="no-active-conversation-icon"
-                    style={{ width: "100px", height: "100px" }}
-                  />
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <p
-                    style={{
-                      fontSize: "45px",
-                      fontWeight: "bold",
-                      margin: "0",
-                      color: "#495057",
-                    }}
-                  >
-                    No Active Conversation
-                  </p>
-
-                  <p style={{ fontSize: "20px", margin: "0" }}>
-                    Please click on visitor's chat to see their messages
-                  </p>
-                </div>
-
-                <div style={{ marginTop: "40px" }}>
-                  <button className="btn btn-primary">
-                    See your open chats
-                  </button>
-                </div>
-              </div>
-            ) : (
+            {activeChat ? (
               <div className="user-chat w-100 overflow-hidden border">
                 <div className="chat-content d-lg-flex">
                   <div className="w-100 overflow-hidden position-relative">
@@ -529,8 +522,8 @@ const Unassigned = () => {
                             className="list-unstyled chat-conversation-list"
                             id="users-conversation"
                           >
-                            {messages &&
-                              messages.map((message, key) => (
+                            {activeChat &&
+                              activeChat?.messages.map((message, key) => (
                                 <li className="chat-list right" key={key}>
                                   <div className="conversation-list">
                                     <div className="user-chat-content">
@@ -673,6 +666,52 @@ const Unassigned = () => {
                       </div>
                     </div>
                   </div>
+                </div>
+              </div>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  width: "100%",
+                  marginTop: "100px",
+                }}
+              >
+                <div>
+                  <img
+                    src={NoChatIcon}
+                    alt="no-active-conversation-icon"
+                    style={{ width: "100px", height: "100px" }}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: "45px",
+                      fontWeight: "bold",
+                      margin: "0",
+                      color: "#495057",
+                    }}
+                  >
+                    No Active Conversation
+                  </p>
+
+                  <p style={{ fontSize: "20px", margin: "0" }}>
+                    Please click on visitor's chat to see their messages
+                  </p>
+                </div>
+
+                <div style={{ marginTop: "40px" }}>
+                  <button className="btn btn-primary">
+                    See your open chats
+                  </button>
                 </div>
               </div>
             )}
