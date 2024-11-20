@@ -45,7 +45,7 @@ function App() {
 
   if (loggedInUser) {
     socket.emit("agent-join", {
-      id: loggedInUser?.id,
+      agentId: loggedInUser?.id,
       workspaceId: loggedInUser.workspace?.id,
     });
 

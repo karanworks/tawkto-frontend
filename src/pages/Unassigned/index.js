@@ -347,7 +347,7 @@ const Unassigned = () => {
                                     width: "18px",
                                     height: "18px",
                                     color: "white",
-                                    background: "red",
+                                    background: "#25A0E2",
                                     display: "flex",
                                     justifyContent: "center",
                                     alignItems: "center",
