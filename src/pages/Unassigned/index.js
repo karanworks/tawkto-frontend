@@ -42,6 +42,7 @@ import userDummayImage from "../../assets/images/users/user-dummy-img.jpg";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { createSelector } from "reselect";
 import socket from "../../socket/socket";
+import { getLoggedInUser } from "../../helpers/fakebackend_helper";
 
 const SingleOptions = [
   { value: "Choices 1", label: "Choices 1" },
@@ -88,6 +89,7 @@ const Unassigned = () => {
   // Inside your component
   // const { chats, messages, channels } = useSelector(chatProperties);
   const { chats } = useSelector(chatProperties);
+  const loggedInUser = getLoggedInUser()?.data;
 
   useEffect(() => {
     dispatch(onGetDirectContact());
@@ -101,45 +103,23 @@ const Unassigned = () => {
   }
 
   socket.on("visitor-message-request", (visitorRequest) => {
-    let requestAlreadyExist = visitorRequests.find(
-      (rqst) => rqst.visitorId === visitorRequest.visitorId
+    console.log("VISITOR REQUEST ON UNASSIGNED ->", visitorRequest);
+
+    const alreadyExist = visitorRequests.find(
+      (request) => request.id === visitorRequest.id
     );
-    console.log("VISITOR REQUESTS ->", visitorRequests);
-    console.log("NEW REQUEST ->", visitorRequest);
-    console.log("REQUEST ALREADY EXIST ->", requestAlreadyExist);
 
-    if (requestAlreadyExist) {
-      const updateRequest = visitorRequests?.map((request) => {
-        if (request.visitorId === visitorRequest.visitorId) {
-          return {
-            ...request,
-            // messages: request.messages.push(visitorRequest.messages),
-            messages: [...request.messages, visitorRequest.messages],
-          };
-        } else {
-          return request;
-        }
-      });
-
-      setVisitorRequests(updateRequest);
-    } else {
-      setVisitorRequests([
-        ...visitorRequests,
-        { ...visitorRequest, messages: [visitorRequest.messages] },
-      ]);
+    if (!alreadyExist) {
+      setVisitorRequests([...visitorRequests, visitorRequest]);
     }
-
-    console.log("VISITOR REQUEST ->", visitorRequest);
   });
 
   function handleActiveChat(chatId) {
     const activeChat = visitorRequests.find(
-      (request) => request.visitorId === chatId
+      (request) => request.visitor.visitorId === chatId
     );
 
     setActiveChat(activeChat);
-
-    console.log("ACTIVE CHAT ->", activeChat);
   }
 
   //Toggle Chat Box Menus
@@ -156,8 +136,14 @@ const Unassigned = () => {
     setsettings_Menu(!settings_Menu);
   };
 
-  function joinConversation() {
-    socket.emit("join-conversation", currentRoomId);
+  function handleJoinConversation(chatRequest) {
+    console.log("CHAT REQUEST WHILE JOINING CONVERSATION ->", chatRequest);
+
+    socket.emit("join-conversation", {
+      agentId: loggedInUser.id,
+      visitorId: chatRequest.visitor.visitorId,
+      chatId: chatRequest.chatId,
+    });
   }
 
   function sendMessage() {
@@ -309,7 +295,9 @@ const Unassigned = () => {
                       <li
                         style={{ background: "#F3F6F9" }}
                         key={i}
-                        onClick={() => handleActiveChat(request.visitorId)}
+                        onClick={() =>
+                          handleActiveChat(request.visitor.visitorId)
+                        }
                       >
                         <Link to="#" onClick={(e) => {}}>
                           <div className="d-flex align-items-center">
@@ -320,7 +308,7 @@ const Unassigned = () => {
                                     "avatar-title rounded-circle bg-primary userprofile"
                                   }
                                 >
-                                  {request.name.charAt(0)}
+                                  {request.visitor.name.charAt(0)}
                                 </div>
                               </div>
 
@@ -329,12 +317,12 @@ const Unassigned = () => {
                             <div className="flex-grow-1 overflow-hidden">
                               <div className="d-flex justify-content-between">
                                 <p className="text-truncate mb-0 text-muted">
-                                  {request.name}
+                                  {request.visitor.name}
                                 </p>
                                 <p className="mb-0 text-muted">8min</p>
                               </div>
 
-                              <div className="d-flex justify-content-between">
+                              {/* <div className="d-flex justify-content-between">
                                 <p className="text-truncate mb-0">
                                   {
                                     request.messages[
@@ -359,7 +347,7 @@ const Unassigned = () => {
                                     {request.messages.length}
                                   </p>
                                 </div>
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                         </Link>
@@ -621,13 +609,13 @@ const Unassigned = () => {
                           <div className="col d-flex flex-column align-items-center justify-center">
                             <button
                               type="button"
-                              className="btn btn-primary btn-sm"
-                              onClick={joinConversation}
+                              className="btn btn-primary "
+                              onClick={() => handleJoinConversation(activeChat)}
                             >
                               Join Conversation
                             </button>
                             <p className="text-muted">To start typing</p>
-                            <input
+                            {/* <input
                               type="text"
                               value={curMessage}
                               onKeyPress={onKeyPress}
@@ -635,7 +623,7 @@ const Unassigned = () => {
                               className="form-control chat-input bg-light border-light fs-13"
                               id="chat-input"
                               placeholder="Type your message..."
-                            />
+                            /> */}
                           </div>
                         </Row>
                       </div>
