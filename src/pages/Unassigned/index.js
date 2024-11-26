@@ -98,6 +98,8 @@ const Unassigned = () => {
     dispatch(onGetChannels());
     dispatch(getMessages(currentRoomId));
     dispatch(getUnassignedChats(workspace.id)).then((res) => {
+      console.log("CHATS WITH MESSAGES ->", res.payload.data);
+
       setChatRequests(res.payload.data);
     });
   }, [dispatch, currentRoomId]);
@@ -108,8 +110,6 @@ const Unassigned = () => {
   }
 
   socket.on("visitor-message-request", (chatRequest) => {
-    console.log("VISITOR REQUEST ON UNASSIGNED ->", chatRequest);
-
     const alreadyExist = chatRequests.find(
       (request) => request.id === chatRequest.id
     );
@@ -121,26 +121,18 @@ const Unassigned = () => {
 
   socket.on("message", (message) => {
     setChatRequests((prevRequests) => {
-      console.log("PREVIOUS REQUEST ->", prevRequests);
-
       return prevRequests.map((rqst) => {
         const chat = prevRequests.find((request) => {
-          console.log("REQUEST I FIND ->", request);
-
           return request.chatId === message.chatId;
         });
 
-        console.log("RQST AND CHAT ->", rqst, chat);
-
         if (rqst.chatId === chat.id) {
-          return { ...rqst, messages: [rqst.messages, message] };
+          return { ...rqst, messages: [...rqst.messages, message] };
         } else {
           return rqst;
         }
       });
     });
-
-    console.log("MESSAGE RECIVED ->", message);
   });
 
   function handleActiveChat(chatId) {
@@ -226,6 +218,7 @@ const Unassigned = () => {
                           handleActiveChat(request.visitor.visitorId)
                         }
                       >
+                        {console.log("REQUEST ->", request)}
                         <Link to="#" onClick={(e) => {}}>
                           <div className="d-flex align-items-center">
                             <div className="flex-shrink-0 chat-user-img online align-self-start me-2 ms-0">
@@ -236,6 +229,9 @@ const Unassigned = () => {
                                   }
                                 >
                                   {/* {request.visitor.name.charAt(0)} */}
+                                  {request.messages[
+                                    request.messages.length - 1
+                                  ].sender.name.charAt(0)}
                                 </div>
                               </div>
 
@@ -245,16 +241,21 @@ const Unassigned = () => {
                               <div className="d-flex justify-content-between">
                                 <p className="text-truncate mb-0 text-muted">
                                   {/* {request.visitor.name} */}
+                                  {
+                                    request.messages[
+                                      request.messages.length - 1
+                                    ].sender.name
+                                  }
                                 </p>
                                 <p className="mb-0 text-muted">8min</p>
                               </div>
 
-                              {/* <div className="d-flex justify-content-between">
+                              <div className="d-flex justify-content-between">
                                 <p className="text-truncate mb-0">
                                   {
                                     request.messages[
                                       request.messages.length - 1
-                                    ]
+                                    ].content
                                   }
                                 </p>
                                 <div
@@ -274,7 +275,7 @@ const Unassigned = () => {
                                     {request.messages.length}
                                   </p>
                                 </div>
-                              </div> */}
+                              </div>
                             </div>
                           </div>
                         </Link>
