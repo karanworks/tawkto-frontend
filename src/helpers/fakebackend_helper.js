@@ -251,6 +251,15 @@ export const getReports = (filters) => {
   return api.create(`${process.env.REACT_APP_SERVER_URL}/reports`, filters);
 };
 
+// *****************************************************************
+// ************************** UNASSIGNED ***************************
+// *****************************************************************
+export const getChatRequests = (workspaceId) => {
+  return api.get(
+    `${process.env.REACT_APP_SERVER_URL}/chat-requests/${workspaceId}`
+  );
+};
+
 //Chat
 export const getDirectContact = () => api.get(url.GET_DIRECT_CONTACT);
 

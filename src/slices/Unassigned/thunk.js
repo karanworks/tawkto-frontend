@@ -1,31 +1,30 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import {
-  getCampaigns as getCampaignsApi,
-  createCampaign as createCampaignApi,
-} from "../../helpers/fakebackend_helper";
+import { getChatRequests as getChatRequestsApi } from "../../helpers/fakebackend_helper";
 
 export const getUnassignedChats = createAsyncThunk(
   "unassigned/getUnassignedChats",
-  async () => {
+  async (workspaceId) => {
     try {
-      const response = await getCampaignsApi();
+      const response = await getChatRequestsApi(workspaceId);
+      console.log("VISITOR REQUESTS INSIDE THUNK ->", response);
+
       return response;
     } catch (error) {
-      console.log("error inside get campaign thunk", error);
+      console.log("error inside get visitor requests thunk", error);
     }
   }
 );
 
-export const createUnassignedChat = createAsyncThunk(
-  "unassigned/createUnassignedChat",
-  async (values) => {
-    try {
-      const response = await createCampaignApi(values);
+// export const createUnassignedChat = createAsyncThunk(
+//   "unassigned/createUnassignedChat",
+//   async (values) => {
+//     try {
+//       const response = await createCampaignApi(values);
 
-      return response;
-    } catch (error) {
-      console.log("error inside create campaign thunk", error);
-    }
-  }
-);
+//       return response;
+//     } catch (error) {
+//       console.log("error inside create campaign thunk", error);
+//     }
+//   }
+// );

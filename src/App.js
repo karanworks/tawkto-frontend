@@ -48,8 +48,6 @@ function App() {
       agentId: loggedInUser?.id,
       workspaceId: loggedInUser.workspace?.id,
     });
-
-    console.log("AGENT JOIN EVENT RENDERED");
   }
 
   // useEffect(() => {

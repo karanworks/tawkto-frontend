@@ -43,6 +43,7 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import { createSelector } from "reselect";
 import socket from "../../socket/socket";
 import { getLoggedInUser } from "../../helpers/fakebackend_helper";
+import { getUnassignedChats } from "../../slices/Unassigned/thunk";
 
 const SingleOptions = [
   { value: "Choices 1", label: "Choices 1" },
@@ -77,7 +78,8 @@ const Unassigned = () => {
   const [activeChat, setActiveChat] = useState(null);
   const [selectedSingle, setSelectedSingle] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [visitorRequests, setVisitorRequests] = useState([]);
+  // const [visitorRequests, setVisitorRequests] = useState([]);
+  const [chatRequests, setChatRequests] = useState([]);
   const [currentRoomId, setCurrentRoomId] = useState(null);
 
   const selectLayoutState = (state) => state.Chat;
@@ -86,15 +88,18 @@ const Unassigned = () => {
     // messages: state.messages,
     channels: state.channels,
   }));
-  // Inside your component
-  // const { chats, messages, channels } = useSelector(chatProperties);
-  const { chats } = useSelector(chatProperties);
+  const { unassignedChats } = useSelector((state) => state.Unassigned);
+
   const loggedInUser = getLoggedInUser()?.data;
+  const workspace = JSON.parse(localStorage.getItem("workspace"));
 
   useEffect(() => {
     dispatch(onGetDirectContact());
     dispatch(onGetChannels());
     dispatch(getMessages(currentRoomId));
+    dispatch(getUnassignedChats(workspace.id)).then((res) => {
+      setChatRequests(res.payload.data);
+    });
   }, [dispatch, currentRoomId]);
 
   function handleSelectSingle(selectedSingle) {
@@ -102,20 +107,44 @@ const Unassigned = () => {
     setSelectedSingle(selectedSingle);
   }
 
-  socket.on("visitor-message-request", (visitorRequest) => {
-    console.log("VISITOR REQUEST ON UNASSIGNED ->", visitorRequest);
+  socket.on("visitor-message-request", (chatRequest) => {
+    console.log("VISITOR REQUEST ON UNASSIGNED ->", chatRequest);
 
-    const alreadyExist = visitorRequests.find(
-      (request) => request.id === visitorRequest.id
+    const alreadyExist = chatRequests.find(
+      (request) => request.id === chatRequest.id
     );
 
     if (!alreadyExist) {
-      setVisitorRequests([...visitorRequests, visitorRequest]);
+      setChatRequests([...chatRequests, { ...chatRequest, messages: [] }]);
     }
   });
 
+  socket.on("message", (message) => {
+    setChatRequests((prevRequests) => {
+      console.log("PREVIOUS REQUEST ->", prevRequests);
+
+      return prevRequests.map((rqst) => {
+        const chat = prevRequests.find((request) => {
+          console.log("REQUEST I FIND ->", request);
+
+          return request.chatId === message.chatId;
+        });
+
+        console.log("RQST AND CHAT ->", rqst, chat);
+
+        if (rqst.chatId === chat.id) {
+          return { ...rqst, messages: [rqst.messages, message] };
+        } else {
+          return rqst;
+        }
+      });
+    });
+
+    console.log("MESSAGE RECIVED ->", message);
+  });
+
   function handleActiveChat(chatId) {
-    const activeChat = visitorRequests.find(
+    const activeChat = chatRequests.find(
       (request) => request.visitor.visitorId === chatId
     );
 
@@ -146,107 +175,6 @@ const Unassigned = () => {
     });
   }
 
-  function sendMessage() {
-    socket.emit("agent-message", {
-      message: curMessage,
-      roomId: currentRoomId,
-    });
-  }
-
-  //Use For Chat Box
-  const userChatOpen = (id, name, status, roomId, image) => {
-    setChat_Box_Username(name);
-    setCurrentRoomId(roomId);
-    setChat_Box_Image(image);
-    dispatch(getMessages(roomId));
-  };
-
-  const addMessage = (roomId, sender) => {
-    const message = {
-      id: Math.floor(Math.random() * 100),
-      roomId,
-      sender,
-      message: curMessage,
-      createdAt: new Date(),
-    };
-    setcurMessage("");
-    dispatch(onAddMessage(message));
-  };
-
-  // const scrollToBottom = useCallback(() => {
-  //   if (messageBox) {
-  //     messageBox.scrollTop = messageBox.scrollHeight + 1000;
-  //   }
-  // }, [messageBox]);
-
-  // useEffect(() => {
-  //   if (!isEmpty(messages)) scrollToBottom();
-  // }, [messages, scrollToBottom]);
-
-  const onKeyPress = (e) => {
-    const { key, value } = e;
-    if (key === "Enter") {
-      e.preventDefault();
-      setcurMessage(value);
-      addMessage(currentRoomId, currentUser.name);
-      sendMessage();
-    }
-  };
-
-  //serach recent user
-  const searchUsers = () => {
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById("search-user");
-    filter = input.value.toUpperCase();
-    var userList = document.getElementsByClassName("users-list");
-    Array.prototype.forEach.call(userList, function (el) {
-      li = el.getElementsByTagName("li");
-      for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          li[i].style.display = "";
-        } else {
-          li[i].style.display = "none";
-        }
-      }
-    });
-  };
-
-  //Search Message
-  const searchMessages = () => {
-    var searchInput, searchFilter, searchUL, searchLI, a, i, txtValue;
-    searchInput = document.getElementById("searchMessage");
-    searchFilter = searchInput.value.toUpperCase();
-    searchUL = document.getElementById("users-conversation");
-    searchLI = searchUL.getElementsByTagName("li");
-    Array.prototype.forEach.call(searchLI, function (search) {
-      a = search.getElementsByTagName("p")[0]
-        ? search.getElementsByTagName("p")[0]
-        : "";
-      txtValue =
-        a.textContent || a.innerText ? a.textContent || a.innerText : "";
-      if (txtValue.toUpperCase().indexOf(searchFilter) > -1) {
-        search.style.display = "";
-      } else {
-        search.style.display = "none";
-      }
-    });
-  };
-
-  // Copy Message
-  const handleCkick = (ele) => {
-    var copy = ele
-      .closest(".chat-list")
-      .querySelector(".ctext-content").innerHTML;
-    navigator.clipboard.writeText(copy);
-
-    document.getElementById("copyClipBoard").style.display = "block";
-    setTimeout(() => {
-      document.getElementById("copyClipBoard").style.display = "none";
-    }, 2000);
-  };
-
   // emoji
   const [emojiArray, setemojiArray] = useState("");
 
@@ -271,7 +199,6 @@ const Unassigned = () => {
                 </div>
                 <div className="search-box">
                   <input
-                    onKeyUp={searchUsers}
                     id="search-user"
                     type="text"
                     className="form-control bg-light border-light"
@@ -291,7 +218,7 @@ const Unassigned = () => {
                     id="userList"
                   >
                     {/* className="active" removed this class because it was changin the text color as well will modify it in the future */}
-                    {(visitorRequests || []).map((request, i) => (
+                    {(chatRequests || []).map((request, i) => (
                       <li
                         style={{ background: "#F3F6F9" }}
                         key={i}
@@ -308,7 +235,7 @@ const Unassigned = () => {
                                     "avatar-title rounded-circle bg-primary userprofile"
                                   }
                                 >
-                                  {request.visitor.name.charAt(0)}
+                                  {/* {request.visitor.name.charAt(0)} */}
                                 </div>
                               </div>
 
@@ -317,7 +244,7 @@ const Unassigned = () => {
                             <div className="flex-grow-1 overflow-hidden">
                               <div className="d-flex justify-content-between">
                                 <p className="text-truncate mb-0 text-muted">
-                                  {request.visitor.name}
+                                  {/* {request.visitor.name} */}
                                 </p>
                                 <p className="mb-0 text-muted">8min</p>
                               </div>
