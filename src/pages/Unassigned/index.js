@@ -93,19 +93,18 @@ const Unassigned = () => {
   const loggedInUser = getLoggedInUser()?.data;
   const workspace = JSON.parse(localStorage.getItem("workspace"));
 
+  console.log("ACTIVE CHAT ->", activeChat);
+
   useEffect(() => {
     dispatch(onGetDirectContact());
     dispatch(onGetChannels());
     dispatch(getMessages(currentRoomId));
     dispatch(getUnassignedChats(workspace.id)).then((res) => {
-      console.log("CHATS WITH MESSAGES ->", res.payload.data);
-
       setChatRequests(res.payload.data);
     });
   }, [dispatch, currentRoomId]);
 
   function handleSelectSingle(selectedSingle) {
-    console.log("selected single ->", selectedSingle);
     setSelectedSingle(selectedSingle);
   }
 
@@ -119,25 +118,33 @@ const Unassigned = () => {
     }
   });
 
-  socket.on("message", (message) => {
+  const handleMessage = useCallback((message) => {
     setChatRequests((prevRequests) => {
       return prevRequests.map((rqst) => {
         const chat = prevRequests.find((request) => {
-          return request.chatId === message.chatId;
+          return request.id === message.chatId;
         });
 
-        if (rqst.chatId === chat.id) {
+        if (rqst.id === chat.id) {
           return { ...rqst, messages: [...rqst.messages, message] };
         } else {
           return rqst;
         }
       });
     });
-  });
+  }, []);
+
+  useEffect(() => {
+    socket.on("message", handleMessage);
+
+    return () => {
+      socket.off("message", handleMessage);
+    };
+  }, [handleMessage]);
 
   function handleActiveChat(chatId) {
     const activeChat = chatRequests.find(
-      (request) => request.visitor.visitorId === chatId
+      (request) => request.visitorId === chatId
     );
 
     setActiveChat(activeChat);
@@ -158,8 +165,6 @@ const Unassigned = () => {
   };
 
   function handleJoinConversation(chatRequest) {
-    console.log("CHAT REQUEST WHILE JOINING CONVERSATION ->", chatRequest);
-
     socket.emit("join-conversation", {
       agentId: loggedInUser.id,
       visitorId: chatRequest.visitor.visitorId,
@@ -214,11 +219,9 @@ const Unassigned = () => {
                       <li
                         style={{ background: "#F3F6F9" }}
                         key={i}
-                        onClick={() =>
-                          handleActiveChat(request.visitor.visitorId)
-                        }
+                        onClick={() => handleActiveChat(request.visitorId)}
                       >
-                        {console.log("REQUEST ->", request)}
+                        {console.log("REQUEST IN MESSAGES  ->", request)}
                         <Link to="#" onClick={(e) => {}}>
                           <div className="d-flex align-items-center">
                             <div className="flex-shrink-0 chat-user-img online align-self-start me-2 ms-0">
@@ -446,7 +449,7 @@ const Unassigned = () => {
                                       <div className="ctext-wrap">
                                         <div className="ctext-wrap-content shadow-none">
                                           <p className="mb-0 ctext-content">
-                                            {message}
+                                            {message.content}
                                           </p>
                                         </div>
                                         <UncontrolledDropdown className="align-self-start message-box-drop">
