@@ -16,6 +16,7 @@ import RunReducer from "./Run/reducer";
 import GatewayReducer from "./Gateway/reducer";
 import ReportReducer from "./Report/reducer";
 import UnassignedReducer from "./Unassigned/reducer";
+import MyOpenReducer from "./MyOpen/reducer";
 
 // SEPARATER
 import AccountReducer from "./auth/register/reducer";
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   Report: ReportReducer,
   Chat: ChatReducer,
   Unassigned: UnassignedReducer,
+  MyOpen: MyOpenReducer,
 });
 
 export default rootReducer;

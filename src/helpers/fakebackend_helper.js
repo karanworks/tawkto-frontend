@@ -254,10 +254,16 @@ export const getReports = (filters) => {
 // *****************************************************************
 // ************************** UNASSIGNED ***************************
 // *****************************************************************
-export const getChatRequests = (workspaceId) => {
+export const getChatRequests = ({ agentId }) => {
   return api.get(
-    `${process.env.REACT_APP_SERVER_URL}/chat-requests/${workspaceId}`
+    `${process.env.REACT_APP_SERVER_URL}/chat-requests/${agentId}`
   );
+};
+// *****************************************************************
+// *************************** MY OPEN *****************************
+// *****************************************************************
+export const getOpenChats = ({ agentId }) => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/my-open/${agentId}`);
 };
 
 //Chat

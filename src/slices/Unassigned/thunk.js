@@ -4,9 +4,9 @@ import { getChatRequests as getChatRequestsApi } from "../../helpers/fakebackend
 
 export const getUnassignedChats = createAsyncThunk(
   "unassigned/getUnassignedChats",
-  async (workspaceId) => {
+  async (data) => {
     try {
-      const response = await getChatRequestsApi(workspaceId);
+      const response = await getChatRequestsApi(data);
       console.log("VISITOR REQUESTS INSIDE THUNK ->", response);
 
       return response;

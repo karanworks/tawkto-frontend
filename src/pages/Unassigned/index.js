@@ -93,13 +93,15 @@ const Unassigned = () => {
   const loggedInUser = getLoggedInUser()?.data;
   const workspace = JSON.parse(localStorage.getItem("workspace"));
 
-  console.log("ACTIVE CHAT ->", activeChat);
-
   useEffect(() => {
     dispatch(onGetDirectContact());
     dispatch(onGetChannels());
     dispatch(getMessages(currentRoomId));
-    dispatch(getUnassignedChats(workspace.id)).then((res) => {
+    dispatch(
+      getUnassignedChats({
+        agentId: loggedInUser.id,
+      })
+    ).then((res) => {
       setChatRequests(res.payload.data);
     });
   }, [dispatch, currentRoomId]);
@@ -136,7 +138,6 @@ const Unassigned = () => {
 
   useEffect(() => {
     socket.on("message", handleMessage);
-
     return () => {
       socket.off("message", handleMessage);
     };
@@ -164,11 +165,13 @@ const Unassigned = () => {
     setsettings_Menu(!settings_Menu);
   };
 
-  function handleJoinConversation(chatRequest) {
+  function handleJoinConversation() {
+    console.log("CHAT ID ->");
+
     socket.emit("join-conversation", {
       agentId: loggedInUser.id,
-      visitorId: chatRequest.visitor.visitorId,
-      chatId: chatRequest.chatId,
+      visitorId: activeChat.visitorId,
+      chatId: activeChat.id,
     });
   }
 
@@ -541,7 +544,7 @@ const Unassigned = () => {
                             <button
                               type="button"
                               className="btn btn-primary "
-                              onClick={() => handleJoinConversation(activeChat)}
+                              onClick={() => handleJoinConversation()}
                             >
                               Join Conversation
                             </button>
