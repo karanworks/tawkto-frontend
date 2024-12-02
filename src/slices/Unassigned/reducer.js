@@ -10,33 +10,28 @@ export const initialState = {
 const unassignedSlice = createSlice({
   name: "unassigned",
   initialState,
-  reducers: {},
+  reducers: {
+    // joinUnassignedChat: (state, action) => {
+    //   console.log("JOIN ASSIGNED CHAT REDUCER ->", action.payload);
+    //   state.unassignedChats = state.unassignedChats.filter(
+    //     (chat) => chat.id !== action.payload
+    //   );
+    // },
+  },
   extraReducers: (builder) => {
     builder.addCase(getUnassignedChats.fulfilled, (state, action) => {
       if (action.payload?.status === "failure") {
         state.error = action.payload.message;
       } else {
+        console.log("UNASSIGNED CHAT REDUCER ->", action.payload);
+
         state.unassignedChats = action.payload?.data;
         state.error = "";
       }
     });
-
-    // builder.addCase(createCampaign.fulfilled, (state, action) => {
-    //   if (action.payload.status == "failure") {
-    //     state.alreadyRegisteredError = action.payload.message;
-    //     state.error = "";
-    //   } else {
-    //     state.campaigns = [...state.campaigns, action.payload.data];
-    //     state.alreadyRegisteredError = null;
-    //     state.error = "";
-    //     toast.success("Campaign has been created !", {
-    //       position: "bottom-center",
-    //       autoClose: 3000,
-    //       theme: "colored",
-    //     });
-    //   }
-    // });
   },
 });
+
+// export const { joinUnassignedChat } = unassignedSlice.actions;
 
 export default unassignedSlice.reducer;

@@ -518,8 +518,8 @@ const MyOpen = () => {
                                 <li
                                   className={
                                     message.sender.type === "visitor"
-                                      ? "chat-list right"
-                                      : "chat-list left"
+                                      ? "chat-list left"
+                                      : "chat-list right"
                                   }
                                   key={key}
                                 >

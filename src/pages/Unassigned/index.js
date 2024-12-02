@@ -44,6 +44,8 @@ import { createSelector } from "reselect";
 import socket from "../../socket/socket";
 import { getLoggedInUser } from "../../helpers/fakebackend_helper";
 import { getUnassignedChats } from "../../slices/Unassigned/thunk";
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 const SingleOptions = [
   { value: "Choices 1", label: "Choices 1" },
@@ -110,31 +112,41 @@ const Unassigned = () => {
     setSelectedSingle(selectedSingle);
   }
 
-  socket.on("visitor-message-request", (chatRequest) => {
-    const alreadyExist = chatRequests.find(
-      (request) => request.id === chatRequest.id
-    );
+  function handleVisitorMessageRequest(chatRequest) {
+    setChatRequests((prevRequests) => {
+      const alreadyExist = prevRequests.some(
+        (request) => request.id === chatRequest.id
+      );
 
-    if (!alreadyExist) {
-      setChatRequests([...chatRequests, { ...chatRequest, messages: [] }]);
-    }
+      if (!alreadyExist) {
+        return [
+          ...prevRequests,
+          { ...chatRequest, messages: chatRequest.messages || [] },
+        ];
+      }
+
+      return prevRequests;
+    });
+  }
+
+  useEffect(() => {
+    socket.on("visitor-message-request", handleVisitorMessageRequest);
+
+    return () => {
+      socket.off("visitor-message-request", handleVisitorMessageRequest);
+    };
   });
 
-  const handleMessage = useCallback((message) => {
+  const handleMessage = (message) => {
     setChatRequests((prevRequests) => {
-      return prevRequests.map((rqst) => {
-        const chat = prevRequests.find((request) => {
-          return request.id === message.chatId;
-        });
-
-        if (rqst.id === chat.id) {
-          return { ...rqst, messages: [...rqst.messages, message] };
-        } else {
-          return rqst;
+      return prevRequests.map((request) => {
+        if (request.id === message.chatId) {
+          return { ...request, messages: [...request.messages, message] };
         }
+        return request;
       });
     });
-  }, []);
+  };
 
   useEffect(() => {
     socket.on("message", handleMessage);
@@ -166,12 +178,22 @@ const Unassigned = () => {
   };
 
   function handleJoinConversation() {
-    console.log("CHAT ID ->");
-
     socket.emit("join-conversation", {
       agentId: loggedInUser.id,
       visitorId: activeChat.visitorId,
       chatId: activeChat.id,
+    });
+
+    setChatRequests((prevChatRequests) =>
+      prevChatRequests.filter((chat) => chat.id !== activeChat.id)
+    );
+
+    setActiveChat(null);
+
+    toast.success("Chat moved to open chats !", {
+      position: "bottom-center",
+      autoClose: 3000,
+      theme: "colored",
     });
   }
 
@@ -235,9 +257,10 @@ const Unassigned = () => {
                                   }
                                 >
                                   {/* {request.visitor.name.charAt(0)} */}
-                                  {request.messages[
-                                    request.messages.length - 1
-                                  ].sender.name.charAt(0)}
+                                  {request.messages.length !== 0 &&
+                                    request.messages[
+                                      request.messages.length - 1
+                                    ].sender.name.charAt(0)}
                                 </div>
                               </div>
 
@@ -247,22 +270,20 @@ const Unassigned = () => {
                               <div className="d-flex justify-content-between">
                                 <p className="text-truncate mb-0 text-muted">
                                   {/* {request.visitor.name} */}
-                                  {
+                                  {request.messages.length !== 0 &&
                                     request.messages[
                                       request.messages.length - 1
-                                    ].sender.name
-                                  }
+                                    ].sender.name}
                                 </p>
                                 <p className="mb-0 text-muted">8min</p>
                               </div>
 
                               <div className="d-flex justify-content-between">
                                 <p className="text-truncate mb-0">
-                                  {
+                                  {request.messages.length !== 0 &&
                                     request.messages[
                                       request.messages.length - 1
-                                    ].content
-                                  }
+                                    ].content}
                                 </p>
                                 <div
                                   style={{
@@ -647,6 +668,7 @@ const Unassigned = () => {
         currentuser={Chat_Box_Username}
         cuurentiseImg={Chat_Box_Image}
       />
+      <ToastContainer />
     </React.Fragment>
   );
 };
