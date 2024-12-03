@@ -308,38 +308,6 @@ const Unassigned = () => {
                         </Link>
                       </li>
                     ))}
-                    {/* <li style={{ background: "#F3F6F9" }}>
-                      <Link to="#" onClick={(e) => {}}>
-                        {visitorRequests?.map((request) => (
-                          <div className="d-flex align-items-center">
-                            <div className="flex-shrink-0 chat-user-img online align-self-start me-2 ms-0">
-                              <div className="avatar-xxs">
-                                <div
-                                  className={
-                                    "avatar-title rounded-circle bg-primary userprofile"
-                                  }
-                                >
-                                  K
-                                </div>
-                              </div>
-
-                              <span className="user-status"></span>
-                            </div>
-                            <div className="flex-grow-1 overflow-hidden">
-                              <div className="d-flex justify-content-between">
-                                <p className="text-truncate mb-0 text-muted">
-                                  Uknown
-                                </p>
-                                <p className="mb-0 text-muted">8min</p>
-                              </div>
-                              <p className="text-truncate mb-0">
-                                {request.message}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </Link>
-                    </li> */}
                   </ul>
                 </div>
               </SimpleBar>
@@ -467,7 +435,14 @@ const Unassigned = () => {
                           >
                             {activeChat &&
                               activeChat?.messages.map((message, key) => (
-                                <li className="chat-list right" key={key}>
+                                <li
+                                  className={
+                                    message.sender.type === "visitor"
+                                      ? "chat-list left"
+                                      : "chat-list right"
+                                  }
+                                  key={key}
+                                >
                                   <div className="conversation-list">
                                     <div className="user-chat-content">
                                       <div className="ctext-wrap">
@@ -526,8 +501,13 @@ const Unassigned = () => {
                                         </UncontrolledDropdown>
                                       </div>
                                       <div className="conversation-name">
+                                        {message.sender.type === "agent" ? (
+                                          <small className="text-muted time">
+                                            {message.sender.name}
+                                          </small>
+                                        ) : null}
                                         <small className="text-muted time">
-                                          09:07 am
+                                          {moment(message.createdAt).fromNow()}
                                         </small>{" "}
                                         <span className="text-success check-message-icon">
                                           <i className="ri-check-double-line align-bottom"></i>

@@ -52,6 +52,7 @@ import { createSelector } from "reselect";
 import { io } from "socket.io-client";
 import { getOpenChats } from "../../slices/MyOpen/thunk";
 import socket from "../../socket/socket";
+import moment from "moment/moment";
 
 const MyOpen = () => {
   const [customActiveTab, setcustomActiveTab] = useState("1");
@@ -531,6 +532,7 @@ const MyOpen = () => {
                                             {message.content}
                                           </p>
                                         </div>
+
                                         <UncontrolledDropdown className="align-self-start message-box-drop">
                                           <DropdownToggle
                                             href="#"
@@ -581,8 +583,13 @@ const MyOpen = () => {
                                         </UncontrolledDropdown>
                                       </div>
                                       <div className="conversation-name">
+                                        {message.sender.type === "agent" ? (
+                                          <small className="text-muted time">
+                                            {message.sender.name}
+                                          </small>
+                                        ) : null}{" "}
                                         <small className="text-muted time">
-                                          09:07 am
+                                          {moment(message.createdAt).fromNow()}
                                         </small>{" "}
                                         <span className="text-success check-message-icon">
                                           <i className="ri-check-double-line align-bottom"></i>
