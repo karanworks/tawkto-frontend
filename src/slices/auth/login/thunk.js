@@ -53,6 +53,10 @@ export const loginUser = (user, history) => async (dispatch) => {
     if (data) {
       sessionStorage.setItem("authUser", JSON.stringify(data));
       localStorage.setItem("authUser", JSON.stringify(data));
+      console.log("WORKSPACE AFTER LOGING IN ->", data.data.workspace);
+
+      data.data.workspace &&
+        localStorage.setItem("workspace", JSON.stringify(data.data.workspace));
       var finallogin = JSON.stringify(data);
       finallogin = JSON.parse(finallogin);
       data = finallogin.data;

@@ -1,4 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import { getWorkspaces, createWorkspace } from "./thunk";
 
@@ -25,6 +25,11 @@ const campaignSlice = createSlice({
 
     builder.addCase(createWorkspace.fulfilled, (state, action) => {
       console.log("CREATE WORKSPACE RESULT ->", action.payload);
+      toast.success("Workspace has been created !", {
+        position: "bottom-center",
+        autoClose: 3000,
+        theme: "colored",
+      });
     });
   },
 });

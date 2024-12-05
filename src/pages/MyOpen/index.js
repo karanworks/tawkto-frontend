@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Container,
   Button,
-  UncontrolledTooltip,
-  Input,
   DropdownToggle,
   DropdownMenu,
   Dropdown,
@@ -13,23 +11,14 @@ import {
   Card,
   CardBody,
   UncontrolledDropdown,
-  Nav,
-  NavItem,
-  NavLink,
-  TabContent,
-  TabPane,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import { isEmpty, map } from "lodash";
-import classnames from "classnames";
 import SimpleBar from "simplebar-react";
 import { getLoggedInUser } from "../../helpers/fakebackend_helper";
 //Import Icons
 import FeatherIcon from "feather-icons-react";
 import PersonalInfo from "./PersonalInfo";
 import NoChatIcon from "./no-chat-icon.svg";
-
-import { chatContactData } from "../../common/data";
 
 import Picker from "emoji-picker-react";
 
@@ -56,11 +45,6 @@ import moment from "moment/moment";
 
 const MyOpen = () => {
   const [customActiveTab, setcustomActiveTab] = useState("1");
-  const toggleCustom = (tab) => {
-    if (customActiveTab !== tab) {
-      setcustomActiveTab(tab);
-    }
-  };
 
   const containerRef = useRef(null);
 
@@ -87,22 +71,9 @@ const MyOpen = () => {
   console.log("ACTIVE CHAT ->", activeChat);
 
   const selectLayoutState = (state) => state.Chat;
-  const chatProperties = createSelector(selectLayoutState, (state) => ({
-    chats: state.chats,
-    // messages: state.messages,
-    channels: state.channels,
-  }));
+
   // Inside your component
-  // const { chats, messages, channels } = useSelector(chatProperties);
-  const { chats } = useSelector(chatProperties);
   const loggedInUser = getLoggedInUser()?.data;
-
-  const workspace = JSON.parse(localStorage.getItem("workspace"));
-
-  //Toggle Chat Box Menus
-  const toggleSearch = () => {
-    setsearch_Menu(!search_Menu);
-  };
 
   //Info details offcanvas
   const toggleInfo = () => {
@@ -137,6 +108,10 @@ const MyOpen = () => {
     setOpenChats((prevOpenChats) => {
       return prevOpenChats?.map((openChat) => {
         if (openChat.id === message.chatId) {
+          setActiveChat({
+            ...openChat,
+            messages: [...openChat.messages, message],
+          });
           return {
             ...openChat,
             messages: [...openChat.messages, message],
@@ -147,14 +122,14 @@ const MyOpen = () => {
       });
     });
 
-    if (activeChat?.id === message.chatId) {
-      console.log("YES IT IS ACTIVE CHAT ->");
+    // if (activeChat?.id === message.chatId) {
+    //   console.log("YES IT IS ACTIVE CHAT ->");
 
-      setActiveChat((prevActiveChat) => ({
-        ...prevActiveChat,
-        messages: [...prevActiveChat.messages, message], // Append the new message to the active chat's messages
-      }));
-    }
+    //   setActiveChat((prevActiveChat) => ({
+    //     ...prevActiveChat,
+    //     messages: [...prevActiveChat.messages, message], // Append the new message to the active chat's messages
+    //   }));
+    // }
   };
 
   useEffect(() => {
@@ -172,14 +147,6 @@ const MyOpen = () => {
 
     setActiveChat(activeChat);
   }
-
-  //Use For Chat Box
-  const userChatOpen = (id, name, status, roomId, image) => {
-    setChat_Box_Username(name);
-    setCurrentRoomId(roomId);
-    setChat_Box_Image(image);
-    dispatch(getMessages(roomId));
-  };
 
   const addMessage = (roomId, sender) => {
     const message = {
@@ -225,48 +192,6 @@ const MyOpen = () => {
     }
   };
 
-  //serach recent user
-  const searchUsers = () => {
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById("search-user");
-    filter = input.value.toUpperCase();
-    var userList = document.getElementsByClassName("users-list");
-    Array.prototype.forEach.call(userList, function (el) {
-      li = el.getElementsByTagName("li");
-      for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          li[i].style.display = "";
-        } else {
-          li[i].style.display = "none";
-        }
-      }
-    });
-  };
-
-  // Copy Message
-  const handleCkick = (ele) => {
-    var copy = ele
-      .closest(".chat-list")
-      .querySelector(".ctext-content").innerHTML;
-    navigator.clipboard.writeText(copy);
-
-    document.getElementById("copyClipBoard").style.display = "block";
-    setTimeout(() => {
-      document.getElementById("copyClipBoard").style.display = "none";
-    }, 2000);
-  };
-
-  // emoji
-  const [emojiArray, setemojiArray] = useState("");
-
-  const onEmojiClick = (event, emojiObject) => {
-    setemojiArray([...emojiArray, emojiObject.emoji]);
-    let emoji = [...emojiArray, emojiObject.emoji].join(" ");
-    setcurMessage(curMessage + event.emoji);
-  };
-
   document.title = "Chat | Velzon - React Admin & Dashboard Template";
   return (
     <React.Fragment>
@@ -282,7 +207,6 @@ const MyOpen = () => {
                 </div>
                 <div className="search-box">
                   <input
-                    onKeyUp={searchUsers}
                     id="search-user"
                     type="text"
                     className="form-control bg-light border-light"
@@ -318,9 +242,10 @@ const MyOpen = () => {
                                   }
                                 >
                                   {/* {request.visitor.name.charAt(0)} */}
-                                  {request.messages[
-                                    request.messages.length - 1
-                                  ].sender.name.charAt(0)}
+                                  {request.messages.length !== 0 &&
+                                    request.messages[
+                                      request.messages.length - 1
+                                    ].sender.name.charAt(0)}
                                 </div>
                               </div>
 
@@ -330,22 +255,20 @@ const MyOpen = () => {
                               <div className="d-flex justify-content-between">
                                 <p className="text-truncate mb-0 text-muted">
                                   {/* {request.visitor.name} */}
-                                  {
+                                  {request.messages.length !== 0 &&
                                     request.messages[
                                       request.messages.length - 1
-                                    ].sender.name
-                                  }
+                                    ].sender.name}
                                 </p>
                                 <p className="mb-0 text-muted">8min</p>
                               </div>
 
                               <div className="d-flex justify-content-between">
                                 <p className="text-truncate mb-0">
-                                  {
+                                  {request.messages.length !== 0 &&
                                     request.messages[
                                       request.messages.length - 1
-                                    ].content
-                                  }
+                                    ].content}
                                 </p>
                                 <div
                                   style={{
@@ -555,12 +478,7 @@ const MyOpen = () => {
                                               <i className="ri-share-line me-2 text-muted align-bottom"></i>
                                               Forward
                                             </DropdownItem>
-                                            <DropdownItem
-                                              href="#"
-                                              onClick={(e) =>
-                                                handleCkick(e.target)
-                                              }
-                                            >
+                                            <DropdownItem href="#">
                                               <i className="ri-file-copy-line me-2 text-muted align-bottom"></i>
                                               Copy
                                             </DropdownItem>
@@ -612,7 +530,7 @@ const MyOpen = () => {
                           <div className="alert pickerEmoji">
                             <Picker
                               disableSearchBar={true}
-                              onEmojiClick={onEmojiClick}
+                              // onEmojiClick={onEmojiClick}
                             />
                           </div>
                         )}

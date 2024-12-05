@@ -18,7 +18,7 @@ function AddMemberModal({
   tog_list,
   formHandleSubmit,
   validation,
-  handleroleStatus,
+  handleRoleStatus,
   rolestatus,
   roleStatus,
 }) {

@@ -22,7 +22,11 @@ const campaignSlice = createSlice({
     builder.addCase(inviteWorkspaceMember.fulfilled, (state, action) => {
       state.workspaceMembers = [...state.workspaceMembers, action.payload.data];
 
-      console.log("invite workspace member reducer", action.payload);
+      toast.success("User has been invited !", {
+        position: "bottom-center",
+        autoClose: 3000,
+        theme: "colored",
+      });
     });
     builder.addCase(setPasswordWorkspaceMember.fulfilled, (state, action) => {
       console.log("invite set password reducer", action.payload);

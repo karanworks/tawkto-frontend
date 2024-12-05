@@ -18,6 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { createWorkspace } from "../../slices/ConnectWebsite/thunk";
+import { ToastContainer } from "react-toastify";
 
 const ConnectWebsite = () => {
   const dispatch = useDispatch();
@@ -127,6 +128,7 @@ const ConnectWebsite = () => {
           </Row>
         </Container>
       </div>
+      <ToastContainer />
     </React.Fragment>
   );
 };

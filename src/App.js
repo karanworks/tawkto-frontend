@@ -44,6 +44,8 @@ function App() {
   }
 
   if (loggedInUser) {
+    console.log("AGENT GETTING JOINED EVENT TRIGGERED");
+
     socket.emit("agent-join", {
       agentId: loggedInUser?.id,
       workspaceId: loggedInUser.workspace?.id,
