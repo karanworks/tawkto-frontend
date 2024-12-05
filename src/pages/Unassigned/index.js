@@ -156,6 +156,22 @@ const Unassigned = () => {
     };
   }, [handleMessage]);
 
+  function handleJoinedConversation({ chatId, agentId }) {
+    if (agentId !== loggedInUser.id && loggedInUser.roleId !== 1) {
+      setChatRequests((prevChatRequests) => {
+        return prevChatRequests.filter((request) => request.id !== chatId);
+      });
+    }
+  }
+
+  useEffect(() => {
+    socket.on("joined-conversation", handleJoinedConversation);
+
+    return () => {
+      socket.off("joined-conversation", handleJoinedConversation);
+    };
+  }, []);
+
   function handleActiveChat(chatId) {
     const activeChat = chatRequests.find(
       (request) => request.visitorId === chatId
@@ -183,6 +199,7 @@ const Unassigned = () => {
       agentId: loggedInUser.id,
       visitorId: activeChat.visitorId,
       chatId: activeChat.id,
+      workspaceId: workspace.id,
     });
 
     setChatRequests((prevChatRequests) =>

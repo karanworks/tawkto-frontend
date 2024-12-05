@@ -25,6 +25,7 @@ import userIcon from "./user-icon.png";
 import { useSelector } from "react-redux";
 import { getWorkspaces } from "../../slices/Workspace/thunk";
 import Loader from "../../Components/Common/Loader";
+import { ToastContainer } from "react-toastify";
 
 const WorkspaceMembers = () => {
   const [modal_list, setmodal_list] = useState(false);
@@ -337,6 +338,7 @@ const WorkspaceMembers = () => {
         rolestatus={rolestatus}
         roleStatus={roleStatus}
       />
+      <ToastContainer />
     </React.Fragment>
   );
 };

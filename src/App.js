@@ -34,6 +34,7 @@ function App() {
   let loggedInUser;
 
   const { user } = useSelector((state) => state.Login);
+  const workspace = JSON.parse(localStorage.getItem("workspace"));
 
   if (Object.keys(user).length !== 0) {
     loggedInUser = user;
@@ -48,7 +49,7 @@ function App() {
 
     socket.emit("agent-join", {
       agentId: loggedInUser?.id,
-      workspaceId: loggedInUser.workspace?.id,
+      workspaceId: workspace?.id,
     });
   }
 
