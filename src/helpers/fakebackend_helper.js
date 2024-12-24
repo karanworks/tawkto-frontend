@@ -18,8 +18,6 @@ export const isUserAuthenticated = () => {
 
 // Register Method
 export const postRegister = (data) => {
-  console.log("REGISTER DATA ->", data);
-
   return api.create(`${process.env.REACT_APP_SERVER_URL}/register`, data);
 };
 // Default Login Method
@@ -73,8 +71,6 @@ export const removeUser = (userId) => {
 };
 
 export const updateUser = ({ userId, values }) => {
-  console.log("USER ID ->", userId, "VALUES ->", values);
-
   return api.update(
     `${process.env.REACT_APP_SERVER_URL}/user/${userId}/edit`,
     values
@@ -126,8 +122,6 @@ export const getCampaigns = () => {
 };
 
 export const createCampaign = (data) => {
-  console.log("CREATING CAMPAIGN AFTER MODIFICATION ->", data);
-
   return api.create(
     `${process.env.REACT_APP_SERVER_URL}/campaign/create`,
     data,
@@ -167,8 +161,6 @@ export const createDesign = (data) => {
 };
 
 export const updateDesign = ({ designId, values }) => {
-  console.log("VALUES AND DESIGN ID ->", designId, values);
-
   return api.update(
     `${process.env.REACT_APP_SERVER_URL}/design/${designId}/edit`,
     values,
@@ -254,16 +246,24 @@ export const getReports = (filters) => {
 // *****************************************************************
 // ************************** UNASSIGNED ***************************
 // *****************************************************************
-export const getChatRequests = ({ agentId }) => {
+export const getChatRequests = ({ agentId, workspaceId }) => {
   return api.get(
-    `${process.env.REACT_APP_SERVER_URL}/chat-requests/${agentId}`
+    `${process.env.REACT_APP_SERVER_URL}/chat-requests/${workspaceId}/${agentId}`
   );
+};
+export const getChatRequestMessages = ({ chatId }) => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/chat-request/${chatId}`);
 };
 // *****************************************************************
 // *************************** MY OPEN *****************************
 // *****************************************************************
-export const getOpenChats = ({ agentId }) => {
-  return api.get(`${process.env.REACT_APP_SERVER_URL}/my-open/${agentId}`);
+export const getOpenChats = ({ agentId, workspaceId }) => {
+  return api.get(
+    `${process.env.REACT_APP_SERVER_URL}/my-open/${workspaceId}/${agentId}`
+  );
+};
+export const getOpenChatMessages = ({ chatId }) => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/my-open/${chatId}`);
 };
 
 //Chat

@@ -13,7 +13,7 @@ import {
   ButtonGroup,
   Label,
 } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SimpleBar from "simplebar-react";
 import Select from "react-select";
 import NoChatIcon from "./no-chat-icon.svg";
@@ -43,10 +43,14 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import { createSelector } from "reselect";
 import socket from "../../socket/socket";
 import { getLoggedInUser } from "../../helpers/fakebackend_helper";
-import { getUnassignedChats } from "../../slices/Unassigned/thunk";
+import {
+  getChatRequestMessages,
+  getUnassignedChats,
+} from "../../slices/Unassigned/thunk";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import moment from "moment";
+import { handleOpenActiveChat } from "../../slices/MyOpen/reducer";
 
 const SingleOptions = [
   { value: "Choices 1", label: "Choices 1" },
@@ -95,14 +99,23 @@ const Unassigned = () => {
 
   const loggedInUser = getLoggedInUser()?.data;
   const workspace = JSON.parse(localStorage.getItem("workspace"));
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(onGetDirectContact());
     dispatch(onGetChannels());
     dispatch(getMessages(currentRoomId));
+    console.log(
+      "WORKSPACE ID FOR UNASSIGNED CHAT ->",
+      workspace.id,
+      "AGENT ID FOR UNASSIGNED CHAT ->",
+      loggedInUser.id
+    );
+
     dispatch(
       getUnassignedChats({
         agentId: loggedInUser.id,
+        workspaceId: workspace.id,
       })
     ).then((res) => {
       setChatRequests(res.payload.data);
@@ -165,19 +178,27 @@ const Unassigned = () => {
   }
 
   useEffect(() => {
+    const handleJoinedConversation = (data) => {
+      console.log("JOINED CONVERSATION EVENT CALLED", activeChat);
+      dispatch(handleOpenActiveChat(activeChat));
+      navigate("/my-open");
+    };
+
     socket.on("joined-conversation", handleJoinedConversation);
 
     return () => {
       socket.off("joined-conversation", handleJoinedConversation);
     };
-  }, []);
+  }, [activeChat, dispatch, navigate]);
 
   function handleActiveChat(chatId) {
-    const activeChat = chatRequests.find(
-      (request) => request.visitorId === chatId
-    );
+    // const activeChat = chatRequests.find(
+    //   (request) => request.visitorId === chatId
+    // );
 
-    setActiveChat(activeChat);
+    dispatch(getChatRequestMessages({ chatId })).then((res) =>
+      setActiveChat(res.payload.data)
+    );
   }
 
   //Toggle Chat Box Menus
@@ -206,7 +227,7 @@ const Unassigned = () => {
       prevChatRequests.filter((chat) => chat.id !== activeChat.id)
     );
 
-    setActiveChat(null);
+    // setActiveChat(null);
 
     toast.success("Chat moved to open chats !", {
       position: "bottom-center",
@@ -260,11 +281,15 @@ const Unassigned = () => {
                     {/* className="active" removed this class because it was changin the text color as well will modify it in the future */}
                     {(chatRequests || []).map((request, i) => (
                       <li
-                        style={{ background: "#F3F6F9" }}
+                        style={{
+                          background:
+                            activeChat?.id === request?.id
+                              ? "#F3F6F9"
+                              : "transparent",
+                        }}
                         key={i}
-                        onClick={() => handleActiveChat(request.visitorId)}
+                        onClick={() => handleActiveChat(request.id)}
                       >
-                        {console.log("REQUEST IN MESSAGES  ->", request)}
                         <Link to="#" onClick={(e) => {}}>
                           <div className="d-flex align-items-center">
                             <div className="flex-shrink-0 chat-user-img online align-self-start me-2 ms-0">

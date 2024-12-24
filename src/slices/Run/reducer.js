@@ -22,8 +22,6 @@ const runSlice = createSlice({
     });
 
     builder.addCase(createRun.fulfilled, (state, action) => {
-      console.log("RUN CREATION UPDATE PAYLOAD ->", action.payload.data);
-
       if (action.payload?.status == "failure") {
         state.alreadyRegisteredError = action.payload.message;
         state.error = "";

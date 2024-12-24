@@ -1,17 +1,31 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getChatRequests as getChatRequestsApi } from "../../helpers/fakebackend_helper";
+import {
+  getChatRequests as getChatRequestsApi,
+  getChatRequestMessages as getChatRequestMessagesApi,
+} from "../../helpers/fakebackend_helper";
 
 export const getUnassignedChats = createAsyncThunk(
   "unassigned/getUnassignedChats",
   async (data) => {
     try {
       const response = await getChatRequestsApi(data);
-      console.log("VISITOR REQUESTS INSIDE THUNK ->", response);
 
       return response;
     } catch (error) {
       console.log("error inside get visitor requests thunk", error);
+    }
+  }
+);
+export const getChatRequestMessages = createAsyncThunk(
+  "unassigned/getChatRequestMessages",
+  async (data) => {
+    try {
+      const response = await getChatRequestMessagesApi(data);
+
+      return response;
+    } catch (error) {
+      console.log("error inside get visitor request messages thunk", error);
     }
   }
 );

@@ -28,8 +28,6 @@ export const createRun = createAsyncThunk("run/createRun", async (values) => {
 
 export const updateRun = createAsyncThunk("run/updateRun", async (data) => {
   try {
-    console.log("UPDATE DATA ->", data);
-
     const response = await updateRunApi(data);
     return response;
   } catch (error) {

@@ -63,10 +63,7 @@ const Register = () => {
         .required("Please confirm your password"),
     }),
     onSubmit: (values) => {
-      console.log("Register values->", values);
-      dispatch(registerUser(values)).then((res) => {
-        console.log("DISPATCH RESPONSE ->", res);
-      });
+      dispatch(registerUser(values)).then((res) => {});
     },
   });
 
@@ -77,8 +74,6 @@ const Register = () => {
   }));
   // Inside your component
   const { error, success } = useSelector(registerdatatype);
-
-  console.log("REGISTER SUCCESS ->", success);
 
   useEffect(() => {
     dispatch(apiError(""));
@@ -96,8 +91,6 @@ const Register = () => {
   }, [dispatch, success, error, history]);
 
   function formHandleSubmit(e) {
-    console.log("FORM GETTING SUBMITTED");
-
     e.preventDefault();
     validation.handleSubmit();
 

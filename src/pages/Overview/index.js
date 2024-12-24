@@ -26,7 +26,8 @@ const Overview = () => {
   let widgetCode;
 
   if (workspace && workspace.id) {
-    widgetCode = `<script src="http://localhost:3010/api/widget/${workspace.id}" async > </script>`;
+    // widgetCode = `<script src="http://localhost:3010/api/widget/${workspace.id}" async > </script>`;
+    widgetCode = `<script src="${process.env.REACT_APP_SERVER_URL}/widget/${workspace.id}" async > </script>`;
   }
 
   return (

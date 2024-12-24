@@ -14,8 +14,6 @@ const campaignSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getReports.fulfilled, (state, action) => {
-      console.log("REPORTS ->", action.payload);
-
       if (action.payload?.status === "failure") {
         state.error = action.payload.message;
       } else {

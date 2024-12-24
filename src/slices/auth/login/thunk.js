@@ -53,7 +53,6 @@ export const loginUser = (user, history) => async (dispatch) => {
     if (data) {
       sessionStorage.setItem("authUser", JSON.stringify(data));
       localStorage.setItem("authUser", JSON.stringify(data));
-      console.log("WORKSPACE AFTER LOGING IN ->", data.data.workspace);
 
       data.data.workspace &&
         localStorage.setItem("workspace", JSON.stringify(data.data.workspace));
@@ -64,7 +63,6 @@ export const loginUser = (user, history) => async (dispatch) => {
         dispatch(loginSuccess(data));
         history("/overview");
       } else {
-        console.log("else condition while logging in ", finallogin);
         dispatch(apiError(finallogin));
       }
     }
@@ -78,7 +76,6 @@ export const alreadyLoggedInUser = (history) => async (dispatch) => {
   // check if already logged in
   const loggedInUser = localStorage.getItem("authUser");
   const loggedInUserData = JSON.parse(loggedInUser);
-  console.log("LOGGED IN USER DATA ->", loggedInUserData);
 
   if (loggedInUserData) {
     dispatch(loginSuccess(loggedInUserData));

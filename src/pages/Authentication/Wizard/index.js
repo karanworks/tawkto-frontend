@@ -75,8 +75,6 @@ const Wizard = () => {
   function formHandleSubmit(e) {
     e.preventDefault();
 
-    console.log("FORM IS BEING SUBMITTED");
-
     validation.handleSubmit();
 
     return false;

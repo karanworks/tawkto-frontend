@@ -39,9 +39,11 @@ import userDummayImage from "../../assets/images/users/user-dummy-img.jpg";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { createSelector } from "reselect";
 import { io } from "socket.io-client";
-import { getOpenChats } from "../../slices/MyOpen/thunk";
+import { getOpenChatMessages, getOpenChats } from "../../slices/MyOpen/thunk";
 import socket from "../../socket/socket";
 import moment from "moment/moment";
+import { set } from "lodash";
+import { handleOpenActiveChat } from "../../slices/MyOpen/reducer";
 
 const MyOpen = () => {
   const [customActiveTab, setcustomActiveTab] = useState("1");
@@ -70,10 +72,17 @@ const MyOpen = () => {
 
   console.log("ACTIVE CHAT ->", activeChat);
 
-  const selectLayoutState = (state) => state.Chat;
-
   // Inside your component
   const loggedInUser = getLoggedInUser()?.data;
+  const workspace = JSON.parse(localStorage.getItem("workspace"));
+  const { activeOpenChat } = useSelector((state) => state.MyOpen);
+
+  console.log("ACTIVE OPEN CHAT ->", activeOpenChat);
+
+  // useEffect(() => {
+  //   setActiveChat(activeOpenChat);
+  //   console.log("ACTIVE OPEN CHAT ->", activeOpenChat);
+  // }, [activeOpenChat]);
 
   //Info details offcanvas
   const toggleInfo = () => {
@@ -98,20 +107,28 @@ const MyOpen = () => {
   }, [dispatch, currentRoomId]);
 
   useEffect(() => {
-    dispatch(getOpenChats({ agentId: loggedInUser?.id })).then((res) => {
+    dispatch(
+      getOpenChats({ agentId: loggedInUser?.id, workspaceId: workspace.id })
+    ).then((res) => {
       setOpenChats(res.payload.data);
     });
   }, []);
 
   const handleIncomingMessage = (message) => {
-    console.log("MESSAGE RECIEVED ->", message);
     setOpenChats((prevOpenChats) => {
       return prevOpenChats?.map((openChat) => {
         if (openChat.id === message.chatId) {
-          setActiveChat({
-            ...openChat,
-            messages: [...openChat.messages, message],
-          });
+          // setActiveChat({
+          //   ...openChat,
+          //   messages: [...openChat.messages, message],
+          // });
+
+          dispatch(
+            handleOpenActiveChat({
+              ...openChat,
+              messages: [...openChat.messages, message],
+            })
+          );
           return {
             ...openChat,
             messages: [...openChat.messages, message],
@@ -138,14 +155,13 @@ const MyOpen = () => {
     return () => {
       socket.off("message", handleIncomingMessage);
     };
-  }, [activeChat]);
+  }, [activeOpenChat]);
 
   function handleActiveChat(chatId) {
-    const activeChat = openChats.find(
-      (request) => request.visitorId === chatId
-    );
-
-    setActiveChat(activeChat);
+    dispatch(getOpenChatMessages({ chatId })).then((res) => {
+      // setActiveChat(res.payload.data);
+      dispatch(handleOpenActiveChat(res.payload.data));
+    });
   }
 
   const addMessage = (roomId, sender) => {
@@ -166,7 +182,7 @@ const MyOpen = () => {
       const contentEl = simpleBar.getScrollElement();
       contentEl.scrollTop = contentEl.scrollHeight;
     }
-  }, [activeChat]);
+  }, [activeOpenChat]);
 
   const onKeyPress = (e) => {
     const { key } = e;
@@ -175,16 +191,14 @@ const MyOpen = () => {
 
       socket.emit("message", {
         message: { content: curMessage },
-        chatId: activeChat.id,
+        chatId: activeOpenChat.id,
         sender: {
           name: loggedInUser.name,
           agentId: loggedInUser.id,
           type: "agent",
         },
-        to: activeChat.visitorId,
+        to: activeOpenChat.visitorId,
       });
-
-      console.log("MESSAGE ->");
 
       setcurMessage("");
       // addMessage(currentRoomId, currentUser.name);
@@ -227,9 +241,14 @@ const MyOpen = () => {
                   >
                     {(openChats || []).map((request, i) => (
                       <li
-                        style={{ background: "#F3F6F9" }}
+                        style={{
+                          background:
+                            activeOpenChat?.id === request?.id
+                              ? "#F3F6F9"
+                              : "transparent",
+                        }}
                         key={i}
-                        onClick={() => handleActiveChat(request.visitorId)}
+                        onClick={() => handleActiveChat(request.id)}
                       >
                         {console.log("REQUEST IN MESSAGES  ->", request)}
                         <Link to="#" onClick={(e) => {}}>
@@ -297,7 +316,7 @@ const MyOpen = () => {
                 </div>
               </SimpleBar>
             </div>
-            {activeChat ? (
+            {activeOpenChat ? (
               <div className="user-chat w-100 overflow-hidden border">
                 <div className="chat-content d-lg-flex">
                   <div className="w-100 overflow-hidden position-relative">
@@ -437,8 +456,8 @@ const MyOpen = () => {
                             className="list-unstyled chat-conversation-list"
                             id="users-conversation"
                           >
-                            {activeChat &&
-                              activeChat?.messages.map((message, key) => (
+                            {activeOpenChat &&
+                              activeOpenChat?.messages.map((message, key) => (
                                 <li
                                   className={
                                     message.sender.type === "visitor"

@@ -25,8 +25,6 @@ export const createDesign = createAsyncThunk(
     try {
       const response = await createDesignApi(values);
 
-      console.log("RESPONSE CHECK FOR AUDIO FILE ->", response);
-
       return response;
     } catch (error) {
       console.log("error inside create design thunk", error);
@@ -38,8 +36,6 @@ export const updateDesign = createAsyncThunk(
   "design/updateDesign",
   async (values) => {
     try {
-      console.log("UPDATE DESIGN THUNK BEING CALLED ->", values);
-
       const response = await updateDesignApi(values);
       return response;
     } catch (error) {

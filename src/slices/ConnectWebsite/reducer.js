@@ -24,7 +24,6 @@ const campaignSlice = createSlice({
     });
 
     builder.addCase(createWorkspace.fulfilled, (state, action) => {
-      console.log("CREATE WORKSPACE RESULT ->", action.payload);
       toast.success("Workspace has been created !", {
         position: "bottom-center",
         autoClose: 3000,
