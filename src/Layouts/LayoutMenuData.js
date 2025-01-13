@@ -11,7 +11,7 @@ const Navdata = () => {
 
   // const menuDataOfUser = useSelector((state) => state.Login.user.menus);
   const userData = getLoggedinUser();
-  const menuDataOfUser = userData.data.menus;
+  const menuDataOfUser = userData.menus;
 
   //state data
 

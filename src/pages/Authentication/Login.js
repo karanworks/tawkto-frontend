@@ -39,20 +39,23 @@ import { loginSuccess } from "../../slices/auth/login/reducer";
 //import images
 
 const Login = (props) => {
+  const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const selectLayoutState = (state) => state;
   const loginpageData = createSelector(selectLayoutState, (state) => ({
     user: state.Account.user,
     error: state.Login.error,
-    loading: state.Login.loading,
     errorMsg: state.Login.errorMsg,
   }));
   // Inside your component
-  const { user, error, loading, errorMsg } = useSelector(loginpageData);
+  const { user, error, errorMsg } = useSelector(loginpageData);
 
   const [userLogin, setUserLogin] = useState([]);
   const [passwordShow, setPasswordShow] = useState(false);
+
+  console.log("LOGIN LOADING ->", loading);
 
   // useEffect(() => {
   //   if (user && user) {
@@ -89,7 +92,10 @@ const Login = (props) => {
     }),
     onSubmit: (values) => {
       // this code works for default login feature
-      dispatch(loginUser(values, props.router.navigate));
+      setLoading(true);
+      dispatch(loginUser(values, props.router.navigate)).then(() =>
+        setLoading(false)
+      );
     },
   });
 

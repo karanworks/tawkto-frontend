@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import {
   Card,
@@ -19,9 +19,22 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { createWorkspace } from "../../slices/ConnectWebsite/thunk";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+import { getLoggedInUser } from "../../helpers/fakebackend_helper";
+import socket from "../../socket/socket";
 
 const ConnectWebsite = () => {
+  const [workspace, setWorkspace] = useState(() =>
+    localStorage.getItem("workspace")
+  );
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const loggedInUser = getLoggedInUser();
+
+  const { error } = useSelector((state) => state.ConnectWebsite);
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
@@ -37,9 +50,20 @@ const ConnectWebsite = () => {
     }),
     onSubmit: (values, { resetForm }) => {
       dispatch(createWorkspace(values)).then((res) => {
-        localStorage.setItem("workspace", JSON.stringify(res.payload.data));
+        if (res.payload.data) {
+          localStorage.setItem("workspace", JSON.stringify(res.payload.data));
+          setWorkspace(res.payload.data);
+          socket.emit("agent-join", {
+            agentId: loggedInUser?.id,
+            workspaceId: res.payload.data.id,
+          });
+          setTimeout(() => {
+            navigate("/overview");
+          }, 1000);
+
+          resetForm();
+        }
       });
-      resetForm();
     },
   });
 
@@ -58,6 +82,39 @@ const ConnectWebsite = () => {
           <Row style={{ display: "flex", justifyContent: "center" }}>
             <Col xs={4}>
               <div className="p-2 mt-4">
+                {error ? (
+                  <Alert color="danger">
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div>{error}</div>
+                    </div>
+                  </Alert>
+                ) : null}
+                {workspace ? (
+                  <Alert color="info">
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div>Workspace has already been created!</div>
+                      <div>
+                        Now copy the widget code and paste it at the bottom of
+                        your body tag!
+                      </div>
+                    </div>
+                  </Alert>
+                ) : null}
+
                 <Form onSubmit={handleFormSubmit} action="#">
                   <div className="mb-3">
                     <Label htmlFor="websiteAddress" className="form-label">
@@ -118,8 +175,9 @@ const ConnectWebsite = () => {
                       color="success"
                       className="btn btn-success w-100"
                       type="submit"
+                      disabled={Boolean(workspace)}
                     >
-                      Connect Website
+                      Create Workspace
                     </Button>
                   </div>
                 </Form>
@@ -127,8 +185,8 @@ const ConnectWebsite = () => {
             </Col>
           </Row>
         </Container>
+        <ToastContainer />
       </div>
-      <ToastContainer />
     </React.Fragment>
   );
 };

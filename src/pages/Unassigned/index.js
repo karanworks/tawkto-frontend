@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Container,
   DropdownToggle,
@@ -10,8 +10,6 @@ import {
   Card,
   CardBody,
   UncontrolledDropdown,
-  ButtonGroup,
-  Label,
 } from "reactstrap";
 import { Link, useNavigate } from "react-router-dom";
 import SimpleBar from "simplebar-react";
@@ -22,25 +20,12 @@ import NoChatIcon from "./no-chat-icon.svg";
 import FeatherIcon from "feather-icons-react";
 import PersonalInfo from "./PersonalInfo";
 
-import { chatContactData } from "../../common/data";
-
-import Picker from "emoji-picker-react";
-
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getDirectContact as onGetDirectContact,
-  getMessages,
-  getChannels as onGetChannels,
-  addMessage as onAddMessage,
-  deleteMessage as onDeleteMessage,
-} from "../../slices/thunks";
 
 import avatar2 from "../../assets/images/users/avatar-2.jpg";
-import userDummayImage from "../../assets/images/users/user-dummy-img.jpg";
 
 import "react-perfect-scrollbar/dist/css/styles.css";
-import { createSelector } from "reselect";
 import socket from "../../socket/socket";
 import { getLoggedInUser } from "../../helpers/fakebackend_helper";
 import {
@@ -50,7 +35,12 @@ import {
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
 import moment from "moment";
-import { handleOpenActiveChat } from "../../slices/MyOpen/reducer";
+import {
+  handleOpenActiveChat,
+  handleIncomingMessageUpdate,
+  handleVisitorRequestUpdate,
+} from "../../slices/Unassigned/reducer";
+import { handleOpenActiveChat as handleOpenActiveChatMyOpen } from "../../slices/MyOpen/reducer";
 
 const SingleOptions = [
   { value: "Choices 1", label: "Choices 1" },
@@ -61,86 +51,43 @@ const SingleOptions = [
 
 const Unassigned = () => {
   const [customActiveTab, setcustomActiveTab] = useState("1");
-  const toggleCustom = (tab) => {
-    if (customActiveTab !== tab) {
-      setcustomActiveTab(tab);
-    }
-  };
 
   const ref = useRef();
   const dispatch = useDispatch();
   const [isInfoDetails, setIsInfoDetails] = useState(false);
-  const [Chat_Box_Username, setChat_Box_Username] = useState("Lisa Parker");
+  const [Chat_Box_Username, setChat_Box_Username] = useState(avatar2);
   const [Chat_Box_Image, setChat_Box_Image] = useState(avatar2);
-  const [messageBox, setMessageBox] = useState(null);
   const [curMessage, setcurMessage] = useState("");
-  const [search_Menu, setsearch_Menu] = useState(false);
   const [settings_Menu, setsettings_Menu] = useState(false);
   const [reply, setreply] = useState("");
-  const [emojiPicker, setemojiPicker] = useState(false);
-  const [currentUser, setCurrentUser] = useState({
-    name: "Anna Adame",
-    isActive: true,
-  });
-  const [activeChat, setActiveChat] = useState(null);
+
   const [selectedSingle, setSelectedSingle] = useState(null);
-  const [messages, setMessages] = useState([]);
-  // const [visitorRequests, setVisitorRequests] = useState([]);
-  const [chatRequests, setChatRequests] = useState([]);
-  const [currentRoomId, setCurrentRoomId] = useState(null);
 
-  const selectLayoutState = (state) => state.Chat;
-  const chatProperties = createSelector(selectLayoutState, (state) => ({
-    chats: state.chats,
-    // messages: state.messages,
-    channels: state.channels,
-  }));
-  const { unassignedChats } = useSelector((state) => state.Unassigned);
+  const { unassignedChats, activeChat } = useSelector(
+    (state) => state.Unassigned
+  );
 
-  const loggedInUser = getLoggedInUser()?.data;
+  const loggedInUser = getLoggedInUser();
   const workspace = JSON.parse(localStorage.getItem("workspace"));
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(onGetDirectContact());
-    dispatch(onGetChannels());
-    dispatch(getMessages(currentRoomId));
-    console.log(
-      "WORKSPACE ID FOR UNASSIGNED CHAT ->",
-      workspace.id,
-      "AGENT ID FOR UNASSIGNED CHAT ->",
-      loggedInUser.id
-    );
-
-    dispatch(
-      getUnassignedChats({
-        agentId: loggedInUser.id,
-        workspaceId: workspace.id,
-      })
-    ).then((res) => {
-      setChatRequests(res.payload.data);
-    });
-  }, [dispatch, currentRoomId]);
+    if (workspace) {
+      dispatch(
+        getUnassignedChats({
+          agentId: loggedInUser.id,
+          workspaceId: workspace.id,
+        })
+      );
+    }
+  }, [dispatch]);
 
   function handleSelectSingle(selectedSingle) {
     setSelectedSingle(selectedSingle);
   }
 
   function handleVisitorMessageRequest(chatRequest) {
-    setChatRequests((prevRequests) => {
-      const alreadyExist = prevRequests.some(
-        (request) => request.id === chatRequest.id
-      );
-
-      if (!alreadyExist) {
-        return [
-          ...prevRequests,
-          { ...chatRequest, messages: chatRequest.messages || [] },
-        ];
-      }
-
-      return prevRequests;
-    });
+    dispatch(handleVisitorRequestUpdate(chatRequest));
   }
 
   useEffect(() => {
@@ -152,14 +99,7 @@ const Unassigned = () => {
   });
 
   const handleMessage = (message) => {
-    setChatRequests((prevRequests) => {
-      return prevRequests.map((request) => {
-        if (request.id === message.chatId) {
-          return { ...request, messages: [...request.messages, message] };
-        }
-        return request;
-      });
-    });
+    dispatch(handleIncomingMessageUpdate(message));
   };
 
   useEffect(() => {
@@ -169,18 +109,10 @@ const Unassigned = () => {
     };
   }, [handleMessage]);
 
-  function handleJoinedConversation({ chatId, agentId }) {
-    if (agentId !== loggedInUser.id && loggedInUser.roleId !== 1) {
-      setChatRequests((prevChatRequests) => {
-        return prevChatRequests.filter((request) => request.id !== chatId);
-      });
-    }
-  }
-
   useEffect(() => {
     const handleJoinedConversation = (data) => {
-      console.log("JOINED CONVERSATION EVENT CALLED", activeChat);
-      dispatch(handleOpenActiveChat(activeChat));
+      console.log("ACTIVE CHAT IN USE EFFECT FOR MY OPEN ->", activeChat);
+
       navigate("/my-open");
     };
 
@@ -192,19 +124,10 @@ const Unassigned = () => {
   }, [activeChat, dispatch, navigate]);
 
   function handleActiveChat(chatId) {
-    // const activeChat = chatRequests.find(
-    //   (request) => request.visitorId === chatId
-    // );
-
-    dispatch(getChatRequestMessages({ chatId })).then((res) =>
-      setActiveChat(res.payload.data)
-    );
+    dispatch(getChatRequestMessages({ chatId })).then((res) => {
+      dispatch(handleOpenActiveChat(res.payload.data));
+    });
   }
-
-  //Toggle Chat Box Menus
-  const toggleSearch = () => {
-    setsearch_Menu(!search_Menu);
-  };
 
   //Info details offcanvas
   const toggleInfo = () => {
@@ -223,17 +146,15 @@ const Unassigned = () => {
       workspaceId: workspace.id,
     });
 
-    setChatRequests((prevChatRequests) =>
-      prevChatRequests.filter((chat) => chat.id !== activeChat.id)
-    );
+    dispatch(handleOpenActiveChat(null));
 
-    // setActiveChat(null);
+    dispatch(handleOpenActiveChatMyOpen(activeChat));
 
-    toast.success("Chat moved to open chats !", {
-      position: "bottom-center",
-      autoClose: 3000,
-      theme: "colored",
-    });
+    // toast.success("Chat moved to open chats !", {
+    //   position: "bottom-center",
+    //   autoClose: 3000,
+    //   theme: "colored",
+    // });
   }
 
   // emoji
@@ -279,7 +200,9 @@ const Unassigned = () => {
                     id="userList"
                   >
                     {/* className="active" removed this class because it was changin the text color as well will modify it in the future */}
-                    {(chatRequests || []).map((request, i) => (
+                    {console.log("UNASSIGNED CHATS ->", unassignedChats)}
+
+                    {(unassignedChats || []).map((request, i) => (
                       <li
                         style={{
                           background:
@@ -292,7 +215,14 @@ const Unassigned = () => {
                       >
                         <Link to="#" onClick={(e) => {}}>
                           <div className="d-flex align-items-center">
-                            <div className="flex-shrink-0 chat-user-img online align-self-start me-2 ms-0">
+                            <div
+                              className={`flex-shrink-0 chat-user-img ${
+                                request?.status &&
+                                request.status.status === "online"
+                                  ? "online"
+                                  : "away"
+                              } align-self-start me-2 ms-0`}
+                            >
                               <div className="avatar-xxs">
                                 <div
                                   className={
@@ -300,10 +230,12 @@ const Unassigned = () => {
                                   }
                                 >
                                   {/* {request.visitor.name.charAt(0)} */}
-                                  {request.messages.length !== 0 &&
+                                  {/* {request.messages.length !== 0 &&
                                     request.messages[
                                       request.messages.length - 1
-                                    ].sender.name.charAt(0)}
+                                    ].sender.name.charAt(0)} */}
+                                  {console.log("SINGLE CHAT ->", request)}
+                                  {request.visitor.name.charAt(0)}
                                 </div>
                               </div>
 
@@ -313,10 +245,11 @@ const Unassigned = () => {
                               <div className="d-flex justify-content-between">
                                 <p className="text-truncate mb-0 text-muted">
                                   {/* {request.visitor.name} */}
-                                  {request.messages.length !== 0 &&
+                                  {/* {request.messages.length !== 0 &&
                                     request.messages[
                                       request.messages.length - 1
-                                    ].sender.name}
+                                    ].sender.name} */}
+                                  {request.visitor.name}
                                 </p>
                                 <p className="mb-0 text-muted">8min</p>
                               </div>
@@ -356,7 +289,7 @@ const Unassigned = () => {
               </SimpleBar>
             </div>
 
-            {activeChat ? (
+            {activeChat?.id ? (
               <div className="user-chat w-100 overflow-hidden border">
                 <div className="chat-content d-lg-flex">
                   <div className="w-100 overflow-hidden position-relative">
@@ -476,7 +409,7 @@ const Unassigned = () => {
                             className="list-unstyled chat-conversation-list"
                             id="users-conversation"
                           >
-                            {activeChat &&
+                            {activeChat?.id &&
                               activeChat?.messages.map((message, key) => (
                                 <li
                                   className={
@@ -569,14 +502,6 @@ const Unassigned = () => {
                         >
                           Message copied
                         </div>
-                        {emojiPicker && (
-                          <div className="alert pickerEmoji">
-                            <Picker
-                              disableSearchBar={true}
-                              onEmojiClick={onEmojiClick}
-                            />
-                          </div>
-                        )}
                       </div>
 
                       <div

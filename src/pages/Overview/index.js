@@ -9,19 +9,39 @@ import {
   Input,
   Label,
   Button,
+  Alert,
 } from "reactstrap";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import CopyCode from "./CopyCode";
+import socket from "../../socket/socket";
 
 const Overview = () => {
   const [workspaceName, setWorkspaceName] = useState("");
-  const workspace = JSON.parse(localStorage.getItem("workspace") || "{}");
+  const [isWidgetConnected, setIsWidgetConnected] = useState(false);
+
+  const workspace = JSON.parse(localStorage.getItem("workspace")) || "{}";
 
   useEffect(() => {
     if (workspace?.name) {
       setWorkspaceName(workspace.name);
+      setIsWidgetConnected(workspace.isWidgetConnected);
     }
   }, [workspace]);
+
+  function updateWidgetConnectedStatus(workspace) {
+    if (workspace.isWidgetConnected) {
+      localStorage.setItem("workspace", JSON.stringify(workspace));
+      setIsWidgetConnected(true);
+    }
+  }
+
+  useEffect(() => {
+    socket.on("widget-connected", updateWidgetConnectedStatus);
+
+    return () => {
+      return socket.off("widget-connected", updateWidgetConnectedStatus);
+    };
+  }, []);
 
   let widgetCode;
 
@@ -66,6 +86,28 @@ const Overview = () => {
                     </Col>
                     <Col md={6}>
                       <div>
+                        {/* {
+                          workspace.isWidgetConnected ? 
+                        } */}
+                        <Alert
+                          color={`${isWidgetConnected ? "success" : "danger"}`}
+                          style={{ fontSize: "1.2rem" }}
+                        >
+                          <div
+                            style={{
+                              width: "100%",
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                            }}
+                          >
+                            <div>
+                              {isWidgetConnected
+                                ? "Your widget is connected! 🎉"
+                                : "Please connect your widget using below code!"}
+                            </div>
+                          </div>
+                        </Alert>
                         <CopyCode code={workspace ? widgetCode : ""} />
                       </div>
                     </Col>

@@ -10,6 +10,8 @@ import {
   Label,
   Form,
   FormFeedback,
+  Button,
+  Spinner,
 } from "reactstrap";
 
 // Formik Validation
@@ -38,6 +40,7 @@ import RegistrationModal from "./RegistrationModal";
 
 const Register = () => {
   const [modal_backdrop, setmodal_backdrop] = useState(false);
+  const [loading, setLoading] = useState(false);
   function tog_backdrop() {
     setmodal_backdrop(!modal_backdrop);
   }
@@ -63,7 +66,8 @@ const Register = () => {
         .required("Please confirm your password"),
     }),
     onSubmit: (values) => {
-      dispatch(registerUser(values)).then((res) => {});
+      setLoading(true);
+      dispatch(registerUser(values)).then(() => setLoading(false));
     },
   });
 
@@ -71,9 +75,10 @@ const Register = () => {
   const registerdatatype = createSelector(selectLayoutState, (account) => ({
     success: account.success,
     error: account.error,
+    registrationError: account.registrationError,
   }));
   // Inside your component
-  const { error, success } = useSelector(registerdatatype);
+  const { error, success, registrationError } = useSelector(registerdatatype);
 
   useEffect(() => {
     dispatch(apiError(""));
@@ -132,14 +137,11 @@ const Register = () => {
                         </>
                       ) : null} */}
 
-                      {/* {error && error ? (
+                      {error && error ? (
                         <Alert color="danger">
-                          <div>
-                            Email has been Register Before, Please Use Another
-                            Email Address...{" "}
-                          </div>
+                          <div>{registrationError}</div>
                         </Alert>
-                      ) : null} */}
+                      ) : null}
 
                       <div className="mb-3">
                         <Label htmlFor="name" className="form-label">
@@ -247,10 +249,25 @@ const Register = () => {
                         ) : null}
                       </div>
 
-                      <div className="mt-4">
+                      {/* <div className="mt-4">
                         <button className="btn btn-success w-100" type="submit">
                           Register
                         </button>
+                      </div> */}
+                      <div className="mt-4">
+                        <Button
+                          color="success"
+                          disabled={error ? null : loading ? true : false}
+                          className="btn btn-success w-100"
+                          type="submit"
+                        >
+                          {loading ? (
+                            <Spinner size="sm" className="me-2">
+                              Loading...
+                            </Spinner>
+                          ) : null}
+                          Register
+                        </Button>
                       </div>
                     </Form>
                   </div>

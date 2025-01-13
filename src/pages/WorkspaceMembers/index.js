@@ -42,7 +42,7 @@ const WorkspaceMembers = () => {
 
   const { workspaceMembers } = useSelector((state) => state.WorkspaceMembers);
 
-  const loggedInUserData = getLoggedinUser().data;
+  const loggedInUserData = getLoggedinUser();
 
   useEffect(() => {
     if (!workspace) {

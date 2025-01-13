@@ -34,13 +34,6 @@ import Picker from "emoji-picker-react";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getDirectContact as onGetDirectContact,
-  getMessages,
-  getChannels as onGetChannels,
-  addMessage as onAddMessage,
-  deleteMessage as onDeleteMessage,
-} from "../../slices/thunks";
 
 import avatar2 from "../../assets/images/users/avatar-2.jpg";
 import userDummayImage from "../../assets/images/users/user-dummy-img.jpg";
@@ -99,12 +92,6 @@ const Solved = () => {
   const toggleSettings = () => {
     setsettings_Menu(!settings_Menu);
   };
-
-  useEffect(() => {
-    dispatch(onGetDirectContact());
-    dispatch(onGetChannels());
-    dispatch(getMessages(currentRoomId));
-  }, [dispatch, currentRoomId]);
 
   //Use For Chat Box
   const userChatOpen = (id, name, status, roomId, image) => {

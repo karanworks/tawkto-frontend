@@ -24,6 +24,7 @@ import {
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import { createSelector } from "reselect";
+import ChatRequestAlertStack from "../pages/ChatRequestAlert";
 
 const Layout = (props) => {
   const [headerClass, setHeaderClass] = useState("");
@@ -143,6 +144,7 @@ const Layout = (props) => {
         <div className="main-content">
           {props.children}
           {/* <Footer /> */}
+          <ChatRequestAlertStack />
         </div>
       </div>
       <RightSidebar />

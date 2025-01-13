@@ -22,13 +22,18 @@ export const registerUser = (user) => async (dispatch) => {
       response = postRegister(user);
       const data = await response;
 
+      console.log("Registration Error In Reducer ->", data);
+
       if (data.status === "success") {
         dispatch(registerUserSuccessful(data));
       } else {
+        console.log("REGISTER ERROR ->", data);
+
         dispatch(registerUserFailed(data));
       }
     }
   } catch (error) {
+    console.log("REGISTER ERROR 2 ->", error);
     dispatch(registerUserFailed(error));
   }
 };

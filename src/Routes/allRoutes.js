@@ -22,15 +22,6 @@ import RegistrationModal from "../pages/Authentication/Register/RegistrationModa
 // User Profile
 import UserProfile from "../pages/Authentication/user-profile";
 
-//APi Key
-import Mapping from "../pages/Mapping";
-import Chat from "../pages/Chat";
-import Campaigns from "../pages/Campaigns";
-import Run from "../pages/Run";
-import Design from "../pages/Design";
-import Report from "../pages/Report";
-import Gateways from "../pages/Gateways";
-
 //Landing Page
 import Landing from "../pages/Landing";
 import WidgetPage from "../pages/WidgetPage";
@@ -49,12 +40,6 @@ const authProtectedRoutes = [
     component: <Navigate to="/" />,
   },
   { path: "*", component: <Navigate to="/" /> },
-  { path: "/roles", component: <Mapping /> },
-  { path: "/campaigns", component: <Campaigns /> },
-  { path: "/run", component: <Run /> },
-  { path: "/design", component: <Design /> },
-  { path: "/report", component: <Report /> },
-  { path: "/gateways", component: <Gateways /> },
   { path: "/invite-members", component: <InviteMembers /> },
   { path: "/workspace-members", component: <WorkspaceMembers /> },
   { path: "/departments", component: <Departments /> },
@@ -63,7 +48,6 @@ const authProtectedRoutes = [
   { path: "/connect-website", component: <ConnectWebsite /> },
   { path: "/registration-modal", component: <RegistrationModal /> },
   { path: "/widget-page", component: <WidgetPage /> },
-  { path: "/chat", component: <Chat /> },
   { path: "/unassigned", component: <Unassigned /> },
   { path: "/my-open", component: <MyOpen /> },
   { path: "/solved", component: <Solved /> },

@@ -9,7 +9,7 @@ export const initialState = {
   error: "",
 };
 
-const campaignSlice = createSlice({
+const connectWebsiteSlice = createSlice({
   name: "connectWebsite",
   initialState,
   reducers: {},
@@ -24,13 +24,28 @@ const campaignSlice = createSlice({
     });
 
     builder.addCase(createWorkspace.fulfilled, (state, action) => {
-      toast.success("Workspace has been created !", {
-        position: "bottom-center",
-        autoClose: 3000,
-        theme: "colored",
-      });
+      console.log(
+        "PAYLOAD WHILE CREATING DUPLICATE WORKSPACE ->",
+        action.payload
+      );
+
+      if (action.payload?.status === "failure") {
+        console.log(
+          "WORKSPACE WITH SAME WEBSITE ALREADY EXIST ->",
+          action.payload
+        );
+
+        state.error = action.payload.message;
+      } else {
+        state.error = "";
+        toast.success("Workspace has been created !", {
+          position: "bottom-center",
+          autoClose: 3000,
+          theme: "colored",
+        });
+      }
     });
   },
 });
 
-export default campaignSlice.reducer;
+export default connectWebsiteSlice.reducer;

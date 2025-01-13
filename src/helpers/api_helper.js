@@ -5,13 +5,20 @@ import { api } from "../config";
 axios.defaults.withCredentials = true;
 
 axios.defaults.baseURL = api.API_URL;
+// axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 // content type
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
+console.log(
+  "LOCAL STORAGE TOKEN ->",
+  JSON.parse(localStorage.getItem("authUser"))
+);
+
 // content type
-const token = JSON.parse(sessionStorage.getItem("authUser"))
-  ? JSON.parse(sessionStorage.getItem("authUser")).token
+const token = JSON.parse(localStorage.getItem("authUser"))
+  ? JSON.parse(localStorage.getItem("authUser")).token
   : null;
+
 if (token) axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 
 // intercepting to capture errors
@@ -104,8 +111,11 @@ class APIClient {
   };
 
   create = (url, data, headers) => {
+    console.log("TOKEN FOR CREATING WORKSPACE ->", token);
+
     return axios.post(url, data, {
       withCredentials: true,
+      Authorization: token,
       headers,
     });
   };

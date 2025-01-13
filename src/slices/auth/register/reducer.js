@@ -19,13 +19,11 @@ const registerSlice = createSlice({
       state.loading = false;
       state.success = true;
       state.registrationError = null;
-
-      console.log("user register successfully");
     },
     registerUserFailed(state, action) {
       state.user = null;
       state.loading = false;
-      state.registrationError = action.payload;
+      state.registrationError = action.payload.message;
       state.error = true;
     },
     resetRegisterFlagChange(state) {

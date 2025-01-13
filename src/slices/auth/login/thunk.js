@@ -51,17 +51,20 @@ export const loginUser = (user, history) => async (dispatch) => {
     var data = await response;
 
     if (data) {
-      sessionStorage.setItem("authUser", JSON.stringify(data));
-      localStorage.setItem("authUser", JSON.stringify(data));
-
-      data.data.workspace &&
-        localStorage.setItem("workspace", JSON.stringify(data.data.workspace));
       var finallogin = JSON.stringify(data);
       finallogin = JSON.parse(finallogin);
       data = finallogin.data;
+
       if (finallogin.status === "success") {
+        sessionStorage.setItem("authUser", JSON.stringify(data));
+        localStorage.setItem("authUser", JSON.stringify(data));
+
         dispatch(loginSuccess(data));
-        history("/overview");
+        console.log("DATA WHICH IS NON SERIABLE ->", data);
+
+        data?.workspace &&
+          localStorage.setItem("workspace", JSON.stringify(data?.workspace));
+        history("/connect-website");
       } else {
         dispatch(apiError(finallogin));
       }

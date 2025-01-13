@@ -91,6 +91,7 @@ const Sidebar = ({ layoutType }) => {
         ) : layoutType === "twocolumn" ? (
           <React.Fragment>
             <TwoColumnLayout layoutType={layoutType} />
+
             <div className="sidebar-background"></div>
           </React.Fragment>
         ) : (
