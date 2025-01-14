@@ -1,13 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function ChatListItem({ chat, activeOpenChat, handleActiveChat, isTyping }) {
+function ChatListItem({ chat, activeSolvedChat, handleActiveChat, isTyping }) {
   console.log("IS TYPING STATUS UPDATES  ->", chat);
 
   return (
     <li
       style={{
-        background: activeOpenChat?.id === chat?.id ? "#F3F6F9" : "transparent",
+        background:
+          activeSolvedChat?.id === chat?.id ? "#F3F6F9" : "transparent",
       }}
       onClick={() => handleActiveChat(chat.id)}
     >

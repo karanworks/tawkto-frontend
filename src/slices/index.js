@@ -10,6 +10,7 @@ import WorkspaceMembersReducer from "./WorkspaceMembers/reducer";
 import UsersReducer from "./Users/reducer";
 import UnassignedReducer from "./Unassigned/reducer";
 import MyOpenReducer from "./MyOpen/reducer";
+import SolvedReducer from "./Solved/reducer";
 import ConnectWebsiteReducer from "./ConnectWebsite/reducer";
 
 // SEPARATER
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   Profile: ProfileReducer,
   Unassigned: UnassignedReducer,
   MyOpen: MyOpenReducer,
+  Solved: SolvedReducer,
 });
 
 export default rootReducer;

@@ -1,29 +1,33 @@
 import { createSlice, current } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { getOpenChats, getOpenChatMessages } from "./thunk";
+import {
+  updateSolvedChat,
+  getSolvedChats,
+  getSolvedChatMessages,
+} from "./thunk";
 
 export const initialState = {
-  openChats: [],
-  activeOpenChat: null,
+  solvedChats: [],
+  activeSolvedChat: null,
   error: "",
 };
 
-const myOpenSlice = createSlice({
-  name: "myOpen",
+const solvedSlice = createSlice({
+  name: "solved",
   initialState,
   reducers: {
-    handleOpenActiveChat(state, action) {
+    handleSolvedActiveChat(state, action) {
       // const filteredChat = state.openChats.find(
       //   (chat) => chat.id === action.payload.id
       // );
 
-      state.activeOpenChat = action.payload;
+      state.activeSolvedChat = action.payload;
     },
 
     handleIncomingMessageUpdate(state, action) {
       const newMessage = action.payload;
 
-      state.openChats = state.openChats.map((chat) => {
+      state.solvedChats = state.solvedChats.map((chat) => {
         if (newMessage.chatId === chat.id) {
           return {
             ...chat,
@@ -35,12 +39,12 @@ const myOpenSlice = createSlice({
       });
 
       if (
-        state.activeOpenChat &&
-        newMessage.chatId === state.activeOpenChat.id
+        state.activeSolvedChat &&
+        newMessage.chatId === state.activeSolvedChat.id
       ) {
-        state.activeOpenChat = {
-          ...state.activeOpenChat,
-          messages: [...state.activeOpenChat.messages, newMessage],
+        state.activeSolvedChat = {
+          ...state.activeSolvedChat,
+          messages: [...state.activeSolvedChat.messages, newMessage],
         };
       }
     },
@@ -63,36 +67,29 @@ const myOpenSlice = createSlice({
         state.activeOpenChat = { ...state.activeOpenChat, status };
       }
     },
-
-    updateOpenChats(state, action) {
-      const chatId = action.payload;
-
-      if (chatId) {
-        state.openChats = state.openChats.filter((chat) => chat.id !== chatId);
-
-        toast.success("Chat moved to solved !", {
-          position: "bottom-center",
-          autoClose: 3000,
-          theme: "colored",
-        });
-      }
-    },
   },
   extraReducers: (builder) => {
-    builder.addCase(getOpenChats.fulfilled, (state, action) => {
+    builder.addCase(updateSolvedChat.fulfilled, (state, action) => {
+      if (action.payload?.status === "failure") {
+        state.error = action.payload.message;
+      } else {
+        state.error = "";
+      }
+    });
+    builder.addCase(getSolvedChats.fulfilled, (state, action) => {
       console.log(
-        "GET ACTIVE OPEN CHATS CALLED AFTER CHAT JOIN ALERT ",
+        "GET SOLVED CHATS FROM BACKEND IN REDUCER",
         action.payload?.data
       );
 
       if (action.payload?.status === "failure") {
         state.error = action.payload.message;
       } else {
-        state.openChats = action.payload?.data;
+        state.solvedChats = action.payload?.data;
         state.error = "";
       }
     });
-    builder.addCase(getOpenChatMessages.fulfilled, (state, action) => {
+    builder.addCase(getSolvedChatMessages.fulfilled, (state, action) => {
       if (action.payload?.status === "failure") {
         state.error = action.payload.message;
       } else {
@@ -104,9 +101,8 @@ const myOpenSlice = createSlice({
 });
 
 export const {
-  handleOpenActiveChat,
+  handleSolvedActiveChat,
   handleIncomingMessageUpdate,
   handleVisitorOnlineStatus,
-  updateOpenChats,
-} = myOpenSlice.actions;
-export default myOpenSlice.reducer;
+} = solvedSlice.actions;
+export default solvedSlice.reducer;

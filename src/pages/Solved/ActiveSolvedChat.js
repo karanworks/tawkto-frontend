@@ -11,7 +11,7 @@ import {
   CardBody,
   UncontrolledDropdown,
 } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 import SimpleBar from "simplebar-react";
 import socket from "../../socket/socket";
@@ -19,12 +19,9 @@ import moment from "moment/moment";
 import { getLoggedInUser } from "../../helpers/fakebackend_helper";
 import { updateSolvedChat } from "../../slices/Solved/thunk";
 import { useDispatch } from "react-redux";
-import {
-  handleOpenActiveChat,
-  updateOpenChats,
-} from "../../slices/MyOpen/reducer";
+import { handleOpenActiveChat } from "../../slices/MyOpen/reducer";
 
-function ActiveOpenChat({ activeOpenChat, isTyping }) {
+function ActiveSolvedChat({ activeSolvedChat, isTyping }) {
   const [isInfoDetails, setIsInfoDetails] = useState(false);
   const [settings_Menu, setsettings_Menu] = useState(false);
   const [emojiPicker, setemojiPicker] = useState(false);
@@ -35,6 +32,7 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
   const containerRef = useRef(null);
   const loggedInUser = getLoggedInUser();
   const workspace = JSON.parse(localStorage.getItem("workspace"));
+  const navigate = useNavigate();
 
   const toggleInfo = () => {
     setIsInfoDetails(!isInfoDetails);
@@ -49,7 +47,7 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
       const contentEl = simpleBar.getScrollElement();
       contentEl.scrollTop = contentEl.scrollHeight;
     }
-  }, [activeOpenChat]);
+  }, [activeSolvedChat]);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -60,13 +58,13 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
 
     socket.emit("message", {
       message: { content: curMessage },
-      chatId: activeOpenChat.id,
+      chatId: activeSolvedChat.id,
       sender: {
         name: loggedInUser.name,
         agentId: loggedInUser.id,
         type: "agent",
       },
-      to: activeOpenChat.visitorId,
+      to: activeSolvedChat.visitorId,
     });
 
     setcurMessage("");
@@ -80,7 +78,7 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
       user: {
         name: loggedInUser.name,
         agentId: loggedInUser.id,
-        visitorId: activeOpenChat.visitor.id,
+        visitorId: activeSolvedChat.visitor.id,
         workspaceId: workspace.id,
 
         type: "agent",
@@ -95,13 +93,13 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
 
       socket.emit("message", {
         message: { content: curMessage },
-        chatId: activeOpenChat.id,
+        chatId: activeSolvedChat.id,
         sender: {
           name: loggedInUser.name,
           agentId: loggedInUser.id,
           type: "agent",
         },
-        to: activeOpenChat.visitorId,
+        to: activeSolvedChat.visitorId,
       });
 
       setcurMessage("");
@@ -111,9 +109,9 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
   function handleSolveChat(chatId) {
     console.log("GOT THE SOLVED CHAT ID ->", chatId);
 
-    dispatch(updateSolvedChat({ chatId, status: "solved" })).then(() => {
-      dispatch(updateOpenChats(chatId));
-      dispatch(handleOpenActiveChat(null));
+    dispatch(updateSolvedChat({ chatId, status: "accepted" })).then(() => {
+      dispatch(handleOpenActiveChat(activeSolvedChat));
+      navigate("/my-open");
     });
   }
 
@@ -142,7 +140,7 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
                               "avatar-title rounded-circle bg-primary userprofile"
                             }
                           >
-                            {activeOpenChat.visitor.name.charAt(0)}
+                            {activeSolvedChat.visitor.name.charAt(0)}
                           </div>
                         </div>
                         <div className="flex-grow-1 overflow-hidden">
@@ -154,7 +152,7 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
                                            href="#userProfileCanvasExample"
                                            aria-controls="userProfileCanvasExample"
                                          > */}
-                              {activeOpenChat.visitor.name} -{/* </a> */}
+                              {activeSolvedChat.visitor.name} -{/* </a> */}
                             </h5>
                             <h5 className="text-truncate mb-0 fs-16">
                               {/* <a
@@ -164,7 +162,7 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
                                            aria-controls="userProfileCanvasExample"
                                          > */}
 
-                              {activeOpenChat.visitor.email}
+                              {activeSolvedChat.visitor.email}
                               {/* </a> */}
                             </h5>
                           </div>
@@ -175,8 +173,8 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
                               </small>
                             ) : (
                               <small>
-                                {activeOpenChat?.status &&
-                                activeOpenChat.status.status === "online"
+                                {activeSolvedChat?.status &&
+                                activeSolvedChat.status.status === "online"
                                   ? "Online"
                                   : "Offline"}
                               </small>
@@ -189,7 +187,7 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
                 </Col>
                 <Col sm={8} xs={4}>
                   <ul className="list-inline user-chat-nav text-end mb-0">
-                    <li
+                    {/* <li
                       className="list-inline-item"
                       style={{ marginRight: "10px" }}
                     >
@@ -201,12 +199,12 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
                           padding: "3px 10px",
                           borderRadius: "5px",
                         }}
-                        onClick={() => handleSolveChat(activeOpenChat.id)}
+                        onClick={() => handleSolveChat(activeSolvedChat.id)}
                       >
                         <span>✅</span>
                         <span>Solve</span>
                       </button>
-                    </li>
+                    </li> */}
                     <li className="list-inline-item d-none d-lg-inline-block m-0">
                       <button
                         type="button"
@@ -268,8 +266,8 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
                   className="list-unstyled chat-conversation-list"
                   id="users-conversation"
                 >
-                  {activeOpenChat?.id &&
-                    activeOpenChat?.messages.map((message, key) => (
+                  {activeSolvedChat?.id &&
+                    activeSolvedChat?.messages.map((message, key) => (
                       <li
                         className={
                           message.sender.type === "visitor"
@@ -381,53 +379,34 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
               )}
             </div>
 
-            <div className="chat-input-section p-3 p-lg-4">
-              <form id="chatinput-form" onSubmit={handleSendMessage}>
-                <Row className="g-0 align-items-center">
-                  {/* <div className="col-auto">
-                                 <div className="chat-input-links me-2">
-                                   <div className="links-list-item">
-                                     <button
-                                       type="button"
-                                       className="btn btn-link text-decoration-none emoji-btn"
-                                       id="emoji-btn"
-                                       onClick={() => setemojiPicker(!emojiPicker)}
-                                     >
-                                       <i className="bx bx-smile align-middle"></i>
-                                     </button>
-                                   </div>
-                                 </div>
-                               </div> */}
-
-                  <div className="col">
-                    <div className="chat-input-feedback">
-                      Please Enter a Message
-                    </div>
-                    <input
-                      type="text"
-                      value={curMessage}
-                      onKeyPress={onKeyPress}
-                      onChange={handleTypingMessage}
-                      className="form-control chat-input bg-light border-light fs-13"
-                      id="chat-input"
-                      placeholder="Type your message..."
-                    />
-                  </div>
-                  <div className="col-auto">
-                    <div className="chat-input-links ms-2">
-                      <div className="links-list-item">
-                        <Button
-                          type="submit"
-                          color="primary"
-                          className="chat-send waves-effect waves-light fs-13"
-                        >
-                          <i className="ri-send-plane-2-fill align-bottom"></i>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </Row>
-              </form>
+            <div
+              className="chat-input-section p-3 p-lg-4"
+              style={{ borderTop: "1px solid #E9EBEC" }}
+            >
+              <Row className="g-0 align-items-center">
+                <div className="col d-flex flex-column align-items-center justify-center">
+                  <p className="text-muted">
+                    This conversation is marked as solved. Click the button to
+                    start conversation with the same visitor.
+                  </p>
+                  {/* <input
+                                         type="text"
+                                         value={curMessage}
+                                         onKeyPress={onKeyPress}
+                                         onChange={(e) => setcurMessage(e.target.value)}
+                                         className="form-control chat-input bg-light border-light fs-13"
+                                         id="chat-input"
+                                         placeholder="Type your message..."
+                                       /> */}
+                  <button
+                    type="button"
+                    className="btn btn-primary "
+                    onClick={() => handleSolveChat(activeSolvedChat.id)}
+                  >
+                    Start Conversation
+                  </button>
+                </div>
+              </Row>
             </div>
 
             <div className={reply ? "replyCard show" : "replyCard"}>
@@ -461,4 +440,4 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
   );
 }
 
-export default ActiveOpenChat;
+export default ActiveSolvedChat;

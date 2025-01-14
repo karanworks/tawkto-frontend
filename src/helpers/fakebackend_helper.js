@@ -115,3 +115,20 @@ export const getOpenChats = ({ agentId, workspaceId }) => {
 export const getOpenChatMessages = ({ chatId }) => {
   return api.get(`${process.env.REACT_APP_SERVER_URL}/my-open/${chatId}`);
 };
+// *****************************************************************
+// ************************* SOLVED CHAT ***************************
+// *****************************************************************
+export const updateSolvedChat = ({ chatId, status }) => {
+
+  return api.update(`${process.env.REACT_APP_SERVER_URL}/solved/${chatId}`, {
+    status,
+  });
+};
+export const getSolvedChats = ({ agentId, workspaceId }) => {
+  return api.get(
+    `${process.env.REACT_APP_SERVER_URL}/solved/${workspaceId}/${agentId}`
+  );
+};
+export const getSolvedChatMessages = ({ chatId }) => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/solved/${chatId}`);
+};
