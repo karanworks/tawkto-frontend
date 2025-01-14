@@ -19,20 +19,6 @@ import { useDispatch } from "react-redux";
 // Activating fake backend
 fakeBackend();
 
-// const firebaseConfig = {
-//   apiKey: process.env.REACT_APP_APIKEY,
-//   authDomain: process.env.REACT_APP_AUTHDOMAIN,
-//   databaseURL: process.env.REACT_APP_DATABASEURL,
-//   projectId: process.env.REACT_APP_PROJECTID,
-//   storageBucket: process.env.REACT_APP_STORAGEBUCKET,
-//   messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
-//   appId: process.env.REACT_APP_APPID,
-//   measurementId: process.env.REACT_APP_MEASUREMENTID,
-// };
-
-// init firebase backend
-// initFirebaseBackend(firebaseConfig);
-
 function App() {
   let loggedInUser;
 
@@ -74,23 +60,6 @@ function App() {
       socket.off("visitor-status-update", handleVisitorOnlineStaus);
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (Object.keys(user).length === 0) {
-  //     return;
-  //   }
-
-  //   socket.emit("agent-join", {
-  //     id: user?.id,
-  //     workspaceId: user.workspace?.id,
-  //   });
-
-  //   // Clean up socket event listener when component unmounts
-  //   return () => {
-  //     console.log("Cleaning up socket connection");
-  //     socket.off("agent-join"); // Ensure cleanup if needed
-  //   };
-  // }, [user]);
 
   return (
     <React.Fragment>

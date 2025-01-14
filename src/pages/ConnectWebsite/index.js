@@ -81,7 +81,7 @@ const ConnectWebsite = () => {
           <BreadCrumb title="ConnectWebsite" pageTitle="Pages" />
           <Row style={{ display: "flex", justifyContent: "center" }}>
             <Col xs={4}>
-              <div className="p-2 mt-4">
+              <div className="p-2 mt-4 shepherd-create-workspace">
                 {error ? (
                   <Alert color="danger">
                     <div
