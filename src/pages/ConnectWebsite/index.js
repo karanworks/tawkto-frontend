@@ -23,6 +23,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { getLoggedInUser } from "../../helpers/fakebackend_helper";
 import socket from "../../socket/socket";
+import {
+  handleisWorkspaceCreated,
+  handleNextStep,
+  handleRunningStatus,
+} from "../../slices/Tour/reducer";
 
 const ConnectWebsite = () => {
   const [workspace, setWorkspace] = useState(() =>
@@ -57,9 +62,13 @@ const ConnectWebsite = () => {
             agentId: loggedInUser?.id,
             workspaceId: res.payload.data.id,
           });
-          setTimeout(() => {
-            navigate("/overview");
-          }, 1000);
+
+          dispatch(handleisWorkspaceCreated(true));
+          // dispatch(handleRunningStatus(true));
+          dispatch(handleNextStep(2));
+          // setTimeout(() => {
+          //   navigate("/overview");
+          // }, 1000);
 
           resetForm();
         }
@@ -81,7 +90,7 @@ const ConnectWebsite = () => {
           <BreadCrumb title="ConnectWebsite" pageTitle="Pages" />
           <Row style={{ display: "flex", justifyContent: "center" }}>
             <Col xs={4}>
-              <div className="p-2 mt-4 shepherd-create-workspace">
+              <div className="p-2 mt-4">
                 {error ? (
                   <Alert color="danger">
                     <div
@@ -115,7 +124,11 @@ const ConnectWebsite = () => {
                   </Alert>
                 ) : null}
 
-                <Form onSubmit={handleFormSubmit} action="#">
+                <Form
+                  onSubmit={handleFormSubmit}
+                  action="#"
+                  className="tour-step-two"
+                >
                   <div className="mb-3">
                     <Label htmlFor="websiteAddress" className="form-label">
                       Website Address
@@ -172,8 +185,8 @@ const ConnectWebsite = () => {
 
                   <div className="mt-4">
                     <Button
-                      color="success"
-                      className="btn btn-success w-100"
+                      color="primary"
+                      className="btn btn-primary w-100"
                       type="submit"
                       disabled={Boolean(workspace)}
                     >

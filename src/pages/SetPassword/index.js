@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Button,
   Card,
@@ -26,6 +26,7 @@ const SetPassword = () => {
   const { token } = useParams();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [passwordShow, setPasswordShow] = useState(false);
   const [confrimPasswordShow, setConfrimPasswordShow] = useState(false);
@@ -92,14 +93,14 @@ const SetPassword = () => {
                     <p style={{ fontSize: "20px" }}>
                       Your password has been set!
                     </p>
-                    <Link to="/login">
+                    <Link to="/connect-website">
                       <p
                         style={{
                           fontSize: "20px",
                           textDecoration: "underline",
                         }}
                       >
-                        Login
+                        Go to dashboard
                       </p>
                     </Link>
                   </div>

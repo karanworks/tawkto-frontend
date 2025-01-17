@@ -24,11 +24,6 @@ const connectWebsiteSlice = createSlice({
     });
 
     builder.addCase(createWorkspace.fulfilled, (state, action) => {
-      console.log(
-        "PAYLOAD WHILE CREATING DUPLICATE WORKSPACE ->",
-        action.payload
-      );
-
       if (action.payload?.status === "failure") {
         console.log(
           "WORKSPACE WITH SAME WEBSITE ALREADY EXIST ->",

@@ -12,6 +12,7 @@ import UnassignedReducer from "./Unassigned/reducer";
 import MyOpenReducer from "./MyOpen/reducer";
 import SolvedReducer from "./Solved/reducer";
 import ConnectWebsiteReducer from "./ConnectWebsite/reducer";
+import TourReducer from "./Tour/reducer";
 
 // SEPARATER
 import AccountReducer from "./auth/register/reducer";
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   Unassigned: UnassignedReducer,
   MyOpen: MyOpenReducer,
   Solved: SolvedReducer,
+  Tour: TourReducer,
 });
 
 export default rootReducer;

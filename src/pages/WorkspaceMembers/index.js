@@ -133,7 +133,7 @@ const WorkspaceMembers = () => {
                       </div>
                       <div>
                         <Button
-                          className="btn btn-primary"
+                          className="btn btn-primary tour-step-four"
                           style={{
                             marginInlineEnd: "5px",
                             backgroundColor: "#25A0E2",

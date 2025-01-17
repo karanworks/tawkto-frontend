@@ -119,7 +119,6 @@ export const getOpenChatMessages = ({ chatId }) => {
 // ************************* SOLVED CHAT ***************************
 // *****************************************************************
 export const updateSolvedChat = ({ chatId, status }) => {
-
   return api.update(`${process.env.REACT_APP_SERVER_URL}/solved/${chatId}`, {
     status,
   });
@@ -131,4 +130,10 @@ export const getSolvedChats = ({ agentId, workspaceId }) => {
 };
 export const getSolvedChatMessages = ({ chatId }) => {
   return api.get(`${process.env.REACT_APP_SERVER_URL}/solved/${chatId}`);
+};
+// *****************************************************************
+// ***************************** TOUR ******************************
+// *****************************************************************
+export const updateTourStatus = () => {
+  return api.update(`${process.env.REACT_APP_SERVER_URL}/tour-status-update`);
 };

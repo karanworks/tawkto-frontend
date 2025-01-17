@@ -111,8 +111,6 @@ class APIClient {
   };
 
   create = (url, data, headers) => {
-    console.log("TOKEN FOR CREATING WORKSPACE ->", token);
-
     return axios.post(url, data, {
       withCredentials: true,
       Authorization: token,

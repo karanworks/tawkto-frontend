@@ -108,7 +108,9 @@ const Overview = () => {
                             </div>
                           </div>
                         </Alert>
-                        <CopyCode code={workspace ? widgetCode : ""} />
+                        <div className="tour-step-three">
+                          <CopyCode code={workspace ? widgetCode : ""} />
+                        </div>
                       </div>
                     </Col>
 

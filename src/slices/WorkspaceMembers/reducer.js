@@ -5,6 +5,7 @@ import {
   setPasswordWorkspaceMember,
   getWorkspaceMembers,
 } from "./thunk";
+import { Navigate } from "react-router-dom";
 
 export const initialState = {
   workspaceMembers: [],
@@ -29,6 +30,21 @@ const campaignSlice = createSlice({
       });
     });
     builder.addCase(setPasswordWorkspaceMember.fulfilled, (state, action) => {
+      const payloadData = action.payload;
+
+      console.log("PAYLOAD ON SET PASSWORD ->", payloadData);
+
+      if (payloadData?.status === "success") {
+        sessionStorage.setItem(
+          "authUser",
+          JSON.stringify(payloadData.data.user)
+        );
+        localStorage.setItem("authUser", JSON.stringify(payloadData.data.user));
+        localStorage.setItem(
+          "workspace",
+          JSON.stringify(payloadData.data.workspace)
+        );
+      }
       console.log("invite set password reducer", action.payload);
     });
   },
