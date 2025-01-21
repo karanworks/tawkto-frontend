@@ -5,7 +5,6 @@ import {
   setPasswordWorkspaceMember,
   getWorkspaceMembers,
 } from "./thunk";
-import { Navigate } from "react-router-dom";
 
 export const initialState = {
   workspaceMembers: [],

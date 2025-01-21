@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { getWorkspaces, createWorkspace } from "./thunk";
+import { getWorkspaces, getUserDetails, createWorkspace } from "./thunk";
 
 export const initialState = {
   workspaces: [],
@@ -14,13 +14,12 @@ const connectWebsiteSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getWorkspaces.fulfilled, (state, action) => {
-      // if (action.payload?.status === "failure") {
-      //   state.error = action.payload.message;
-      // } else {
-      //   state.campaigns = action.payload?.data.campaigns;
-      //   state.error = "";
-      // }
+    builder.addCase(getWorkspaces.fulfilled, (state, action) => {});
+    builder.addCase(getUserDetails.fulfilled, (state, action) => {
+      console.log(
+        "RESPONSE PAYLOAD FROM GET USER DETAILS API CALL ->",
+        action?.payload
+      );
     });
 
     builder.addCase(createWorkspace.fulfilled, (state, action) => {

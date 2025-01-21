@@ -34,6 +34,9 @@ export const postLogin = (data) => {
 // *****************************************************************
 // ************************* WORKSPACE *****************************
 // *****************************************************************
+export const getUserDetails = () => {
+  return api.get(`${process.env.REACT_APP_SERVER_URL}/get-user-details`);
+};
 export const getWorkspaces = (userId) => {
   return api.get(`${process.env.REACT_APP_SERVER_URL}/workspace/${userId}`);
 };
@@ -136,4 +139,13 @@ export const getSolvedChatMessages = ({ chatId }) => {
 // *****************************************************************
 export const updateTourStatus = () => {
   return api.update(`${process.env.REACT_APP_SERVER_URL}/tour-status-update`);
+};
+
+// *****************************************************************
+// ************************* VERIFY EMAIL **************************
+// *****************************************************************
+export const verifyEmail = ({ token }) => {
+  return api.get(
+    `${process.env.REACT_APP_SERVER_URL}/verify-email?token=${token}`
+  );
 };

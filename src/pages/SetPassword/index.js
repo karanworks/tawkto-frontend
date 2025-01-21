@@ -19,6 +19,7 @@ import * as Yup from "yup";
 import { setPasswordWorkspaceMember } from "../../slices/WorkspaceMembers/thunk";
 import { useDispatch } from "react-redux";
 import { getLoggedinUser } from "../../helpers/api_helper";
+import socket from "../../socket/socket";
 
 const SetPassword = () => {
   document.title = "Create New Password";
@@ -31,7 +32,16 @@ const SetPassword = () => {
   const [passwordShow, setPasswordShow] = useState(false);
   const [confrimPasswordShow, setConfrimPasswordShow] = useState(false);
 
+  const workspace = JSON.parse(localStorage.getItem("workspace"));
+  const loggedInUser = getLoggedinUser();
+
   const [passwordCreated, setPasswordCreated] = useState(false);
+
+  console.log(
+    "WORKSPACE AND LOGGED IN USER ON GO TO DASHBOARD ->",
+    workspace,
+    loggedInUser
+  );
 
   const validation = useFormik({
     enableReinitialize: true,
@@ -64,6 +74,16 @@ const SetPassword = () => {
       });
     },
   });
+
+  function handleAgentJoin() {
+    if (loggedInUser && workspace) {
+      socket.emit("agent-join", {
+        agentId: loggedInUser?.id,
+        workspaceId: workspace?.id,
+      });
+    }
+  }
+
   return (
     <div
       className="auth-page-content"
@@ -93,7 +113,7 @@ const SetPassword = () => {
                     <p style={{ fontSize: "20px" }}>
                       Your password has been set!
                     </p>
-                    <Link to="/connect-website">
+                    <Link to="/connect-website" onClick={handleAgentJoin}>
                       <p
                         style={{
                           fontSize: "20px",

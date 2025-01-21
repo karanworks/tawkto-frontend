@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import {
   getWorkspaces as getWorkspacesApi,
+  getUserDetails as getUserDetailsApi,
   createWorkspace as createWorkspaceApi,
 } from "../../helpers/fakebackend_helper";
 
@@ -13,6 +14,17 @@ export const getWorkspaces = createAsyncThunk(
       return response;
     } catch (error) {
       console.log("error inside get campaign thunk", error);
+    }
+  }
+);
+export const getUserDetails = createAsyncThunk(
+  "connectWebsite/getUserDetails",
+  async () => {
+    try {
+      const response = await getUserDetailsApi();
+      return response;
+    } catch (error) {
+      console.log("error inside get user details thunk", error);
     }
   }
 );

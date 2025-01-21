@@ -55,9 +55,12 @@ function App() {
   }
 
   useEffect(() => {
+    console.log(
+      "AGENT JOINED AFTER INVITATION MAIL ->",
+      loggedInUser,
+      workspace?.id
+    );
     if (loggedInUser && workspace?.id) {
-      console.log("WORKSPACE ID WHILE AGENT JOIN ->", workspace?.id);
-
       socket.emit("agent-join", {
         agentId: loggedInUser?.id,
         workspaceId: workspace?.id,

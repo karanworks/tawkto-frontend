@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BreadCrumb from "../../Components/Common/BreadCrumb";
 import {
   Card,
@@ -17,7 +17,10 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { createWorkspace } from "../../slices/ConnectWebsite/thunk";
+import {
+  createWorkspace,
+  getUserDetails,
+} from "../../slices/ConnectWebsite/thunk";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -40,6 +43,14 @@ const ConnectWebsite = () => {
   const loggedInUser = getLoggedInUser();
 
   const { error } = useSelector((state) => state.ConnectWebsite);
+
+  // useEffect(() => {
+  //   if (!loggedInUser) {
+  //     console.log("GET USER DETAILS THUNK CALLED ");
+
+  //     dispatch(getUserDetails());
+  //   }
+  // }, []);
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed

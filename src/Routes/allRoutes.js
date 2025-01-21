@@ -32,6 +32,7 @@ import General from "../pages/Settings/General/index";
 import ChangePassword from "../pages/Settings/ChangePassword/index";
 import Security from "../pages/Settings/Security/index";
 import SetPassword from "../pages/SetPassword";
+import VerifyEmail from "../pages/VerifyEmail";
 
 const authProtectedRoutes = [
   {
@@ -68,6 +69,7 @@ const publicRoutes = [
   { path: "/register", component: <Register /> },
   { path: "/", component: <Landing /> },
   { path: "/set-password/token/:token", component: <SetPassword /> },
+  { path: "/verify-email/:token", component: <VerifyEmail /> },
 ];
 
 export { authProtectedRoutes, publicRoutes };

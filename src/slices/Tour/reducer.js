@@ -62,6 +62,85 @@ export const initialState = {
     tourActive: true,
     isWorkspaceCreated: false,
   },
+  tourStateWorkspaceMember: {
+    run: true,
+    stepIndex: 0,
+    steps: [
+      {
+        target: "html",
+        placement: "center",
+        content:
+          "Hi, there! Let me guide you through the features of our website.",
+        disableBeacon: true,
+        hideCloseButton: true,
+        disableOverlayClose: true,
+        data: {
+          next: "/unassigned",
+        },
+        styles: {
+          options: {
+            zIndex: 99999,
+          },
+        },
+      },
+      {
+        target: ".member-tour-step-two",
+        content:
+          "When a visitor message it will show up here, click join conversation button to chat with that visitor.",
+        disableBeacon: true,
+        disableOverlayClose: true,
+        hideCloseButton: true,
+        spotlightClicks: true,
+        styles: {
+          options: {
+            zIndex: 99999,
+          },
+        },
+        data: {
+          next: "/my-open",
+          previous: "/unassigned",
+        },
+      },
+      {
+        target: ".member-tour-step-three",
+        content:
+          "After joining the chat you can chat with the visitor here. click on the solve button if the visitor's query has been resolved.",
+        disableBeacon: true,
+        disableOverlayClose: true,
+        hideCloseButton: true,
+        spotlightClicks: true,
+        styles: {
+          options: {
+            zIndex: 99999,
+          },
+        },
+        data: {
+          next: "/solved",
+          previous: "/my-open",
+        },
+      },
+      {
+        target: ".member-tour-step-four",
+        content:
+          "Solved chats will appear here click start converstation button to start the conversation again with that visitor.",
+        disableBeacon: true,
+        disableOverlayClose: true,
+        hideCloseButton: true,
+        spotlightClicks: true,
+        styles: {
+          options: {
+            zIndex: 99999,
+          },
+        },
+        data: {
+          // next: "/solved",
+          previous: "/my-open",
+        },
+      },
+    ],
+    tourActive: true,
+    isWorkspaceCreated: false,
+  },
   error: null,
 };
 
@@ -70,8 +149,6 @@ const toruSlice = createSlice({
   initialState,
   reducers: {
     handleNextStep(state, action) {
-      console.log("STEP INDEX AFTER WORKSPACE CREATION ->", action.payload);
-
       state.tourState = { ...state.tourState, stepIndex: action.payload };
     },
     handleRunningStatus(state, action) {
@@ -82,6 +159,25 @@ const toruSlice = createSlice({
     },
     handleisWorkspaceCreated(state, action) {
       state.isWorkspaceCreated = action.payload;
+    },
+
+    handleMemberNextStep(state, action) {
+      state.tourStateWorkspaceMember = {
+        ...state.tourStateWorkspaceMember,
+        stepIndex: action.payload,
+      };
+    },
+    handleMemberRunningStatus(state, action) {
+      state.tourStateWorkspaceMember = {
+        ...state.tourStateWorkspaceMember,
+        run: action.payload,
+      };
+    },
+    handleMemberTourActiveStatus(state, action) {
+      state.tourStateWorkspaceMember = {
+        ...state.tourStateWorkspaceMember,
+        run: action.payload,
+      };
     },
   },
 
@@ -101,6 +197,9 @@ export const {
   handleRunningStatus,
   handleTourActiveStatus,
   handleisWorkspaceCreated,
+  handleMemberNextStep,
+  handleMemberRunningStatus,
+  handleMemberTourActiveStatus,
 } = toruSlice.actions;
 
 export default toruSlice.reducer;

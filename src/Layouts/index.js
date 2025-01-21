@@ -8,7 +8,12 @@ import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import RightSidebar from "../Components/Common/RightSidebar";
 import Joyride, { EVENTS } from "react-joyride";
-import { handleNextStep, handleRunningStatus } from "../slices/Tour/reducer";
+import {
+  handleNextStep,
+  handleRunningStatus,
+  handleMemberNextStep,
+  handleMemberRunningStatus,
+} from "../slices/Tour/reducer";
 
 //import actions
 import {
@@ -33,10 +38,17 @@ import { updateTourStatus } from "../slices/Tour/thunk";
 
 const Layout = (props) => {
   const [headerClass, setHeaderClass] = useState("");
-  const { tourState, isWorkspaceCreated } = useSelector((state) => state.Tour);
+  const { tourState, tourStateWorkspaceMember, isWorkspaceCreated } =
+    useSelector((state) => state.Tour);
   const { run, steps, stepIndex } = tourState;
+  const {
+    run: memberRun,
+    steps: memberSteps,
+    stepIndex: memberStepIndex,
+  } = tourStateWorkspaceMember;
 
   const loggedInUser = getLoggedInUser();
+  const workspace = JSON.parse(localStorage.getItem("workspace"));
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -153,9 +165,6 @@ const Layout = (props) => {
     } = data;
     const isPreviousAction = action === "prev";
 
-    console.log("DATA ON TOUR SKIP ->", data);
-    console.log("EVENT ON TOUR SKIP ->", EVENTS);
-
     if (action === "skip" && type === EVENTS.TOUR_END) {
       dispatch(updateTourStatus()).then(() => {
         localStorage.setItem(
@@ -226,40 +235,90 @@ const Layout = (props) => {
         }
       }
     }
-    // if (type === EVENTS.STEP_AFTER) {
-    //   if (index < 1) {
-    //     dispatch(handleNextStep(1));
-    //     navigate(isPreviousAction && previous ? previous : next);
-    //   }
+  };
 
-    //   if (index === 1) {
-    //     if (isPreviousAction && previous) {
-    //       navigate(previous);
-    //     } else {
-    //       navigate(isPreviousAction && previous ? previous : next);
-    //     }
-    //   }
+  const handleMemberCallback = (data) => {
+    const {
+      action,
+      index,
+      step: {
+        data: { next, previous },
+      },
+      type,
+    } = data;
+    const isPreviousAction = action === "prev";
 
-    //   console.log(
-    //     "AFTER WORKSPACE CREATION ->",
-    //     isWorkspaceCreated,
-    //     index,
-    //     isWorkspaceCreated && index === 2
-    //   );
+    if (action === "skip" && type === EVENTS.TOUR_END) {
+      dispatch(updateTourStatus()).then(() => {
+        localStorage.setItem(
+          "authUser",
+          JSON.stringify({
+            ...loggedInUser,
+            isTourCompleted: true,
+          })
+        );
+        sessionStorage.setItem(
+          "authUser",
+          JSON.stringify({
+            ...loggedInUser,
+            isTourCompleted: true,
+          })
+        );
+      });
+    }
 
-    //   if (isWorkspaceCreated && index === 2) {
-    //     if (isPreviousAction && previous) {
-    //       dispatch(handleNextStep(1));
-    //       navigate(previous);
-    //     } else {
-    //       console.log("STEP TWO EXECUTED", stepIndex);
-    //       console.log("STEP TWO RUN EXECUTED", run);
-    //       dispatch(handleRunningStatus(false));
-    //       dispatch(updateTourStatus());
-    //       console.log("WEBSITE TOUR COMPLETED ✅");
-    //     }
-    //   }
-    // }
+    if (type === EVENTS.STEP_AFTER) {
+      if (index < 1) {
+        dispatch(handleMemberNextStep(1));
+        navigate(isPreviousAction && previous ? previous : next);
+      }
+
+      if (index === 1) {
+        if (isPreviousAction && previous) {
+          navigate(previous);
+        } else {
+          navigate(isPreviousAction && previous ? previous : next);
+          dispatch(handleMemberNextStep(2));
+        }
+      }
+
+      if (index === 2) {
+        if (isPreviousAction && previous) {
+          dispatch(handleMemberNextStep(1));
+          navigate(previous);
+        } else {
+          dispatch(handleMemberNextStep(3));
+          navigate(isPreviousAction && previous ? previous : next);
+        }
+      }
+
+      if (index === 3) {
+        if (isPreviousAction && previous) {
+          console.log("PREVIOUS URL AFTER LAST STEP ->", previous);
+          dispatch(handleMemberNextStep(2));
+          navigate(previous);
+        } else {
+          dispatch(updateTourStatus()).then(() => {
+            localStorage.setItem(
+              "authUser",
+              JSON.stringify({
+                ...loggedInUser,
+                isTourCompleted: true,
+              })
+            );
+            sessionStorage.setItem(
+              "authUser",
+              JSON.stringify({
+                ...loggedInUser,
+                isTourCompleted: true,
+              })
+            );
+          });
+          navigate(isPreviousAction && previous ? previous : next);
+          dispatch(handleMemberRunningStatus(false));
+        }
+      }
+    }
   };
 
   return (
@@ -276,7 +335,58 @@ const Layout = (props) => {
           {/* <Footer /> */}
           <ChatRequestAlertStack />
 
-          {!loggedInUser?.isTourCompleted && (
+          {!loggedInUser?.isTourCompleted ? (
+            loggedInUser?.id === workspace?.createdBy || !workspace ? (
+              <Joyride
+                callback={handleCallback}
+                continuous
+                run={run}
+                stepIndex={stepIndex}
+                steps={steps}
+                debug
+                showProgress={true}
+                showSkipButton={true}
+                locale={{
+                  last: "Finish",
+                }}
+                styles={{
+                  options: {
+                    backgroundColor: "#fff",
+                    overlayColor: "rgba(0, 0, 0, 0.5)",
+                    spotlightShadow: "0 0 15px rgba(0, 0, 0, 0.5)",
+                    primaryColor: "#25A0E2",
+                    textColor: "#333",
+                    zIndex: 1000,
+                  },
+                }}
+              />
+            ) : (
+              <Joyride
+                callback={handleMemberCallback}
+                continuous
+                run={memberRun}
+                stepIndex={memberStepIndex}
+                steps={memberSteps}
+                debug
+                showProgress={true}
+                showSkipButton={true}
+                locale={{
+                  last: "Finish",
+                }}
+                styles={{
+                  options: {
+                    backgroundColor: "#fff",
+                    overlayColor: "rgba(0, 0, 0, 0.5)",
+                    spotlightShadow: "0 0 15px rgba(0, 0, 0, 0.5)",
+                    primaryColor: "#25A0E2",
+                    textColor: "#333",
+                    zIndex: 1000,
+                  },
+                }}
+              />
+            )
+          ) : null}
+          {/* {!loggedInUser?.isTourCompleted && (
             <Joyride
               callback={handleCallback}
               continuous
@@ -300,7 +410,7 @@ const Layout = (props) => {
                 },
               }}
             />
-          )}
+          )} */}
         </div>
       </div>
       <RightSidebar />

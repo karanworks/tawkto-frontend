@@ -264,7 +264,17 @@ const TwoColumnLayout = (props) => {
                             (item.subItems || []).map((subItem, key) => (
                               <React.Fragment key={key}>
                                 {!subItem.isChildItem ? (
-                                  <li className="nav-item">
+                                  <li
+                                    className={`nav-item ${
+                                      props.t(subItem.label) === "Unassigned"
+                                        ? "member-tour-step-two"
+                                        : props.t(subItem.label) === "My Open"
+                                        ? "member-tour-step-three"
+                                        : props.t(subItem.label) === "Solved"
+                                        ? "member-tour-step-four"
+                                        : ""
+                                    }`}
+                                  >
                                     <Link
                                       to={subItem.link ? subItem.link : "/#"}
                                       className="nav-link"
