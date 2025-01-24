@@ -1,5 +1,12 @@
 import axios from "axios";
 import { api } from "../config";
+import { refreshAccessToken } from "./fakebackend_helper";
+
+// const axiosInstance = axios.create({
+//   headers: {
+//     "Content-Type": "application/json", // Default headers
+//   },
+// });
 
 // default
 axios.defaults.withCredentials = true;
@@ -7,51 +14,69 @@ axios.defaults.withCredentials = true;
 axios.defaults.baseURL = api.API_URL;
 // axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 // content type
-axios.defaults.headers.post["Content-Type"] = "application/json";
+// axios.defaults.headers.post["Content-Type"] = "application/json";
 
-console.log(
-  "LOCAL STORAGE TOKEN ->",
-  JSON.parse(localStorage.getItem("authUser"))
-);
+// axios.defaults.headers["Authorization"] = `Bearer ${access_token}`;
 
 // content type
-const token = JSON.parse(localStorage.getItem("authUser"))
-  ? JSON.parse(localStorage.getItem("authUser")).token
-  : null;
+// const token = JSON.parse(localStorage.getItem("authUser"))
+//   ? JSON.parse(localStorage.getItem("authUser")).token
+//   : null;
 
-if (token) axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+// console.log("GETTING TOKEN TO ADD INSIDE AUTHORIZATION HEADER ->", token);
+
+// if (token) axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 
 // intercepting to capture errors
 axios.interceptors.response.use(
   function (response) {
+    // console.log("GETTING THE RESPONSE OF OF EVERY REQUEST ->", response);
+
+    console.log("RESPONSE IS BEING RETURNED AS WELL", response);
+
     return response.data ? response.data : response;
   },
-  function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    let message;
-    switch (error.status) {
-      case 500:
-        message = "Internal Server Error";
-        break;
-      case 401:
-        message = "Invalid credentials";
-        break;
-      case 404:
-        message = "Sorry! the data you are looking for could not be found";
-        break;
-      default:
-        message = error.message || error;
+  async function (error) {
+    // console.log("GOT THE ERROR FROM INTERCEPTOR ->", error.response);
+
+    const errorResponse = error.response;
+
+    if (
+      errorResponse.status === 401 &&
+      errorResponse.data.message === "Unauthorized" &&
+      !error.config._retry
+    ) {
+      const res = await refreshAccessToken();
+      const newAccessToken = res.data.access_token;
+      error.config._retry = true;
+
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${newAccessToken}`;
+
+      localStorage.setItem("access_token", newAccessToken);
+      sessionStorage.setItem("access_token", newAccessToken);
+
+      error.config.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
+      console.log("ERROR RE-REQUEST CONFIG ->", error.config);
+
+      // Retry the original request
+      return axios(error.config);
     }
-    return Promise.reject(message);
+
+    console.log("THIS CODE SHOULDN'T GET EXECUTED");
+
+    return Promise.reject(error);
   }
 );
 /**
  * Sets the default authorization
  * @param {*} token
  */
-const setAuthorization = (token) => {
-  axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-};
+// const setAuthorization = (token) => {
+//   axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+// };
 
 class APIClient {
   /**
@@ -113,7 +138,7 @@ class APIClient {
   create = (url, data, headers) => {
     return axios.post(url, data, {
       withCredentials: true,
-      Authorization: token,
+      // Authorization: token,
       headers,
     });
   };
@@ -147,4 +172,5 @@ const getLoggedinUser = () => {
   }
 };
 
-export { APIClient, setAuthorization, getLoggedinUser };
+export { APIClient, getLoggedinUser };
+// export { APIClient, setAuthorization, getLoggedinUser };

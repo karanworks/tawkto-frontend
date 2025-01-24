@@ -55,8 +55,6 @@ const Login = (props) => {
   const [userLogin, setUserLogin] = useState([]);
   const [passwordShow, setPasswordShow] = useState(false);
 
-  console.log("LOGIN LOADING ->", loading);
-
   // useEffect(() => {
   //   if (user && user) {
   //     const updatedUserData =

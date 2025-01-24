@@ -1,15 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { Navigate, Route } from "react-router-dom";
 import { setAuthorization } from "../helpers/api_helper";
 import { useDispatch } from "react-redux";
+import { logoutUser } from "../slices/auth/login/thunk";
 
 import { useProfile } from "../Components/Hooks/UserHooks";
 
-import { logoutUser } from "../slices/auth/login/thunk";
+import axios from "axios";
 
 const AuthProtected = (props) => {
-  const dispatch = useDispatch();
   const { userProfile, loading, token } = useProfile();
+
+  // content type
+  // const authToken = JSON.parse(localStorage.getItem("authUser"))
+  //   ? JSON.parse(localStorage.getItem("authUser")).access_token
+  //   : null;
+
+  const access_token = localStorage.getItem("access_token")
+    ? localStorage.getItem("access_token")
+    : null;
+
+  // console.log("ACCESS TOKEN ->", access_token);
+
+  useEffect(() => {
+    axios.interceptors.request.use(function (config) {
+      config.headers.Authorization = `Bearer ${access_token}`;
+
+      console.log("REQUEST INTERCEPTOR CALLED->", access_token);
+
+      return config;
+    });
+  }, [access_token]);
 
   // it was causing to logout but we wanted a feature that would not allow to login if the user was logged out accidentally previously
 

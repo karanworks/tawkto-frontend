@@ -44,8 +44,6 @@ function App() {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
 
-  console.log("APP COMPONENT RENDERED");
-
   if (Object.keys(user).length !== 0) {
     loggedInUser = user;
   } else if (getLoggedInUser()) {
@@ -55,11 +53,6 @@ function App() {
   }
 
   useEffect(() => {
-    console.log(
-      "AGENT JOINED AFTER INVITATION MAIL ->",
-      loggedInUser,
-      workspace?.id
-    );
     if (loggedInUser && workspace?.id) {
       socket.emit("agent-join", {
         agentId: loggedInUser?.id,

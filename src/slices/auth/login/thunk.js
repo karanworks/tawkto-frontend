@@ -57,10 +57,18 @@ export const loginUser = (user, history) => async (dispatch) => {
 
       if (finallogin.status === "success") {
         sessionStorage.setItem("authUser", JSON.stringify(data));
+
+        data.access_token &&
+          sessionStorage.setItem("access_token", data.access_token);
+
         localStorage.setItem("authUser", JSON.stringify(data));
 
+        data.access_token &&
+          localStorage.setItem("access_token", data.access_token);
+
+        // localStorage.setItem("access_token", JSON.stringify(data));
+
         dispatch(loginSuccess(data));
-        console.log("DATA WHICH IS NON SERIABLE ->", data);
 
         data?.workspace &&
           localStorage.setItem("workspace", JSON.stringify(data?.workspace));
@@ -88,16 +96,17 @@ export const alreadyLoggedInUser = (history) => async (dispatch) => {
 
 export const logoutUser = () => async (dispatch) => {
   try {
-    sessionStorage.removeItem("authUser");
-    localStorage.removeItem("authUser");
-    localStorage.removeItem("workspace");
-
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/logout`, {
         withCredentials: true,
       })
       .then((res) => {
         dispatch(logoutUserSuccess(true));
+        sessionStorage.removeItem("authUser");
+        sessionStorage.removeItem("access_token");
+        localStorage.removeItem("authUser");
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("workspace");
       })
       .catch((err) => {
         console.log("error while logging out", err);
