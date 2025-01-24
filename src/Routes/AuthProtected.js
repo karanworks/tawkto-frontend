@@ -8,25 +8,27 @@ import { useProfile } from "../Components/Hooks/UserHooks";
 
 import axios from "axios";
 
+let access_token = localStorage.getItem("access_token")
+  ? localStorage.getItem("access_token")
+  : null;
+const setAccessToken = (token) => {
+  access_token = token;
+  localStorage.setItem("access_token", token);
+};
+
 const AuthProtected = (props) => {
   const { userProfile, loading, token } = useProfile();
 
   // content type
-  // const authToken = JSON.parse(localStorage.getItem("authUser"))
-  //   ? JSON.parse(localStorage.getItem("authUser")).access_token
-  //   : null;
-
-  const access_token = localStorage.getItem("access_token")
-    ? localStorage.getItem("access_token")
+  const authToken = JSON.parse(localStorage.getItem("authUser"))
+    ? JSON.parse(localStorage.getItem("authUser")).access_token
     : null;
-
-  // console.log("ACCESS TOKEN ->", access_token);
 
   useEffect(() => {
     axios.interceptors.request.use(function (config) {
       config.headers.Authorization = `Bearer ${access_token}`;
 
-      console.log("REQUEST INTERCEPTOR CALLED->", access_token);
+      console.log("REQUEST INTERCEPTOR CALLED->", config);
 
       return config;
     });
@@ -73,4 +75,4 @@ const AccessRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-export { AuthProtected, AccessRoute };
+export { AuthProtected, AccessRoute, setAccessToken };

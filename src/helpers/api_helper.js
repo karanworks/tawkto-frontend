@@ -1,6 +1,7 @@
 import axios from "axios";
 import { api } from "../config";
 import { refreshAccessToken } from "./fakebackend_helper";
+import { setAccessToken } from "../Routes/AuthProtected";
 
 // const axiosInstance = axios.create({
 //   headers: {
@@ -14,7 +15,7 @@ axios.defaults.withCredentials = true;
 axios.defaults.baseURL = api.API_URL;
 // axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 // content type
-// axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.headers.post["Content-Type"] = "application/json";
 
 // axios.defaults.headers["Authorization"] = `Bearer ${access_token}`;
 
@@ -39,35 +40,43 @@ axios.interceptors.response.use(
   async function (error) {
     // console.log("GOT THE ERROR FROM INTERCEPTOR ->", error.response);
 
-    const errorResponse = error.response;
+    try {
+      const errorResponse = error.response;
 
-    if (
-      errorResponse.status === 401 &&
-      errorResponse.data.message === "Unauthorized" &&
-      !error.config._retry
-    ) {
-      const res = await refreshAccessToken();
-      const newAccessToken = res.data.access_token;
-      error.config._retry = true;
+      if (
+        errorResponse.status === 401 &&
+        errorResponse.data.message === "Unauthorized" &&
+        !error.config._retry
+      ) {
+        const res = await refreshAccessToken();
+        const newAccessToken = res.data.access_token;
+        error.config._retry = true;
 
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${newAccessToken}`;
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${newAccessToken}`;
 
-      localStorage.setItem("access_token", newAccessToken);
-      sessionStorage.setItem("access_token", newAccessToken);
+        localStorage.setItem("access_token", newAccessToken);
+        sessionStorage.setItem("access_token", newAccessToken);
+        setAccessToken(newAccessToken);
 
-      error.config.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        error.config.headers["Authorization"] = `Bearer ${newAccessToken}`;
 
-      console.log("ERROR RE-REQUEST CONFIG ->", error.config);
+        console.log("ERROR RE-REQUEST CONFIG ->", error.config);
 
-      // Retry the original request
-      return axios(error.config);
+        // Retry the original request
+        // return axios(error.config);
+        // return "EXAMPLE RETURN";
+        return axios(error.config);
+      }
+
+      console.log("THIS CODE SHOULDN'T GET EXECUTED");
+
+      return Promise.reject(error);
+    } catch (error) {
+      console.log("Error while re-requesting the access token ->", error);
+      return Promise.reject(error); //
     }
-
-    console.log("THIS CODE SHOULDN'T GET EXECUTED");
-
-    return Promise.reject(error);
   }
 );
 /**
@@ -129,7 +138,9 @@ class APIClient {
         paramKeys && paramKeys.length ? paramKeys.join("&") : "";
       response = axios.get(`${url}?${queryString}`, params);
     } else {
-      response = axios.get(`${url}`, { withCredentials: true });
+      response = axios.get(`${url}`, {
+        withCredentials: true,
+      });
     }
 
     return response;
