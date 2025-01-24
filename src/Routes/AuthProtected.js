@@ -16,8 +16,12 @@ const setAccessToken = (token) => {
   localStorage.setItem("access_token", token);
 };
 
+console.log("SETTING ACCESS TOKEN HERE ->", access_token);
+
 const AuthProtected = (props) => {
   const { userProfile, loading, token } = useProfile();
+
+  onsole.log("AUTH PROTECTED ROUTE HANDLING");
 
   // content type
   const authToken = JSON.parse(localStorage.getItem("authUser"))
