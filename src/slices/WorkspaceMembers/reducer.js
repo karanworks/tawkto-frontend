@@ -38,7 +38,16 @@ const campaignSlice = createSlice({
           "authUser",
           JSON.stringify(payloadData.data.user)
         );
+        sessionStorage.setItem(
+          "workspace",
+          JSON.stringify(payloadData.data.user)
+        );
+        sessionStorage.setItem(
+          "access_token",
+          payloadData.data.user.accessToken
+        );
         localStorage.setItem("authUser", JSON.stringify(payloadData.data.user));
+        localStorage.setItem("access_token", payloadData.data.user.accessToken);
         localStorage.setItem(
           "workspace",
           JSON.stringify(payloadData.data.workspace)

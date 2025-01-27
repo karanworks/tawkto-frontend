@@ -11,10 +11,21 @@ const VerifyEmail = () => {
   useEffect(() => {
     if (token) {
       verifyEmail({ token }).then((res) => {
-        console.log("RESPONSE", res, res.data);
+        console.log(
+          "ACCESS TOKEN FOR VERIFYING EMAIL ->",
+          res.data.accessToken
+        );
 
         localStorage.setItem("authUser", JSON.stringify(res.data));
+        localStorage.setItem(
+          "access_token",
+          JSON.stringify(res.data.accessToken)
+        );
         sessionStorage.setItem("authUser", JSON.stringify(res.data));
+        sessionStorage.setItem(
+          "access_token",
+          JSON.stringify(res.data.accessToken)
+        );
         navigate("/connect-website");
       });
     }

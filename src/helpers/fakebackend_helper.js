@@ -149,9 +149,3 @@ export const verifyEmail = ({ token }) => {
     `${process.env.REACT_APP_SERVER_URL}/verify-email?token=${token}`
   );
 };
-// *****************************************************************
-// ************************* VERIFY EMAIL **************************
-// *****************************************************************
-export const refreshAccessToken = () => {
-  return api.get(`${process.env.REACT_APP_SERVER_URL}/refresh-token`);
-};

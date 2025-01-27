@@ -343,7 +343,6 @@ const Layout = (props) => {
                 run={run}
                 stepIndex={stepIndex}
                 steps={steps}
-                debug
                 showProgress={true}
                 showSkipButton={true}
                 locale={{
@@ -367,7 +366,6 @@ const Layout = (props) => {
                 run={memberRun}
                 stepIndex={memberStepIndex}
                 steps={memberSteps}
-                debug
                 showProgress={true}
                 showSkipButton={true}
                 locale={{

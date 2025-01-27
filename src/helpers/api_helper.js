@@ -45,32 +45,11 @@ axios.interceptors.response.use(
 
       if (
         errorResponse.status === 401 &&
-        errorResponse.data.message === "Unauthorized" &&
-        !error.config._retry
+        errorResponse.data.message === "Unauthorized"
       ) {
-        const res = await refreshAccessToken();
-        const newAccessToken = res.data.access_token;
-        error.config._retry = true;
-
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${newAccessToken}`;
-
-        localStorage.setItem("access_token", newAccessToken);
-        sessionStorage.setItem("access_token", newAccessToken);
-        setAccessToken(newAccessToken);
-
-        error.config.headers["Authorization"] = `Bearer ${newAccessToken}`;
-
-        console.log("ERROR RE-REQUEST CONFIG ->", error.config);
-
-        // Retry the original request
-        // return axios(error.config);
-        // return "EXAMPLE RETURN";
-        return axios(error.config);
+        localStorage.clear();
+        location.href("/login");
       }
-
-      console.log("THIS CODE SHOULDN'T GET EXECUTED");
 
       return Promise.reject(error);
     } catch (error) {

@@ -56,6 +56,8 @@ export const loginUser = (user, history) => async (dispatch) => {
       data = finallogin.data;
 
       if (finallogin.status === "success") {
+        console.log("DATA AFTER LOG IN ->", data);
+
         sessionStorage.setItem("authUser", JSON.stringify(data));
 
         data.access_token &&
