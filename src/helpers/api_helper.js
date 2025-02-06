@@ -1,7 +1,5 @@
 import axios from "axios";
 import { api } from "../config";
-import { refreshAccessToken } from "./fakebackend_helper";
-import { setAccessToken } from "../Routes/AuthProtected";
 
 // const axiosInstance = axios.create({
 //   headers: {
