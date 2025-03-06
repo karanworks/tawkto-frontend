@@ -10,6 +10,7 @@ export const getWorkspaceMembers = createAsyncThunk(
   "workspaceMembers/getWorkspaceMembers",
   async (workspaceId) => {
     try {
+      console.log("RESPONSE FOR WORKSPACE MEMBERS ->", workspaceId);
       const response = await getWorkspaceMembersApi(workspaceId);
 
       return response;

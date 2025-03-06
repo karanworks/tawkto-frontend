@@ -37,12 +37,6 @@ const SetPassword = () => {
 
   const [passwordCreated, setPasswordCreated] = useState(false);
 
-  console.log(
-    "WORKSPACE AND LOGGED IN USER ON GO TO DASHBOARD ->",
-    workspace,
-    loggedInUser
-  );
-
   const validation = useFormik({
     enableReinitialize: true,
 

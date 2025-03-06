@@ -294,7 +294,6 @@ const Layout = (props) => {
 
       if (index === 3) {
         if (isPreviousAction && previous) {
-          console.log("PREVIOUS URL AFTER LAST STEP ->", previous);
           dispatch(handleMemberNextStep(2));
           navigate(previous);
         } else {

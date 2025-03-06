@@ -23,11 +23,6 @@ const workspaceSlice = createSlice({
     });
     builder.addCase(createWorkspace.fulfilled, (state, action) => {
       if (action.payload?.status === "failure") {
-        console.log(
-          "WORKSPACE WITH SAME WEBSITE ALREADY EXIST ->",
-          action.payload
-        );
-
         state.error = action.payload.message;
       } else {
         // state.workspaces = [...state.workspaces, action.payload?.data];

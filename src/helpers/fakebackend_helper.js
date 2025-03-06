@@ -25,8 +25,6 @@ export const postRegister = (data) => {
 
 // Login Method
 export const postLogin = (data) => {
-  console.log("LOGIN URL ->", `${process.env.REACT_APP_SERVER_URL}/login`);
-
   return api.create(`${process.env.REACT_APP_SERVER_URL}/login`, data);
   // return api.create("http://localhost:3008/login", data);
 };

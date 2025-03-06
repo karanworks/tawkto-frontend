@@ -42,6 +42,8 @@ const WorkspaceMembers = () => {
 
   const { workspaceMembers } = useSelector((state) => state.WorkspaceMembers);
 
+  console.log("READING WORKSPACE MEMBERS -> ", workspaceMembers);
+
   const loggedInUserData = getLoggedinUser();
 
   useEffect(() => {
@@ -56,6 +58,8 @@ const WorkspaceMembers = () => {
   }, [workspace, dispatch]);
 
   useEffect(() => {
+    console.log("GETTING WORKSPACE ?->", workspace);
+
     if (workspace) {
       setLoading(true);
       dispatch(getWorkspaceMembers(workspace.id)).then((res) =>

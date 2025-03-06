@@ -77,11 +77,6 @@ const solvedSlice = createSlice({
       }
     });
     builder.addCase(getSolvedChats.fulfilled, (state, action) => {
-      console.log(
-        "GET SOLVED CHATS FROM BACKEND IN REDUCER",
-        action.payload?.data
-      );
-
       if (action.payload?.status === "failure") {
         state.error = action.payload.message;
       } else {

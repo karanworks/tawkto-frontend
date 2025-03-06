@@ -1,9 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 function ChatListItem({ chat, activeOpenChat, handleActiveChat, isTyping }) {
-  console.log("IS TYPING STATUS UPDATES  ->", chat);
-
   return (
     <li
       style={{
@@ -46,7 +45,9 @@ function ChatListItem({ chat, activeOpenChat, handleActiveChat, isTyping }) {
                                         ].sender.name} */}
                 {chat.visitor.name}
               </p>
-              <p className="mb-0 text-muted">8min</p>
+              <p className="mb-0 text-muted">
+                {moment(chat.createdAt).fromNow()}
+              </p>
             </div>
 
             <div className="d-flex justify-content-between">

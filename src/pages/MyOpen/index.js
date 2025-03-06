@@ -47,14 +47,10 @@ const MyOpen = () => {
   const [Chat_Box_Image, setChat_Box_Image] = useState(avatar2);
   const [isTyping, setIsTyping] = useState({});
 
-  console.log("CHAT TYPNIG STATUS ->", isTyping);
-
   // Inside your component
   const loggedInUser = getLoggedInUser();
   const workspace = JSON.parse(localStorage.getItem("workspace"));
   const { openChats, activeOpenChat } = useSelector((state) => state.MyOpen);
-
-  console.log("ACTIVE OPEN CHAT  ->", activeOpenChat);
 
   useEffect(() => {
     if (workspace) {
@@ -109,7 +105,7 @@ const MyOpen = () => {
     socket.on("typing", handleTypingStatus);
 
     return () => {
-      socket.off(handleTypingStatus);
+      socket.off("typing", handleTypingStatus);
     };
   }, []);
 

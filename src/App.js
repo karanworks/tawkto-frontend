@@ -62,7 +62,6 @@ function App() {
   }, [loggedInUser, workspace?.id, dispatch]);
 
   function handleVisitorOnlineStaus(status) {
-    console.log("USER ONLINE STATUS ->", status);
     dispatch(handleVisitorOnlineStatus(status));
     dispatch(handleVisitorOnlineStatusUnassigned(status));
   }

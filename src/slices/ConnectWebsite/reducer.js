@@ -15,20 +15,10 @@ const connectWebsiteSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getWorkspaces.fulfilled, (state, action) => {});
-    builder.addCase(getUserDetails.fulfilled, (state, action) => {
-      console.log(
-        "RESPONSE PAYLOAD FROM GET USER DETAILS API CALL ->",
-        action?.payload
-      );
-    });
+    builder.addCase(getUserDetails.fulfilled, (state, action) => {});
 
     builder.addCase(createWorkspace.fulfilled, (state, action) => {
       if (action.payload?.status === "failure") {
-        console.log(
-          "WORKSPACE WITH SAME WEBSITE ALREADY EXIST ->",
-          action.payload
-        );
-
         state.error = action.payload.message;
       } else {
         state.error = "";

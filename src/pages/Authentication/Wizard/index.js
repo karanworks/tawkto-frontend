@@ -68,7 +68,6 @@ const Wizard = () => {
 
     onSubmit: (values) => {
       // dispatch(WizardUser(values));
-      console.log("form values=>", values);
     },
   });
 

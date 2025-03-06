@@ -31,8 +31,6 @@ const campaignSlice = createSlice({
     builder.addCase(setPasswordWorkspaceMember.fulfilled, (state, action) => {
       const payloadData = action.payload;
 
-      console.log("PAYLOAD ON SET PASSWORD ->", payloadData);
-
       if (payloadData?.status === "success") {
         sessionStorage.setItem(
           "authUser",
@@ -53,7 +51,6 @@ const campaignSlice = createSlice({
           JSON.stringify(payloadData.data.workspace)
         );
       }
-      console.log("invite set password reducer", action.payload);
     });
   },
 });

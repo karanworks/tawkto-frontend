@@ -31,8 +31,6 @@ axios.interceptors.response.use(
   function (response) {
     // console.log("GETTING THE RESPONSE OF OF EVERY REQUEST ->", response);
 
-    console.log("RESPONSE IS BEING RETURNED AS WELL", response);
-
     return response.data ? response.data : response;
   },
   async function (error) {

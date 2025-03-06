@@ -73,8 +73,6 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
   };
 
   function handleTypingMessage(e) {
-    console.log("SENDING TYPING MESSAGE ->", e.target.value);
-
     setcurMessage(e.target.value);
     socket.emit("typing", {
       user: {
@@ -109,8 +107,6 @@ function ActiveOpenChat({ activeOpenChat, isTyping }) {
   };
 
   function handleSolveChat(chatId) {
-    console.log("GOT THE SOLVED CHAT ID ->", chatId);
-
     dispatch(updateSolvedChat({ chatId, status: "solved" })).then(() => {
       dispatch(updateOpenChats(chatId));
       dispatch(handleOpenActiveChat(null));

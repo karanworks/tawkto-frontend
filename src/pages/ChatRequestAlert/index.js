@@ -105,11 +105,9 @@ function ChatRequestAlertStack() {
   };
 
   function handleVisitorMessageRequest(chatRequest) {
-    console.log("CHAT REQUEST ALERT ->", chatRequest);
+    const notificationRingtone = new Audio(notificationSound);
 
-    // const notificationRingtone = new Audio(notificationSound);
-
-    // notificationRingtone.play();
+    notificationRingtone.play();
 
     setAlerts((prev) => [...prev, chatRequest]);
   }

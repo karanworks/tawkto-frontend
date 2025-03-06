@@ -36,11 +36,6 @@ const unassignedSlice = createSlice({
           messages: [...state.activeChat.messages, newMessage],
         };
       }
-
-      console.log(
-        "UNASSIGNED CHATS ON MESSAGE IN REDUCER ->",
-        state.unassignedChats
-      );
     },
 
     handleVisitorRequestUpdate(state, action) {

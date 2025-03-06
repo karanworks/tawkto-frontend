@@ -51,6 +51,10 @@ const CopyCode = ({ code, maxHeight = "300px" }) => {
         >
           <code className="text-wrap d-block">{code}</code>
         </pre>
+        <p style={{ color: "#7C7F90", textAlign: "center" }}>
+          Copy this code and paste it at the bottom inside the {"<body>"} tag,
+          just before the closing {"</body>"} tag.
+        </p>
       </CardBody>
     </Card>
   );

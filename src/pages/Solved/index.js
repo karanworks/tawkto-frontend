@@ -89,8 +89,6 @@ const Solved = () => {
     (state) => state.Solved
   );
 
-  console.log("GETTING SOLVED CHATS FROM BACKEND ->", solvedChats);
-
   useEffect(() => {
     if (workspace) {
       dispatch(

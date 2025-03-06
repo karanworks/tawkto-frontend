@@ -80,11 +80,6 @@ const myOpenSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getOpenChats.fulfilled, (state, action) => {
-      console.log(
-        "GET ACTIVE OPEN CHATS CALLED AFTER CHAT JOIN ALERT ",
-        action.payload?.data
-      );
-
       if (action.payload?.status === "failure") {
         state.error = action.payload.message;
       } else {

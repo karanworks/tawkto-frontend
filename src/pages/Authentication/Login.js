@@ -97,13 +97,14 @@ const Login = (props) => {
     },
   });
 
-  useEffect(() => {
-    if (errorMsg) {
-      setTimeout(() => {
-        dispatch(resetLoginFlag());
-      }, 3000);
-    }
-  }, [dispatch, errorMsg]);
+  // HIDES ERROR MESSAGE AFTER 3 SECONDS
+  // useEffect(() => {
+  //   if (errorMsg) {
+  //     setTimeout(() => {
+  //       dispatch(resetLoginFlag());
+  //     }, 3000);
+  //   }
+  // }, [dispatch, errorMsg]);
 
   document.title = "Login";
   return (

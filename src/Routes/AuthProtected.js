@@ -17,8 +17,6 @@ const AuthProtected = (props) => {
 
       config.headers.Authorization = `bearer ${access_token}`;
 
-      console.log("REQUEST INTERCEPTOR CALLED->", config);
-
       return config;
     });
   }, []);

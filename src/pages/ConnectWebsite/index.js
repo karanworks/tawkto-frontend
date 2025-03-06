@@ -93,12 +93,12 @@ const ConnectWebsite = () => {
     return false;
   }
 
-  document.title = "ConnectWebsite | Velzon - React Admin & Dashboard Template";
+  document.title = "Connect Website";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="ConnectWebsite" pageTitle="Pages" />
+          <BreadCrumb title="Connect Website" pageTitle="Pages" />
           <Row style={{ display: "flex", justifyContent: "center" }}>
             <Col xs={4}>
               <div className="p-2 mt-4">

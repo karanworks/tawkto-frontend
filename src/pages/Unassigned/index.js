@@ -111,8 +111,6 @@ const Unassigned = () => {
 
   useEffect(() => {
     const handleJoinedConversation = (data) => {
-      console.log("ACTIVE CHAT IN USE EFFECT FOR MY OPEN ->", activeChat);
-
       navigate("/my-open");
     };
 
@@ -200,7 +198,6 @@ const Unassigned = () => {
                     id="userList"
                   >
                     {/* className="active" removed this class because it was changin the text color as well will modify it in the future */}
-                    {console.log("UNASSIGNED CHATS ->", unassignedChats)}
 
                     {(unassignedChats || []).map((request, i) => (
                       <li
@@ -234,7 +231,6 @@ const Unassigned = () => {
                                     request.messages[
                                       request.messages.length - 1
                                     ].sender.name.charAt(0)} */}
-                                  {console.log("SINGLE CHAT ->", request)}
                                   {request.visitor.name.charAt(0)}
                                 </div>
                               </div>
@@ -251,7 +247,9 @@ const Unassigned = () => {
                                     ].sender.name} */}
                                   {request.visitor.name}
                                 </p>
-                                <p className="mb-0 text-muted">8min</p>
+                                <p className="mb-0 text-muted">
+                                  {moment(request.createdAt).fromNow()}
+                                </p>
                               </div>
 
                               <div className="d-flex justify-content-between">
