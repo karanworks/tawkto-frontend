@@ -19,8 +19,9 @@ function AddMemberModal({
   formHandleSubmit,
   validation,
   handleRoleStatus,
-  rolestatus,
   roleStatus,
+  roleValues,
+  isEditingMember,
 }) {
   return (
     <Modal
@@ -93,54 +94,65 @@ function AddMemberModal({
               </FormFeedback>
             ) : null}
           </div>
-          {/* <div className="mb-2">
-            <Label htmlFor="password" className="form-label">
-              Password
-            </Label>
-
-            <Input
-              id="password"
-              name="password"
-              className="form-control"
-              placeholder="Enter Password"
-              type="password"
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.password || ""}
-              invalid={
-                validation.touched.password && validation.errors.password
-                  ? true
-                  : false
-              }
-            />
-
-            {validation.touched.password && validation.errors.password ? (
-              <FormFeedback type="invalid">
-                {validation.errors.password}
-              </FormFeedback>
-            ) : null}
-          </div> */}
 
           <div className="mb-2">
-            <Label htmlFor="password" className="form-label">
+            <Label htmlFor="role" className="form-label">
               Select Role
             </Label>
             <div>
               <Select
+                // className={`form-control ${
+                //   validation.touched.role && validation.errors.role
+                //     ? "is-invalid"
+                //     : ""
+                // }`}
                 value={roleStatus}
                 onChange={(roleStatus) => {
                   handleRoleStatus(roleStatus);
                 }}
-                options={rolestatus}
-                name="choices-single-default"
-                id="idStatus"
+                options={roleValues}
+                name="role"
+                id="role"
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    borderColor:
+                      validation.touched.role && validation.errors.role
+                        ? "#f06548"
+                        : base.borderColor,
+                    "&:hover": {
+                      borderColor:
+                        validation.touched.role && validation.errors.role
+                          ? "#f06548"
+                          : base.borderColor,
+                    },
+                  }),
+                }}
               ></Select>
             </div>
+
+            {validation.touched.role && validation.errors.role ? (
+              // <FormFeedback type="invalid">
+              //   {validation.errors.role}
+              // </FormFeedback>
+              <div
+                style={{
+                  display: "block",
+                  width: "100%",
+                  marginTop: "0.25rem",
+                  fontSize: "12.25px",
+                  color: "#f06548",
+                  fontFamily: "Open Sans",
+                }}
+              >
+                {validation.errors.role}
+              </div>
+            ) : null}
           </div>
 
           <div className="text-end">
             <button type="submit" className="btn btn-primary">
-              Send Invite
+              {isEditingMember ? "Update" : "Send Invite"}
             </button>
           </div>
         </ModalBody>

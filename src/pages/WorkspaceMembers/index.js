@@ -18,6 +18,8 @@ import AddMemberModal from "./AddMemberModal";
 import {
   inviteWorkspaceMember,
   getWorkspaceMembers,
+  deleteUser,
+  updateMember,
 } from "../../slices/WorkspaceMembers/thunk";
 import { useDispatch } from "react-redux";
 import { getLoggedinUser } from "../../helpers/api_helper";
@@ -40,6 +42,8 @@ const WorkspaceMembers = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const [isEditingMember, setIsEditingMember] = useState(null);
+
   const { workspaceMembers } = useSelector((state) => state.WorkspaceMembers);
 
   console.log("READING WORKSPACE MEMBERS -> ", workspaceMembers);
@@ -58,8 +62,6 @@ const WorkspaceMembers = () => {
   }, [workspace, dispatch]);
 
   useEffect(() => {
-    console.log("GETTING WORKSPACE ?->", workspace);
-
     if (workspace) {
       setLoading(true);
       dispatch(getWorkspaceMembers(workspace.id)).then((res) =>
@@ -68,14 +70,10 @@ const WorkspaceMembers = () => {
     }
   }, [dispatch, workspace]);
 
-  const rolestatus = [
+  const roleValues = [
     { label: "Admin", value: "Admin" },
     { label: "Agent", value: "Agent" },
   ];
-
-  function tog_list() {
-    setmodal_list(!modal_list);
-  }
 
   const validation = useFormik({
     initialValues: {
@@ -86,21 +84,41 @@ const WorkspaceMembers = () => {
     validationSchema: Yup.object({
       name: Yup.string().required("Please enter name"),
       email: Yup.string().required("Please enter your email"),
-      role: Yup.string().required("Please enter role"),
+      role: Yup.string().required("Please select role"),
     }),
     onSubmit: (values, { resetForm }) => {
-      dispatch(
-        inviteWorkspaceMember({
-          ...values,
-          workspaceId: workspace.id,
-        })
-      );
+      console.log("IS EDITING MEMBER ->", isEditingMember);
+
+      isEditingMember
+        ? dispatch(
+            updateMember({
+              ...values,
+              userId: isEditingMember,
+            })
+          )
+        : dispatch(
+            inviteWorkspaceMember({
+              ...values,
+              workspaceId: workspace.id,
+            })
+          );
 
       resetForm();
-
       setmodal_list(false);
     },
   });
+
+  function tog_list() {
+    setmodal_list(!modal_list);
+    setIsEditingMember(null);
+    validation.setValues({
+      name: "",
+      email: "",
+      role: "",
+    });
+
+    setroleStatus(null);
+  }
 
   function formHandleSubmit(e) {
     e.preventDefault();
@@ -112,9 +130,29 @@ const WorkspaceMembers = () => {
     return false;
   }
 
-  function handleRoleStatus(roleStatus) {
-    setroleStatus(roleStatus);
-    validation.setFieldValue("role", roleStatus.value);
+  function handleRoleStatus(role) {
+    setroleStatus(role);
+    validation.setFieldValue("role", role.value);
+  }
+
+  function handleDeleteMember(memberId) {
+    dispatch(deleteUser(memberId));
+  }
+
+  function handleEditMember(member) {
+    setIsEditingMember(member.id);
+    setmodal_list(!modal_list);
+
+    const selectedRole = roleValues.find(
+      (role) => role.label === (member.roleId === 1 ? "Admin" : "Agent")
+    );
+
+    validation.setValues({
+      name: member.name,
+      email: member.email,
+      // role: member.roleId === 1 ? "Admin" : "Agent",
+    });
+    handleRoleStatus(selectedRole);
   }
 
   return (
@@ -271,15 +309,32 @@ const WorkspaceMembers = () => {
                                       <button
                                         type="button"
                                         className="btn btn-primary btn-sm"
+                                        onClick={() => handleEditMember(member)}
                                       >
                                         Edit Profile
                                       </button>
-                                      <button
+
+                                      {member.email !==
+                                      loggedInUserData.email ? (
+                                        <button
+                                          type="button"
+                                          className="btn btn-danger btn-sm"
+                                          onClick={() =>
+                                            handleDeleteMember(member.id)
+                                          }
+                                        >
+                                          Delete
+                                        </button>
+                                      ) : null}
+                                      {/* <button
                                         type="button"
                                         className="btn btn-danger btn-sm"
+                                        onClick={() =>
+                                          handleDeleteMember(member.id)
+                                        }
                                       >
                                         Delete
-                                      </button>
+                                      </button> */}
                                     </div>
                                   </td>
                                 </tr>
@@ -339,8 +394,9 @@ const WorkspaceMembers = () => {
         tog_list={tog_list}
         formHandleSubmit={formHandleSubmit}
         handleRoleStatus={handleRoleStatus}
-        rolestatus={rolestatus}
         roleStatus={roleStatus}
+        roleValues={roleValues}
+        isEditingMember={isEditingMember}
       />
       <ToastContainer />
     </React.Fragment>

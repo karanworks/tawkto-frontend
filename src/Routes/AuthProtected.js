@@ -9,17 +9,22 @@ import axios from "axios";
 const AuthProtected = (props) => {
   const { userProfile, loading, token } = useProfile();
 
-  useEffect(() => {
-    axios.interceptors.request.use(function (config) {
-      let access_token = localStorage.getItem("access_token")
-        ? localStorage.getItem("access_token").replace(/^"|"$/g, "")
-        : null;
+  // useEffect(() => {
+  //   axios.interceptors.request.use(function (config) {
+  //     console.log(
+  //       "REQUEST INTERCEPTOR WAS CALLED ->",
+  //       localStorage.getItem("access_token")
+  //     );
 
-      config.headers.Authorization = `bearer ${access_token}`;
+  //     let access_token = localStorage.getItem("access_token")
+  //       ? localStorage.getItem("access_token").replace(/^"|"$/g, "")
+  //       : null;
 
-      return config;
-    });
-  }, []);
+  //     config.headers.Authorization = `bearer ${access_token}`;
+
+  //     return config;
+  //   });
+  // }, []);
 
   if (!userProfile && loading && !token) {
     return (

@@ -13,6 +13,8 @@ const loginSlice = createSlice({
   initialState,
   reducers: {
     apiError(state, action) {
+      console.log("ERROR LOGGING IN LATEST -> ", action.payload);
+
       state.error = action.payload.message;
       state.loading = true;
       state.isUserLogout = false;

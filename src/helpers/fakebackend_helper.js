@@ -53,6 +53,12 @@ export const getWorkspaceMembers = (workspaceId) => {
 export const inviteWorkspaceMember = (data) => {
   return api.create(`${process.env.REACT_APP_SERVER_URL}/invite-member`, data);
 };
+export const updateMember = (data) => {
+  return api.update(
+    `${process.env.REACT_APP_SERVER_URL}/update-member/${data.userId}`,
+    data
+  );
+};
 export const setPasswordWorkspaceMember = (data) => {
   return api.create(`${process.env.REACT_APP_SERVER_URL}/set-password`, data);
 };
@@ -60,31 +66,33 @@ export const setPasswordWorkspaceMember = (data) => {
 // *****************************************************************
 // *************************** USERS *******************************
 // *****************************************************************
-export const getUsers = () => {
-  return api.get(`${process.env.REACT_APP_SERVER_URL}/users`);
-};
+// export const getUsers = () => {
+//   return api.get(`${process.env.REACT_APP_SERVER_URL}/users`);
+// };
 
-export const createUser = (data) => {
-  return api.create(`${process.env.REACT_APP_SERVER_URL}/user/register`, data);
-};
-export const removeUser = (userId) => {
-  return api.delete(
+// export const createUser = (data) => {
+//   return api.create(`${process.env.REACT_APP_SERVER_URL}/user/register`, data);
+// };
+export const deleteUser = (userId) => {
+  console.log("ID FOR DELETE USER 2 ->", userId);
+
+  return api.update(
     `${process.env.REACT_APP_SERVER_URL}/user/${userId}/delete`
   );
 };
 
-export const updateUser = ({ userId, values }) => {
-  return api.update(
-    `${process.env.REACT_APP_SERVER_URL}/user/${userId}/edit`,
-    values
-  );
-};
+// export const updateUser = ({ userId, values }) => {
+//   return api.update(
+//     `${process.env.REACT_APP_SERVER_URL}/user/${userId}/edit`,
+//     values
+//   );
+// };
 
-export const removeRole = (roleId) => {
-  return api.delete(
-    `${process.env.REACT_APP_SERVER_URL}/role/${roleId}/delete`
-  );
-};
+// export const removeRole = (roleId) => {
+//   return api.delete(
+//     `${process.env.REACT_APP_SERVER_URL}/role/${roleId}/delete`
+//   );
+// };
 
 // *****************************************************************
 // **************************** HOME *******************************

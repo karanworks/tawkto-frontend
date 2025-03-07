@@ -26,6 +26,21 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 
 // if (token) axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 
+axios.interceptors.request.use(function (config) {
+  console.log(
+    "REQUEST INTERCEPTOR WAS CALLED ->",
+    localStorage.getItem("access_token")
+  );
+
+  let access_token = localStorage.getItem("access_token")
+    ? localStorage.getItem("access_token").replace(/^"|"$/g, "")
+    : null;
+
+  config.headers.Authorization = `bearer ${access_token}`;
+
+  return config;
+});
+
 // intercepting to capture errors
 axios.interceptors.response.use(
   function (response) {

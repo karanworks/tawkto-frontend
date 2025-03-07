@@ -4,6 +4,8 @@ import {
   inviteWorkspaceMember,
   setPasswordWorkspaceMember,
   getWorkspaceMembers,
+  deleteUser,
+  updateMember,
 } from "./thunk";
 
 export const initialState = {
@@ -18,6 +20,34 @@ const campaignSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getWorkspaceMembers.fulfilled, (state, action) => {
       state.workspaceMembers = action.payload.workspaceMembers;
+    });
+    builder.addCase(updateMember.fulfilled, (state, action) => {
+      const user = action.payload?.data;
+
+      state.workspaceMembers = state.workspaceMembers.map((member) => {
+        if (member.id === user.id) {
+          return user;
+        }
+        return member;
+      });
+
+      toast.success("User has been updated !", {
+        position: "bottom-center",
+        autoClose: 3000,
+        theme: "colored",
+      });
+    });
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      const user = action.payload?.data;
+      state.workspaceMembers = state.workspaceMembers.filter(
+        (member) => member.id !== user.id
+      );
+
+      toast.error("User has been deleted !", {
+        position: "bottom-center",
+        autoClose: 3000,
+        theme: "colored",
+      });
     });
     builder.addCase(inviteWorkspaceMember.fulfilled, (state, action) => {
       state.workspaceMembers = [...state.workspaceMembers, action.payload.data];

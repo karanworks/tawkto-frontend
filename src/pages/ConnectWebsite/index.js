@@ -98,7 +98,7 @@ const ConnectWebsite = () => {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Connect Website" pageTitle="Pages" />
+          <BreadCrumb title="Connect Website" pageTitle="Administration" />
           <Row style={{ display: "flex", justifyContent: "center" }}>
             <Col xs={4}>
               <div className="p-2 mt-4">
