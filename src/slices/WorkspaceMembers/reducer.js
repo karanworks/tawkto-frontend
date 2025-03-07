@@ -50,11 +50,13 @@ const campaignSlice = createSlice({
       });
     });
     builder.addCase(inviteWorkspaceMember.fulfilled, (state, action) => {
+      console.log("INVITE WORKSPACE MEMBER ->", action.payload);
+
       state.workspaceMembers = [...state.workspaceMembers, action.payload.data];
 
-      toast.success("User has been invited !", {
+      toast.success("Invitation mail has been to user !", {
         position: "bottom-center",
-        autoClose: 3000,
+        autoClose: 6000,
         theme: "colored",
       });
     });

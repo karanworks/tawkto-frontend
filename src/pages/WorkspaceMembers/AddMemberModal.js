@@ -23,6 +23,8 @@ function AddMemberModal({
   roleValues,
   isEditingMember,
 }) {
+  console.log("IS EDITING MEMBER INSIDE ADD MEMBER MODAL ->", isEditingMember);
+
   return (
     <Modal
       isOpen={modal_list}

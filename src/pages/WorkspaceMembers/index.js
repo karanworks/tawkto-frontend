@@ -28,9 +28,12 @@ import { useSelector } from "react-redux";
 import { getWorkspaces } from "../../slices/Workspace/thunk";
 import Loader from "../../Components/Common/Loader";
 import { ToastContainer } from "react-toastify";
+import MemberDeleteModal from "./MemberDeleteModal";
 
 const WorkspaceMembers = () => {
   const [modal_list, setmodal_list] = useState(false);
+
+  const [modal_delete, setmodal_delete] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -49,6 +52,10 @@ const WorkspaceMembers = () => {
   console.log("READING WORKSPACE MEMBERS -> ", workspaceMembers);
 
   const loggedInUserData = getLoggedinUser();
+
+  function tog_delete() {
+    setmodal_delete(!modal_delete);
+  }
 
   useEffect(() => {
     if (!workspace) {
@@ -135,8 +142,10 @@ const WorkspaceMembers = () => {
     validation.setFieldValue("role", role.value);
   }
 
-  function handleDeleteMember(memberId) {
-    dispatch(deleteUser(memberId));
+  function handleDeleteMember() {
+    dispatch(deleteUser(isEditingMember));
+    setmodal_delete(false);
+    setIsEditingMember(null);
   }
 
   function handleEditMember(member) {
@@ -203,7 +212,7 @@ const WorkspaceMembers = () => {
                               <th scope="col">Name</th>
                               <th scope="col">Role</th>
                               <th scope="col">Invitation Status</th>
-                              <th scope="col">Status</th>
+                              {/* <th scope="col">Status</th> */}
                               <th scope="col">Settings</th>
                             </tr>
                           </thead>
@@ -294,14 +303,14 @@ const WorkspaceMembers = () => {
                                         : "Pending"}
                                     </span>
                                   </td>
-                                  <td>
+                                  {/* <td>
                                     <button
                                       type="button"
                                       className="btn btn-outline-danger btn-sm"
                                     >
                                       Deactivate
                                     </button>
-                                  </td>
+                                  </td> */}
                                   <td>
                                     <div
                                       style={{ display: "flex", gap: "8px" }}
@@ -309,19 +318,26 @@ const WorkspaceMembers = () => {
                                       <button
                                         type="button"
                                         className="btn btn-primary btn-sm"
-                                        onClick={() => handleEditMember(member)}
+                                        onClick={() => {
+                                          console.log(
+                                            "TESTING MEMBER ->",
+                                            member
+                                          );
+
+                                          handleEditMember(member);
+                                        }}
                                       >
                                         Edit Profile
                                       </button>
 
-                                      {member.email !==
-                                      loggedInUserData.email ? (
+                                      {member.id !== loggedInUserData.id ? (
                                         <button
                                           type="button"
                                           className="btn btn-danger btn-sm"
-                                          onClick={() =>
-                                            handleDeleteMember(member.id)
-                                          }
+                                          onClick={() => {
+                                            tog_delete();
+                                            setIsEditingMember(member.id);
+                                          }}
                                         >
                                           Delete
                                         </button>
@@ -397,6 +413,12 @@ const WorkspaceMembers = () => {
         roleStatus={roleStatus}
         roleValues={roleValues}
         isEditingMember={isEditingMember}
+      />
+      <MemberDeleteModal
+        modal_delete={modal_delete}
+        tog_delete={tog_delete}
+        setmodal_delete={setmodal_delete}
+        handleDeleteTask={handleDeleteMember}
       />
       <ToastContainer />
     </React.Fragment>
